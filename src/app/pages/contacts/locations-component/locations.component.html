@@ -1,0 +1,279 @@
+﻿<div class="container-fluid">
+  <div class="col-md-13 locations-header">
+    <!--Location Header-->
+    <!--Included in Mockup but not being Used: <button type="button" class="btn-location pull-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>&nbsp;Edit</button>-->
+    <!--END: Location Header-->
+
+    <!-- Tags
+    <div class="dropdown pull-right">
+      <button type="button" class="btn-location" data-toggle="dropdown"><i class="fa fa-tag" aria-hidden="true"></i></button>
+      <ul class="dropdown-menu" id="ddlLocationTag">
+        <li><input type="text" id="txtLocationTag" class="dropdown-input" placeholder="Add Tag" /></li>
+        <li>
+          <label class="dropdown-label">Tag</label>
+          <button type="button" class="btn-link pull-right">
+            <i class="fa fas fa-times" aria-hidden="true"></i>
+          </button>
+        </li>
+        <li>
+          <label class="dropdown-label">Another Tag</label>
+          <button type="button" class="btn-link pull-right">
+            <i class="fa fas fa-times" aria-hidden="true"></i>
+          </button>
+        </li>
+        <li>
+          <label class="dropdown-label">Another Tag</label>
+          <button type="button" class="btn-link pull-right">
+            <i class="fa fas fa-times" aria-hidden="true"></i>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <!--END: Tags
+
+    <!--Options
+    <div class="dropdown pull-right">
+      <button type="button" class="btn-location" data-toggle="dropdown"><i class="fas fa-bars" aria-hidden="true"></i></button>
+      <ul class="dropdown-menu dropdown-menu-icon">
+        <li><button type="button" class="btn-location btn-dropdown-menu pull-right"><i class="fa fas fa-times" aria-hidden="true"></i>&nbsp;Delete</button></li>
+        <li><button type="button" class="btn-location btn-dropdown-menu pull-right"><i class="fa fa-files-o" aria-hidden="true"></i>&nbsp;Clone</button></li>
+        <li><button type="button" class="btn-location btn-dropdown-menu pull-right"><i class="fa fa-code-fork" aria-hidden="true"></i>&nbsp;Merge</button></li>
+        <li><button type="button" class="btn-location btn-dropdown-menu pull-right"><i class="fa fa-user-circle" aria-hidden="true"></i>&nbsp;Owner</button></li>
+      </ul>
+    </div>
+  </div>
+  <!--END: Options -->
+  <ng-container *ngIf="AccountID">
+  <!--Addresses-->
+  <!-- <div class="row">
+    <div class="col-md-1">
+      Billing Address
+    </div>
+    <div class="col-md-2">
+      <label id="lblLocationName"></label><br />
+      <label id="lblHouseNumber"></label>
+      <label id="lblStreet"></label><br />
+      <label id="lblCity"></label>,
+      <label id="lblState"></label> &nbsp;
+      <label id="lblPostalCode"></label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <label>Other Company Addresses</label>
+    </div>
+  </div> -->
+
+        <button type="button" id="btnNewLocation" data-toggle="modal" data-target="#mdlContactEdit" class="btn-details btn-affirm pull-right" (click)="NewLocation()">+ New Location</button>
+      <ag-grid-angular 
+      #agGrid 
+      class="ag-fresh grid-stretched-70-500" 
+      id="locationGrid"
+      [gridOptions]="LocationsGridOptions" 
+      [rowData]="LocationsData" > <!--(rowDoubleClicked)="onRowDoubleClicked($event)"-->
+      </ag-grid-angular>
+
+
+  </ng-container>  
+</div>
+<!--END: Addresses-->
+
+  <!--Modal-->
+<div class="modal fade" id="mdlContactEdit" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+        <!--<h5 class="modal-title" id="lineModalLabel">Edit Contact</h5>-->
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table">
+            <tr>
+              <td>Location name</td>
+              <td>
+                <input id="txtLocationName" name="textinput" placeholder="Location Name" class="form-control input-md location-input"  
+                  type="text" (keyup)="onLocationNameChange($event.target.value)" maxlength="100" required>
+                <div id="locationNameInvalid" class="col-md-12" style="text-align: left; color:red; display: none;">
+                  Location name is required.
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Location Type</td>
+              <td>
+                <!-- <div class="btn-group location-input"> -->
+                  <!-- <select [(ngModel)]="selectedLocationTypeId">
+                  <option *ngFor="let l of locationTypes" [value]="l.id"> {{l.name}}</option> -->
+                  <div class="col-md-4" style="text-align: left;" *ngFor="let l of locationTypes">
+                    <input id="locationType{{l.id}}" type="checkbox" name="locationType{{l.id}}" (change)="locationTypeChanged($event, l.id)" />
+                    <label>{{l.name}}</label>
+                  </div>
+                  <div class="col-md-12" style="text-align: left;" *ngIf="!validateBillToLocations()">
+                    The existing location with type Bill-To will be replaced with type Ship-To.
+                  </div>
+                  <div class="col-md-12" style="text-align: left; color:red" *ngIf="!checkIfAccountHasBillTo()">
+                    This location cannot be saved.  A minimum of 1 Bill-To location is required.
+                  </div>
+                  <div id="locationTypeInvalid" class="col-md-12" style="text-align: left; color:red; display: none;">
+                    At least one location type is required.
+                  </div>                  
+              </td>            
+            </tr>
+            
+            <tr>
+              <td>Country</td>
+              <td>
+                <div  class="btn-group location-input">
+                  <!-- <select id="ddlCountry" class="selectpicker form-control" (change)="onCountryChange($event.target.value)">
+                    <option value="" disabled selected>Select a country</option>
+                  </select> -->
+                  <select id="locationHeight" [(ngModel)]="selectedCountryCode2"
+                  (change)="onCountryChange($event.target.value)">
+                    <option *ngFor="let c of countries" [value]="c.CodeForSap"> {{c.CountryName}}</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Address Line 1</td>
+              <td>
+                <input id="txtAddress1" name="textinput" placeholder="Address 1" class="form-control input-md location-input" required="" type="text" maxlength="40">
+
+              </td>
+              
+            </tr>
+            <!-- <tr>
+              <td>Address Line 2</td>
+              <td><input id="txtAddress2" name="textinput" placeholder="Address 2" class="form-control input-md location-input" required="" type="text"></td>
+            </tr> -->
+            <tr>
+              <td>House Number</td>
+              <td><input id="txtHouseNumber" name="textinput" placeholder="House Number" class="form-control input-md location-input" required="" type="text" maxlength="10">
+                <div id="locationHouseNumberInvalid" class="col-md-12" style="text-align: left; color:red; display: none;">
+                  House Number is required.
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Street</td>
+              <td><input id="txtStreet" name="textinput" placeholder="Street" class="form-control input-md location-input" required="" type="text" maxlength="60">
+                <div id="locationStreetInvalid" class="col-md-12" style="text-align: left; color:red; display: none;">
+                  Street is required.
+                </div>
+              </td>
+            </tr>
+            <!-- <tr>
+              <td>Address Line 4</td>
+              <td><input id="txtAddress4" name="textinput" placeholder="Address 4" class="form-control input-md location-input" required="" type="text"></td>
+            </tr> -->
+            <tr>
+              <td>City</td>
+              <td><input id="txtCity" name="textinput" placeholder="City" class="form-control input-md location-input" required="" type="text" maxlength="40">
+                <div id="locationCityInvalid" class="col-md-12" style="text-align: left; color:red; display: none;">
+                  City is required.
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>State/Province/Region</td>
+              <td>
+                <div class="btn-group location-input">                
+                  <select id="ddlState" class="selectpicker form-control">
+                    <option value="" disabled selected>Select a state/region</option>
+                  </select>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>Postal Code</td>
+              <td><input id="txtPostalCode" name="textinput" placeholder="Postal Code" class="form-control input-md location-input" required="" type="text" maxlength="10"></td>
+            </tr>
+            <tr>
+              <td>District</td>
+              <td><input id="txtDistrict" name="textinput" placeholder="District" class="form-control input-md location-input" required="" type="text" maxlength="40"></td>
+            </tr>
+            <tr>
+              <td>Notes</td>
+              <td><textarea id="txtNotes" cols="40" rows="3" maxlength="512" ></textarea></td>
+            </tr>
+          </table>
+         </div>
+       </div>
+      <div class="modal-footer">
+        <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Close</button>
+          </div>
+          <div class="btn-group" role="group">
+            <button type="button" id="btnSaveLocation" (click)="SaveLocationDetails()" [disabled]="!checkIfAccountHasBillTo()" class="btn btn-default btn-modal" data-action="save" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+          </div>
+
+          <!--Contact Specific Options-->
+          <div class="dropup pull-right">
+            <button type="button" class="btn btn-default btn-modal" data-toggle="dropdown"><i class="fas fa-bars" aria-hidden="true"></i></button>
+            <ul class="dropdown-menu dropdown-menu-icon">
+              <!-- <li><button type="button" (click)="DeleteLocation()" class="btn-modal btn-dropdown-menu pull-right"><i class="fa fas fa-times" aria-hidden="true"></i>&nbsp;Delete</button></li> -->
+              <li><button type="button" class="btn-modal btn-dropdown-menu pull-right"><i class="fa fa-files-o" aria-hidden="true"></i>&nbsp;Clone</button></li>
+              <li><button type="button" class="btn-modal btn-dropdown-menu pull-right"><i class="fa fa-code-fork" aria-hidden="true"></i>&nbsp;Merge</button></li>
+            </ul>
+          </div>
+          <!--END: Contact Specific Options-->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="mdlDeleteChecker" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-small">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+      </div>
+      <div class="modal-body">
+          Are you sure you want to delete this location?
+      </div>
+      <div class="modal-footer">
+        <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-modal" id="btnCloseDeleteModal" data-dismiss="modal" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+          </div>
+          <div class="btn-group" role="group">
+            <button type="button" id="btnDeleteLocation" (click)="DeleteLocation()" class="btn btn-default btn-modal" data-action="save" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Ok</button>
+          </div>
+
+          <!--Contact Specific Options-->
+          <!-- <div class="dropup pull-right">
+            <button type="button" class="btn btn-default btn-modal" data-toggle="dropdown"><i class="fas fa-bars" aria-hidden="true"></i></button>
+            <ul class="dropdown-menu dropdown-menu-icon">
+              <li><button type="button" (click)="DeleteLocation()" class="btn-modal btn-dropdown-menu pull-right"><i class="fa fas fa-times" aria-hidden="true"></i>&nbsp;Delete</button></li> 
+              <li><button type="button" class="btn-modal btn-dropdown-menu pull-right"><i class="fa fa-files-o" aria-hidden="true"></i>&nbsp;Clone</button></li>
+              <li><button type="button" class="btn-modal btn-dropdown-menu pull-right"><i class="fa fa-code-fork" aria-hidden="true"></i>&nbsp;Merge</button></li>
+            </ul>
+          </div> -->
+          <!--END: Contact Specific Options-->
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--END: Modal-->
+  <simple-notifications [options]="locationNotifyOptions"></simple-notifications>
+
+  <!--Undo-Delete toast message-->
+  <div id="undoDeleteToastMessage" hidden="hidden">
+    <div class="simple-notification success undo-delete" style="opacity: 1; transform: translateX(0px);">
+      <a onclick="$('#undoDeleteToastMessage button').click()">
+        <div class="sn-title">Saved!</div>
+        <div class="sn-content">Location deleted! &nbsp;Click to undo</div>
+        <div class="icon">
+          <i class="fas fa-check fa-4x" aria-hidden="true"></i>
+        </div>
+      </a>
+    </div>
+    <button (click)="UndoDeleteLocation()"></button>
+    </div>
+<!--END: Undo-Delete toast message-->

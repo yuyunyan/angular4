@@ -1,0 +1,35 @@
+<li class="media" [ngClass]="{'reply-media': replyToId > 0, 'last-reply': lastChild}">
+    <div class="media-left">
+        <img class="media-object rounded-circle" style="max-width: 40px; max-height: 40px;" src="../assets/img/profile/tereza.jpg" alt="user image">
+    </div>
+    <div class="media-body rounded left">
+        <form class="form">
+            <div class="media-heading row">
+                <div class="col-1 reply-author">
+                    <h6>{{loggedInResponse.displayusername}}&nbsp;(You)</h6>
+                </div>
+                <div class="col-2 form-group comment-type-control" [ngClass]="{'has-danger': invalidForm}" *ngIf="!hideCommentType">
+                    <select class="form-control" [(ngModel)]="commentTypeId" name="commentTypeId" [ngClass]="{'form-control-danger': invalidForm}" (change)="invalidForm = !commentTypeId">
+                        <option [value]="selectedUndefinedOption" hidden disabled>Select CommentType</option>
+                        <option *ngFor="let commentType of commentTypeMap;" [value]="commentType?.id">{{commentType?.name}}</option>
+                    </select>
+                </div>
+                <!-- <div class="col-1">
+                    <button
+                        type="button"
+                        (click)="onCommentReplyClosed.emit()" 
+                        class="reply-close-btn"><i class="fa fa-window-close" aria-hidden="true"></i></button>
+                </div> -->
+            </div>
+            <div class="form-group">
+                <input type="text"
+                    class="form-control"
+                    name="comment"
+                    [(ngModel)]="commentContent"
+                    placeholder="Comment..."
+                    (keyup)="createComment($event)"
+                    maxlength="3800">
+            </div>
+        </form>
+    </div>
+</li>

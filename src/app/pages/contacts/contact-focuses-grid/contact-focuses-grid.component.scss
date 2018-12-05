@@ -1,0 +1,27 @@
+div.grid-label-wrapper{
+	margin: 5px 0;
+	span.gridName{
+		font-weight: 500;
+		font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+		font-size: 16px;
+	}
+}
+.focuses-dropdown-wrapper{
+	width: 100%;
+	display: flex;
+	flex-flow: row;
+	justify-content: space-between;
+	align-items: center;
+	select{
+		width: 90%;
+		height: 30px;
+	}
+	button.btn-add-focus{
+		height: 30px;
+		width: 30px;
+		color: white;
+		background-color: #01A282;
+		padding: 0;
+		border: none;
+	}
+}

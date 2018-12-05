@@ -1,0 +1,10 @@
+<div class="leadtime-editor-wrapper">
+	<input 
+		style="min-width:50px; max-width: 100px; height:auto; text-align:left;" 
+		type="number" min="0" class="small-number-input" 
+		[(ngModel)]="colValue"
+	/>
+	<select #container class="form-control" type="number" [(ngModel)]="selectedValue" name="statusDropDown">
+		<option *ngFor="let option of options" [value]="option.id">{{option.name}}</option>
+	</select>
+</div>

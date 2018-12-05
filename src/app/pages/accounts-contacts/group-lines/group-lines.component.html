@@ -1,0 +1,17 @@
+<div class="groupPartsContainer">
+<div id="add-account-wrapper" [ngStyle]="{'display': !onReadonly ? 'flex': 'none'}">
+	<button type="button"
+		id="btnAddAccount"
+		class="btn-details btn-affirm"
+		(click)="addAccountToGroup()"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;
+		Add Account
+	</button>  
+</div>
+<ag-grid-angular 
+	#agGrid 
+	id="accountGroupLinesGrid"
+	style="width: 100%; height:380px"
+	class="ag-fresh" 
+	[gridOptions]="groupLinesGridOptions">
+</ag-grid-angular>
+</div>

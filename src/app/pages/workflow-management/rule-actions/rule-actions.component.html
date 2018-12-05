@@ -1,0 +1,14 @@
+<div class="rule-actions-control-bar">
+	<div>Do the following:</div>
+	<button class="btnNewAction" 
+		(click)="onAddAction()" 
+		[ngStyle]="{'display': onReadonly? 'none': 'inline-block'}">
+		<i class="fas fa-plus" aria-hidden="true"></i>&ensp;Action
+	</button>
+</div>
+<ag-grid-angular 
+	id="ruleActionsGrid" 
+	style="width: 100%; height: 400px;" class="ag-fresh" 
+	[gridOptions]="gridOptions" 
+	[rowData]="ruleActionsData">
+</ag-grid-angular>

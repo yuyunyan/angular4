@@ -1,0 +1,37 @@
+<div class="container-fluid">
+    <div ng-if="message" class="red">{{message}}</div>
+    <div class="row">
+        <div class="col-sm-3 searchBoxAlignment">
+            <input type="text" class="searchBoxAccounts" (keyup.enter)="searchUsers()"
+                [(ngModel)]="searchString" [value]="searchString" placeholder="Search Users..." />
+            <button type="button" class="btn-search btn-search-small">
+                <i class="fas fa-search" aria-hidden="true" (click)="searchUsers()"></i>
+            </button>
+
+        </div>
+        <div class="col-sm-2">
+            <select style="margin-top: 0px;" (change)="changeViewType($event)" class="lhs-controls pull-left col-form-label">
+                <option selected  value="0">Active Users</option>
+                <option value="1">All Users</option>
+            </select>
+        </div>
+        <div class="col-sm-4"></div>
+
+        
+        <!-- <div class="col-sm-2 col-form-label">
+            <input class="" type="checkbox" id="showInactiveAccounts" name="showInactive" [(ngModel)]="showInactive" (change)="onCheckboxStateChange($event)">Show Inactive Accounts
+        </div> -->
+        <div class="col-sm-3">
+            <button (click)="onAddNewUser()" type="button" class="btn-details btn-affirm pull-right col-form-label" >
+                <i class="fas fa-plus" aria-hidden="true"></i>&nbsp;New User</button>
+            <!-- <button (click)="onGroupModalClicked()" type="button" class="btn-details btn-affirm pull-right col-form-label">
+                <i class="fas fa-users" aria-hidden="true"></i>&nbsp;My Groups</button> -->
+        </div>
+
+    </div>
+
+    <ag-grid-angular #agGrid style="width: 100%; height: 700px;" class="ag-fresh" [gridOptions]="gridOptions" [rowData]="userData"
+        (rowDoubleClicked)="onRowDoubleClicked($event)">
+    </ag-grid-angular>
+    <button (click)="save()">Save</button>
+</div>

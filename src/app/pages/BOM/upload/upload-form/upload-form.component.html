@@ -1,0 +1,267 @@
+<form class="form" #bomForm="ngForm" [ngBusy]="busyConfig">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">List Type</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="listType"
+            [(ngModel)]="bom.listTypeId"
+            (change)="onListTypeChange($event.target.value)"
+            required>
+            <option value="1"> BOM</option>
+            <option value="2"> Excess/Outside Offer</option>
+          </select>
+        </div>
+      </div>
+      <div *ngIf="isQuoteTypeVisible" class="form-group row text-left"> 
+      <label class="col-sm-3 offset-sm-1 col-form-label">Quote Type</label>
+      <div class="col-sm-7">
+        <select 
+          class="form-control" 
+          name="quoteTypeDropDown" 
+          [(ngModel)]="bom.quoteTypeId">
+          <option *ngFor="let q of quoteTypes" [value]="q.id">{{q?.name}}</option>
+        </select>
+      </div>
+    </div>
+      <div class="form-group row text-left customer-supplier">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Customer</label>
+        <div class="col-sm-7">
+          <!-- <select 
+            class="form-control"
+            name="accountId"
+            #formAccountId="ngModel"
+            required
+            [(ngModel)]="bom.accountId"
+            [disabled]="accountsByQuoteObjectType.length < 1"
+            (change)="onCustomerChange($event.target.value)">
+            <option *ngFor="let c of accountsByQuoteObjectType" [value]="c.accountId"> {{c.accountName}}</option>
+          </select> -->
+          
+            <ng2-completer       
+                #formCustomer        
+                name="accountCustomerCompleter" 
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote" 
+                (blur) = "onInputFocusLost()"
+                (keydown)="onInputKeydown($event)"
+                [minSearchLength]="2">
+            </ng2-completer>
+          <!-- <span
+            class="help-block text-danger"
+            *ngIf="!isAccountSelected()">
+            Customer is required.
+          </span> -->
+          <span class="help-block text-danger" *ngIf="!isAccountSelected()">Customer is required.</span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left customer-supplier" style="display:none;">
+          <label class="col-sm-3 offset-sm-1 col-form-label">Supplier</label>
+          <div class="col-sm-7">
+            <!-- <select 
+              class="form-control"
+              name="accountId"
+              #formAccountId="ngModel"
+              required
+              [(ngModel)]="bom.accountId"
+              [disabled]="accountsByPOObjectType.length < 1"
+              (change)="onCustomerChange($event.target.value)">
+              <option *ngFor="let c of accountsByPOObjectType" [value]="c.accountId"> {{c.accountName}}</option>
+            </select>
+            <span
+              class="help-block text-danger"
+              *ngIf="formAccountId.invalid && (formAccountId.dirty || formAccountId.touched)">
+              Supplier is required.
+            </span> -->
+            <ng2-completer   
+                #formSupplier            
+                name="accountCustomerCompleter" 
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote" 
+                (keydown)="onInputKeydown($event)"
+                [minSearchLength]="2">
+            </ng2-completer>
+            <span class="help-block text-danger" *ngIf="!isAccountSelected()">Supplier is required.</span>
+
+            <!-- <span
+              class="help-block text-danger"
+              *ngIf="!isAccountSelected()">
+              Supplier is required.
+            </span> -->
+          </div>
+        </div>  
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Contact</label>
+        <div class="col-sm-7">
+          <select
+            class="form-control"
+            name="contactId"
+            #formContactId="ngModel"
+            required
+            [(ngModel)]="bom.contactId"
+            [disabled]="contactsByAccount.length < 1"
+            (change)="onContactsChange($event.target.value)">
+            <option *ngFor="let con of contactsByAccount" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="formContactId.invalid && (formContactId.dirty || formContactId.touched)">
+            Contact is required.
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+        
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Sales Rep</label>
+        <div class="col-sm-7">
+          <select
+            class="form-control"
+            name="salesUserId"
+            #formSalesUserId="ngModel"
+            required
+            [(ngModel)]="bom.salesUserId"
+            [disabled]="salesPersons.length < 1"
+            (change)="onSalesPersonChange($event.target.value)">
+            <option *ngFor="let sp of salesPersons" [value]="sp.UserID"> {{sp.FirstName + ' ' + sp.LastName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="formSalesUserId.invalid && (formSalesUserId.dirty || formSalesUserId.touched)">
+            Sales Rep is required.
+          </span>
+        </div>
+      </div>
+  
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">List Description</label>
+        <div class="col-sm-7">
+          <input 
+            type="text" 
+            name="listName" 
+            class="form-control"
+            #formListName="ngModel"
+            required
+            [(ngModel)]="bom.listName">
+          <span
+            class="help-block text-danger"
+            *ngIf="formListName.invalid && (formListName.dirty || formListName.touched)">
+            List Name is required.
+          </span>
+        </div>
+      </div>
+  
+      <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label">Currency</label>
+          <div class="col-sm-7">
+              <select
+              class="form-control"
+              name="CurrencyId"
+              #formCurrencyId="ngModel"
+              required
+              [(ngModel)]="bom.currencyId">
+              <option *ngFor="let cur of currencies" [value]="cur.currencyId"> {{cur.name}}</option>
+            </select>
+            <span
+              class="help-block text-danger"
+              *ngIf="formCurrencyId.invalid && (formCurrencyId.dirty || formCurrencyId.touched)">
+              Currency is required.
+            </span>
+          </div>
+        </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row text-left">
+        <label class="col-sm-1 offset-sm-3 col-form-label">Comment</label>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <textarea class="form-control" name="comment" rows="5" [(ngModel)]="comment"></textarea>
+        </div>
+      </div>
+    </div>    
+  </div>
+  
+  <div class="row" style="height: 24px;">
+    <div class="col-sm-12 file-upload-control" [ngStyle]="{'min-width.px': fileName? (130 + fileName.length * 12): 150 }">
+      <div class="col-sm-3">
+      <label class="btn btn-upload" style="margin-left: 32px;">
+        <i class="fas fa-upload" aria-hidden="true"></i> &nbsp;Select File
+        <input type="file" hidden multiple="false" (change)="fileUploaded(input.files)" #input>
+      </label>
+      <span>{{fileName}}</span>
+      <i class="fas fa-times delete-file"
+        *ngIf="fileName"
+        (click)="removeFile()">
+      </i>
+     </div>
+     <div class="col-sm-2">
+        <input class="save-layout-checkbox" type="checkbox" name="runMatch" [(ngModel)]="bom.runMatch">
+        <label for="runMatch">Run match</label> 
+     </div>
+
+     <div class="col-sm-3 source-list" style="display:none;">
+        <input class="save-layout-checkbox" (change)="onPublishChange($event.target.value)" type="checkbox" name="runMatch" [(ngModel)]="bom.publishToSources">
+        <label for="runMatch">Publish to Sources</label> 
+     </div>
+
+     <div class="col-sm-2 source-list-sel" style="display:none;">
+        <select
+        class="checking-field"
+        name="SourcingType"
+        #formCurrencyId="ngModel"
+        required
+        [(ngModel)]="bom.sourcingTypeId">
+        <option *ngFor="let src of sourcingTypes" [value]="src.id"> {{src.name}}</option>
+      </select>
+     </div>
+
+    </div>
+  </div>
+
+  <div class="row file-preview-wrapper" [ngStyle]="{'display': userUpload? 'block': 'none' }">
+    <div class="col-sm-12">
+      <az-bom-upload-preview
+        [userUpload]="userUpload"
+        [accountMaps]="accountMaps"
+        [itemListTypeId]="bom.listTypeId">
+      </az-bom-upload-preview>
+    </div>
+  </div>
+
+  <div class="row save-bom-buttons-wrapper">
+    <div class="col-sm-4 file-upload-save-layout-checkbox">
+      <input class="save-layout-checkbox" type="checkbox" name="saveLayout" [(ngModel)]="bom.saveLayout">
+      <label for="saveLayout">Save layout for {{account?.name || '[Customer Name]'}}.</label> 
+    </div>
+
+    <div class="col-sm-4 file-upload-buttons">
+      <button
+        class="btn btn-bom-save"
+        type="button"
+        [disabled]="IsValidSubmit()"
+        (click)="onSaveBOMClicked($event)">
+        <i class="fas fa-check" aria-hidden="true"></i> &nbsp;SAVE
+      </button>
+      <button
+        class="btn btn-bom-cancel"
+        type="button"
+        (click)="onCancelBOMUploadClicked($event)">
+        <i class="fas fa-times" aria-hidden="true"></i> &nbsp;CANCEL
+      </button>
+    </div>
+  </div>
+
+</form>

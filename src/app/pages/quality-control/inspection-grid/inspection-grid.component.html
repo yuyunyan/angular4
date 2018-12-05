@@ -1,0 +1,47 @@
+<div class="container-fluid parentMargin">
+    <div>
+        <h5>Inspections</h5>
+        <br/>
+        <input (keyup.enter)="searchInspection()" type="text" id="txtOrderSearch" class="searchBox"
+         [(ngModel)]="searchParameter"
+        placeholder="Search Inspections..."/>
+      <button (click)="searchInspection()" class="btn-search-small" type="button">
+        <i class="fas fa-search" aria-hidden="true"></i>
+      </button>
+    </div>
+  <div class="inspectionGridOuter">
+  <ag-grid-angular 
+  id="inspectionGrid" 
+  style="width: 100%; height:500px" 
+  class="ag-fresh" 
+  [gridOptions]="inspectionGrid" 
+ >
+  </ag-grid-angular>
+
+  <div class="ag-grid-sort pull-right" style="position: absolute; top: 66%; right: 5%;">
+    <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -120%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+        <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+    </div>
+    <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -120%; right: 7.5%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+      <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+    </div>
+  </div>
+  <div class="btn-group dropup quotePartsButton">
+    <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+    <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+        <ul class="dropdown-menu">
+            <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+            <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+            <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+        </ul>
+  </div>
+  <!-- <div class="btn-group dropup">
+        <button class="refreshGrid menuBtn" data-toggle="dropdown" ><i style="color:white;" class="fas fa-sync-alt"></i></button>
+        <ul class="dropdown-menu">
+              <li><button style="width:100%" class="export-grid dropdown-item" (click)="refreshGrid()">No Auto-Refresh</button></li>
+              <li><button style="width:100%" class="reset-grid dropdown-item" (click)="oneMinuteRefresh_Click()">1 Minute Auto-Refresh</button></li>
+              <li><button style="width:100%" class="save-grid dropdown-item" (click)="fiveMinuteRefresh_Click()">5 Minute Auto-Refresh</button></li>
+          </ul>
+    </div> -->
+</div>
+</div>

@@ -1,0 +1,43 @@
+<ng-container>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+        <!--<h5 class="modal-title" id="lineModalLabel">Edit Contact</h5>-->
+      </div>
+      <div class="modal-body">
+        <div class="table-responsive">
+          <table class="table">
+            <th>User or Group</th>
+            <th>Percent</th>
+            <tr *ngFor="let owner of owners">
+              <td>
+                <select class="form-control" [(ngModel)]="owner.id"  name="accountDropDown">
+                  <option *ngFor="let user of (usersList$ | async)" [value]="user.UserID">{{user.FirstName + ' '+ user.LastName}}</option>
+                </select>
+              </td>
+              <td><input  name="percentage" placeholder="Location Name" class="form-control input-md location-input" required="" type="text" [(ngModel)]="owner.percentage"></td>
+              <td>
+                <a (click)="onDeleteOwner(owner)"><i class="fas fa-times" aria-hidden="true"></i></a>
+              </td>
+            </tr>
+            <tr>
+            <td> <button type="button" class="btn-location" (click)="createNewOwner()">+ New Owner</button></td>
+             <td><span class="text-danger" *ngIf="formError">{{formError}}</span></td>
+            </tr>
+          </table>
+         </div>
+       </div>
+      <div class="modal-footer">
+        <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+          <div class="btn-group" role="group">
+            <button id="ownershipClose" type="button" class="btn btn-modal" data-dismiss="modal" (click)="ownersCloseClicked()" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Close</button>
+          </div>
+          <div class="btn-group" role="group">
+            <button type="button" id="saveOwners" class="btn btn-default btn-modal" (click)="ownersSaveClicked()" data-action="save" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>

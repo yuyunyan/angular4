@@ -1,0 +1,35 @@
+.outer{
+    width:100%;
+}
+
+.agGridCustom{
+    width: 100%; height: 800px;
+}
+.inner{
+    position: absolute; top: 96.5%; right: 1%;
+}
+.alertSaved{
+    display:none; 
+    position: absolute; 
+    top: -120%; 
+    right: 0; 
+    height: 25px; 
+    padding-top: 2px; 
+    padding-left: 10px; 
+    padding-right: 100px;
+}
+
+.searchBox{
+    width: 175px;
+    height: 30px;
+    margin-right: 3px;
+}
+
+.ag-bl-full-height{
+    overflow:visible !important;
+}
+
+.newQuoteBtn{
+    float:right;
+}
+

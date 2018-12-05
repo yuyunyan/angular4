@@ -1,0 +1,140 @@
+.control-bar{
+	background: none;
+	margin-bottom: 10px;
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: space-between;
+	padding-left: 1rem;
+	padding-right: 1rem;	
+}
+
+.btn-details{
+	cursor: pointer;
+	font-weight: 500;
+	margin: 3px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+	width: fit-content;
+	height: 30px;
+	color: white;
+}
+
+.btn-extras{
+	@extend .btn-details;
+	width: auto;
+}
+
+input[readonly]{
+	color: black !important;
+	background: none !important;
+	border: none;
+}
+
+select[disabled], .col-sm-10 label{
+	color: black !important;
+	background: none !important;
+	border: none;
+	cursor: default !important;
+	-webkit-appearance: none;
+}
+
+.btn-hamburger {
+	@extend .btn-details;
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 35px;
+}
+
+.btn-affirm{
+	background-color: #01A282;
+	border: none;
+}
+
+
+.btn-negative{
+	background-color: #990000;
+	border: none;
+}
+
+.btn-none {
+	background-color: #CCCCCC;
+	border: none;
+	margin: 3px;
+}
+
+//Normalize different buttons so that they have the same style as "btn" class (bootstrap)
+.btn-details, .btn-affirm, .btn-negative, .btn-hamburger, .btn-none {
+	display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    border: 1px solid transparent;
+    font-size: 0.9rem;
+    line-height: 1.5;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+.btn-affirm span{
+	margin-left: -10px;
+}
+.extra-btn{
+    margin-right: auto;
+}
+
+.dropdown-menu {
+	white-space: nowrap;
+	background: white;
+	border: none;
+	min-width: 100px;
+	max-width: 200px;
+	padding: 0 0 5px;
+}
+
+.btn-dropdown-menu {
+	@extend .btn-affirm;
+	cursor: pointer;
+	margin-left: 0px;
+	margin-right: 0px;
+	margin-top: 3px;
+	margin-bottom: 0px;
+	height: 30px;
+	width: 100px;
+	padding-top: 0;
+	padding-bottom: 0;
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+	align-items: center;
+	vertical-align: middle;
+	i{
+		display: flex;
+		align-items: center;
+		height: 100%;
+	}
+}
+
+.read-only-btn-group{
+	display: flex;
+	flex-direction: row-reverse;
+}
+
+.newAccount{
+	margin-bottom: 10px;
+	background-color: #242D3A;
+	color: white;
+	border: 2px solid #008CBA;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.tagBtn{
+	visibility: hidden;
+}
+

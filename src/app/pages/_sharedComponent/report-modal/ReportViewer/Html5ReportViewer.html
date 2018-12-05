@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Telerik HTML5 Report Viewer</title>
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+
+    <link href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.common.min.css" rel="stylesheet" />
+    <link href="http://kendo.cdn.telerik.com/2015.3.930/styles/kendo.blueopal.min.css" rel="stylesheet" />
+
+    <!--kendo.all.min.js can be used as well instead of the following custom Kendo UI subset-->
+    <script src="/ReportViewer/js/telerikReportViewer.kendo-11.2.17.1025.min.js"></script>
+
+    <script src="/ReportViewer/js/telerikReportViewer-11.2.17.1025.min.js"></script>	
+
+  <style>
+        #reportViewer1 {
+            position: absolute;
+            left: 5px;
+            right: 5px;
+            top: 5px;
+            bottom: 5px;
+            overflow: hidden;
+            font-family: Verdana, Arial;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="reportViewer1">
+        loading...
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#reportViewer1")
+                .telerik_ReportViewer({
+
+                    // The URL of the service which will serve reports.
+                    // The URL corresponds to the name of the controller class (ReportsController).
+                    // For more information on how to configure the service please check http://www.telerik.com/help/reporting/telerik-reporting-rest-conception.html.
+					serviceUrl: "/api/reports",
+
+                    // The URL for custom report viewer template. The template can be edited -
+                    // new functionalities can be added and unneeded ones can be removed.
+                    // For more information please check http://www.telerik.com/help/reporting/html5-report-viewer-templates.html.
+                    // templateUrl: '/ReportViewer/templates/telerikReportViewerTemplate-11.2.17.1025.html',
+
+                    //ReportSource - report description
+                    reportSource: {
+                        // The report can be set to a report file name (trdx report definition) 
+                        // or CLR type name (report class definition).
+                        report: "Sourceportal.Reports.QuoteDetails, Sourceportal.Reports, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null",
+                        parameters: { QuoteID: 100004, VersionID: 1, UserID: 1, AccountID: 43 , Date: "2017-01-01", Salesperson: "Sally Sales" }
+                    },
+
+                    // Specifies whether the viewer is in interactive or print preview mode.
+                    // PRINT_PREVIEW - Displays the paginated report as if it is printed on paper. Interactivity is not enabled.
+                    // INTERACTIVE - Displays the report in its original width and height without paging. Additionally interactivity is enabled.
+                    viewMode: telerikReportViewer.ViewModes.INTERACTIVE,
+
+                    // Sets the scale mode of the viewer.
+                    // Three modes exist currently:
+                    // FIT_PAGE - The whole report will fit on the page (will zoom in or out), regardless of its width and height.
+                    // FIT_PAGE_WIDTH - The report will be zoomed in or out so that the width of the screen and the width of the report match.
+                    // SPECIFIC - Uses the scale to zoom in and out the report.
+                    scaleMode: telerikReportViewer.ScaleModes.SPECIFIC,
+
+                    // Zoom in and out the report using the scale
+                    // 1.0 is equal to 100%, i.e. the original size of the report
+                    scale: 1.0,
+					enableAccessibility: false,
+
+                    ready: function () {
+                        //this.refreshReport();
+                    },
+                });
+        });
+    </script>
+
+</body>
+</html>

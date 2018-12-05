@@ -1,0 +1,34 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="row form-group text-left">
+      <label class="col-sm-3 offset-sm-1 col-form-label">Create a</label>
+      <div class="col-sm-5">
+          <select 
+            class="form-control"
+            name="createObjectType"
+            [(ngModel)]="createObjectType"
+            (change)="onCreateTypeChange($event.target.value)">
+            <option *ngFor="let c of createOptions" [value]="c.id"> {{c.name}}</option>
+          </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<az-items-flagged-quote
+  [itemsFlagged]="itemsFlagged"
+  [ngStyle]="{'display': createObjectType == 1 ? 'block' : 'none'}"
+  (onCloseModal)="onCloseModal.emit()">
+</az-items-flagged-quote>
+
+<az-items-flagged-rfq
+  [itemsFlagged]="itemsFlagged"
+  [ngStyle]="{'display': createObjectType == 2 ? 'block' : 'none'}"
+  (onCloseModal)="onCloseModal.emit()">
+</az-items-flagged-rfq>
+
+<az-items-flagged-purchase-order
+  [itemsFlagged]="itemsFlagged"
+  [ngStyle]="{'display': createObjectType == 3 ? 'block' : 'none'}"
+  (onCloseModal)="onCloseModal.emit()">
+</az-items-flagged-purchase-order>

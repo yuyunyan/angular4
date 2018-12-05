@@ -1,0 +1,22 @@
+<div class="grid-label-wrapper">
+		<span class="gridName"><b>Focuses</b></span>
+</div>
+	<ag-grid-angular 
+		id="contactFocusGrid"
+		#agGrid 
+		style="width: 100%; height: 80%;"
+		class="ag-fresh" 
+		[gridOptions]="contactFocusesGrid"
+		(rowClicked)="onCellClicked($event)">
+	</ag-grid-angular>
+<div class="focuses-dropdown-wrapper" [ngStyle]="{'display': canEdit? 'flex' : 'none'}">
+	<select class="focuses-dropdown-select" name="focusId" [(ngModel)]="focusId">
+		<option *ngFor="let option of contactFocusOptions;" [value]="option.focusId">
+			{{option?.focusName + ' (' + option?.objectName + ')'}}
+		</option>
+	</select>
+	<button type="button" class="btn-add-focus" (click)="addFocus()">
+		<i class="fas fa-plus" aria-hidden="true"></i>
+	</button>
+</div>
+	

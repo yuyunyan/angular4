@@ -1,0 +1,135 @@
+<ng-container>
+	<div class="modal-dialog">
+		<div class="modal-content" style="width: 220%; right: 60%;">
+			<div class="modal-header">
+				<div class="header-text">
+					Generate Rfqs
+				</div>
+				<button 
+					type="button" 
+					class="close" 
+					data-dismiss="modal" 
+					#rfqCloseBtn>
+					<span aria-hidden="true">×</span>
+					<span class="sr-only">Cancel</span>
+				</button>
+			</div>
+
+			<div class="modal-body" style="padding: 15px;">
+
+				<div widget class="card partsContainer">
+					<div class="card-header" style="display: flex;">
+						<span>Parts</span>
+					</div>
+					<div class="card-block widget-body" style="padding-top: 0;">
+						<div id="add-mpn-wrapper">
+							<ng2-completer #rfqLineCompleter 
+								placeholder="Add MPN"
+								name="accountCompleter" 
+								[(ngModel)]="selectedValue"
+								(selected)="onAccountSelected($event)"
+								(opened)="onDropdownOpened()"
+								[datasource]="dataRemote" 
+								[minSearchLength]="2"
+								[fillHighlighted]=false>
+							</ng2-completer>
+						</div>
+						<ag-grid-angular
+							id="rfqGeneratePartGrid"
+							#agGrid
+							class="ag-theme-balham"
+							[gridOptions]="rfqGeneratePartGrid">
+						</ag-grid-angular>
+						<div>
+							<h3 class="has-error" *ngIf="errorMesgMPN">{{errorMesgMPN}}</h3>
+						</div>
+					</div>
+				</div>
+
+				<div widget class="card">
+					<div class="card-header" style="display: flex;">
+						<span>Suppliers</span>
+					</div>
+					<div class="card-block widget-body" style="padding-top: 0;">
+						<div id="add-supplier-wrapper">
+							<ng2-completer #rfqSupplierCompleter 
+								placeholder="Add Supplier"
+								name="supplierCompleter" 
+								[(ngModel)]="selectedSupplier"
+								(selected)="onSuppliertSelected($event)"
+								(opened)="onDropdownSupplierOpened()"
+								[datasource]="dataRemoteSupplier" 
+								[minSearchLength]="2"
+								[fillHighlighted]=false>
+							</ng2-completer>
+							
+							<div class="dropdown">
+								<button type="button"
+									id="btnAddGroup"
+									data-toggle="dropdown"
+									aria-haspopup="true" 
+									aria-expanded="false"
+									style="margin-left: 10px;"
+									class="btn-details btn-affirm">
+									<i class="fas fa-plus" aria-hidden="true"></i>&nbsp;
+									New Group
+								</button> 
+								<div class="dropdown-menu" >
+									<button 
+										*ngFor="let accountGroup of accountGroupList;"
+										style="width: 100%; background-color: white; color: black; font-weight: 900;"
+										class="btn-primary btn-dropdown-menu dropdown-item" 
+										(click)="addAccountGroup(accountGroup.accountGroupId)">
+										{{accountGroup?.groupName}}
+									</button>
+								</div>
+							</div>
+							<button type="button"
+								id="btnAddRfq"
+								style="margin-left: 10px;"
+								class="btn-details btn-affirm"
+								(click)="matchSpecialty()"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;
+								Add From Line Cards
+							</button>  
+						</div>
+						<ag-grid-angular
+							id="rfqGenerateSupplierGrid"
+							#agGrid
+							class="ag-theme-balham"
+							[gridOptions]="rfqGenerateSupplierGrid">
+						</ag-grid-angular>
+						<div>
+							<h3 class="has-error" *ngIf="errorMesgSupplier">{{errorMesgSupplier}}</h3>
+						</div>
+					</div>
+				</div>
+
+				<div widget class="card">
+					<div class="card-block widget-body" style="padding: 0;">
+						<textarea
+							style="padding: 3px;"
+							placeholder="Additional Note for Suppliers"
+							[(ngModel)]="comment"
+							name="comment" 
+							id="rfqComments" 
+							cols="172" 
+							rows="4"></textarea>
+					</div>
+				</div>
+			</div>
+
+			<div class="modal-footer">
+				<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+					<div class="btn-group" role="group">
+						<button (click)="onSendRfq()" 
+							type="button" class="btn btn-default btn-modal" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp;Send</button>
+					</div>
+
+					<div class="btn-group" role="group">
+						<button (click)="onCancelGenerateRfq()" type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fa fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</ng-container>

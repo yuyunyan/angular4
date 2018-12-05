@@ -1,0 +1,128 @@
+<div class="widget-body">
+  <div class="row mbm-20">
+    <div class="col-lg-12 col-12 bottom-30">
+      <div widget class="card">
+        <div class="card-header">
+          <span>Quotes</span>
+          <div class="widget-controls">              
+            <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+            <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+            <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+            <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+          </div>        
+        </div>
+        <div class="card-block widget-body" style="padding-top:5px;">
+          <div class="container-fluid">
+            <div class="form-group row" style="margin-bottom: -4px; padding-bottom:5px;">
+              <div class="col-sm-7">
+
+								<ul class="nav nav-tabs source-nav-tabs top pull-left">
+                  <li 
+                    *ngFor="let rs of routeStatuses;"
+                    class="nav-item source-nav-item">
+                    <a class="nav-link source-nav-link btn btn-outline-secondary transition"
+                      [ngClass]="{'active': rs.routeStatusId == sourcingStatus}"
+                      (click)="statusChanged(rs)" 
+                      data-toggle="tab">
+                      {{rs?.statusName}}{{rs?.isComplete ? '': '(' + (rs?.countQuoteLines || 0) + ')'}}
+										</a>
+									</li>
+								</ul>
+							</div>
+							
+              <div class="col-sm-5">
+                <button type="button"
+                  id="btnAddRfq"
+                  class="btn-details btn-affirm pull-right"
+                  (click)="populateDialog()">
+                  Generate Vendor Quotes
+                </button>
+                <button type="button"
+                  class="btn-details btn-affirm dropdown-toggle pull-right" 
+                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Set Selected To 
+                </button>
+                <div class="dropdown-menu buyer-status-dropdown-menu">
+                  <button type="button"
+                    *ngFor="let rs of routeStatuses;"
+                    class="dropdown-item"
+                    (click)="setRouteStatus(rs)">
+                    {{rs?.statusName}}
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="sourcingPartsGridOuter">
+              <ag-grid-angular
+                id="sourcing-parts-grid"
+                #agGrid
+                style="width: 100%; height: 500px;"
+                class="ag-fresh"
+                [gridOptions]="partsGrid"
+                [rowData] = "AcData"
+                (rowClicked)="onRowDoubleClicked($event)">
+              </ag-grid-angular>
+          
+              <div class="btn-group dropup quotePartsButton">
+                <button (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+                <button data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+                    <ul class="dropdown-menu dropLeft">
+                        <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+                        <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+                        <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+                    </ul>
+              </div> 
+
+              <div class="ag-grid-sort pull-right grid-control-wrapper">
+                  <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -120%; right: 7%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+                      <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+                  </div>
+                  <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -120%; right: 0; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+                      <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="rfqGenerateModal" tabindex="-1" style="z-index: 110;"
+  role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <az-rfq-generate
+    [rfqLines]="_selectedRowArray">
+  </az-rfq-generate>
+</div>
+<!-- <az-sourcing-rfq-dialog [rfqLines]="_selectedRowArray"></az-sourcing-rfq-dialog> -->
+
+<div id="quote-part-comment-preview">
+  <az-comment-hover
+    [objectId]="hoverObjectId"
+    [objectTypeId]="quotePartObjectTypeId"
+    [objectInfo]="hoverObjectInfo">
+  </az-comment-hover>
+</div>
+
+<div id="quote-part-comment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 150%; right: 25%;">
+      <div class="modal-header">
+        <div class="header-text">
+          {{clickedObjectInfo}}
+        </div>
+      </div>
+      <div class="modal-body">
+        <az-comments
+          [objectId]="clickedQuoteLineId"
+          [objectTypeId]="quotePartObjectTypeId"
+          [commentTitle]="'Quote Line Comments'"
+          (onCommentSaved)="onQuotePartCommentSaved()">
+        </az-comments>
+      </div>
+    </div>
+  </div>
+</div>
+
+<simple-notifications [options]="notifyOptions"></simple-notifications>

@@ -1,0 +1,90 @@
+<div class="container-fluid parentMargin">
+    <div>
+        <h5>Checklists</h5>
+        <br/>
+    </div>
+  <div class="row">
+    <div class="col-md-4">
+      <div style="width:100%;">
+        <h5 class="pull-left">
+          <button class="btn-details btn-affirm" (click)="AddCheckList()">+ Checklist</button>
+        </h5>
+        <!-- <button id="btnsearchChecklist" type="button" class="btn-search pull-right">
+                  <i class="fas fa-search" aria-hidden="true" (click)="searchChecklist()"></i>
+          </button>
+        <input type="text" id="txtOrdersSearch" class="pull-right" style="width: 150px;" (keyup.enter)="searchChecklist()" [(ngModel)]="searchParamter"
+          [value]="searchParamter" placeholder="Search..." /> -->
+      </div>
+      <div ng-if="message" class="red">{{message}}</div>
+      <ag-grid-angular 
+      #agGrid style="width: 100%; height: 500px;" 
+      class="ag-fresh" [gridOptions]="gridOptions" 
+      (rowDoubleClicked)="onRowDoubleClicked($event)">
+      </ag-grid-angular>
+      
+    </div>
+    <div class="col-md-8">
+      <div *ngIf="showMessage" class="clickGridMessage">
+        <p>Choose a checklist to view details.</p>
+      </div>
+      <br/>
+      <br/>
+      <div *ngIf="checkListId || showAddNewCheckList">
+        <div widget class="card clWidget">
+          <div class="card-header">
+            <span>Details</span>
+            <div class="widget-controls">
+              <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+              <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+              <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+              <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+            </div>
+          </div>
+          <div class="card-block widget-body">
+            <az-details [checkListId]="checkListId" (saveTriggered)="onSaveTriggered($event)" (parentSelected)="onParentSelected($event)"></az-details>
+          </div>
+        </div>
+      </div>
+      <br/>
+      <div *ngIf="checkListId && !isChildCheckList && !showAddNewCheckList">
+        <div widget class="card clWidget">
+          <div class="card-header">
+            <span>Associations</span>
+            <div class="widget-controls">
+              <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+              <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+              <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+              <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+            </div>
+          </div>
+          <div class="card-block widget-body">
+            <az-associations [checkListId]="checkListId"></az-associations>
+          </div>
+        </div>
+      </div>
+      <span *ngIf="checkListId && isChildCheckList && !showAddNewCheckList"><strong>Rules are set only for the parent checklist<br/><br/></strong></span>
+      <br/>
+      <div *ngIf="checkListId && !showAddNewCheckList">
+        <div widget class="card">
+          <div class="card-header">
+            <span>Questions</span>
+            <div class="widget-controls">
+              <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+              <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+              <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+              <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+            </div>
+          </div>
+          <div class="card-block widget-body">
+            <az-questions [checkListId]="checkListId"></az-questions>
+            <br/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+

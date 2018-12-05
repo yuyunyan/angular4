@@ -1,0 +1,63 @@
+<div class="col-md-12" *ngIf="rfqLineId">
+  <div class="response-buttons pull-right">
+    <button *ngxPermissionsOnly="['CanEditLines27']" (click)="onAddRow()" class="btn-gridButtons"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;Add Response</button>
+    <button *ngxPermissionsOnly="['CanEditLines27']" (click)="onAddRow(true)" class="btn-gridButtons"><i class="fas fa-ban" aria-hidden="true"></i>&nbsp;No stock</button>
+    <button *ngxPermissionsOnly="['CanEditLines27']" (click)="deleteRows()" class="btn-gridButtons"><i class="fa fas fa-times" aria-hidden="true"></i>&nbsp;Delete Selected</button>
+  </div>
+
+<div class="rfqGridOuter">
+  <ag-grid-angular
+    id="rfqLineResponsesGrid"
+    style="width: 100%; height:500px"
+    class="ag-fresh"
+    [gridOptions]="rfqLineResponsesGrid"
+    (rowClicked)="onCellClicked($event)">
+  </ag-grid-angular>
+
+  <div class="btn-group dropup rfqsPartsButton">
+    <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+    <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+        <ul class="dropdown-menu dropLeft">
+            <li><button *ngxPermissionsOnly="['CanExport19']" style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+            <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+            <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+        </ul>
+  </div>
+</div>
+
+<div *ngIf="rfqLineId" class="ag-grid-sort pull-right" style="position: absolute; top: 95%; right: 1%; width: 36%">
+    <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -105%; right: 53%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px; z-index: 1;">
+      <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+    </div>
+
+  </div>
+</div>
+
+<div id="source-comment-preview">
+  <az-comment-hover
+    [objectId]="sourcesJoinCommentUId"
+    [objectTypeId]="sourcesJoinObjectTypeId"
+    [objectInfo]="hoverObjectInfo">
+  </az-comment-hover>
+</div>
+  
+<div id="source-comment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 150%; right: 25%;">
+      <div class="modal-header">
+        <div class="header-text">
+          {{clickedObjectInfo}}
+        </div>
+      </div>
+      <div class="modal-body">
+        <az-comments
+          [ngStyle]="{'display': sourcesJoinCommentUId && (sourcesJoinCommentUId > 0) ? 'block': 'none'}"
+          [objectId]="sourcesJoinCommentUId"
+          [objectTypeId]="sourcesJoinObjectTypeId"
+          [commentTitle]="'Source Join Comments'"
+          (onCommentSaved)="onResponseCommentSaved()">
+        </az-comments>
+      </div>
+    </div>
+  </div>
+</div>

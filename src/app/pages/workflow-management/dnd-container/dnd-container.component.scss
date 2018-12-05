@@ -1,0 +1,43 @@
+.btn-details btn-affirm {
+  background-color: #01A282;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 2px;
+  font-weight: 500;
+  margin: 4px;
+  margin-left: 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 30px;
+}
+
+.btn-icons {
+  background-color: #01A282;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 2px;
+  font-weight: 500;
+  margin: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 30px;
+}
+
+.heading-selection-wrapper{
+  display: inline-block;
+  padding: 10px 0 10px 0;
+}
+
+.rule-condition-edit-btn-group{
+  display: flex;
+  justify-content: space-around;
+  flex-flow: row;
+  min-width: 80px;
+  align-items: center;
+}

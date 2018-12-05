@@ -1,0 +1,303 @@
+<div [ngBusy]="busyConfig">
+    <report-modal [reportUrl]="reportUrl"></report-modal>
+    <form [readonlyField]="onReadonly"
+    [objectPermissions]="purchaseOrderPermissions"
+    (onFormStatusChange)="onFormStatusChange($event)"
+    (onOwnershipClick)="onOwnershipClick($event)"
+    [showSync]="true">
+
+      <div class="row detailParent">
+        <div class="col-sm-10">
+            <div class="row bottom-30">
+                <div class="col-sm-4 mbm-20">
+                    <div class="card card-outline-default">
+                        <div  class="card-header detailCard"><strong>Purchase Order Details</strong></div>
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Vendor']">
+                            <label class="col-sm-4 col-form-label">Supplier</label>
+                            <div class="col-sm-8">
+                              <div [ngClass]="{'has-danger': !poDetails.accountId}">
+                                  <div>
+                                    <ng2-completer
+                                      #formSupplier
+                                      [inputClass]="'Vendor-Input form-control'"
+                                      [hidden]="poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync"
+                                      name="accountSupplierCompleter"
+                                      #accountSupplierCompleter="ngModel"
+                                      [(ngModel)]="selectedAccountName"
+                                      (selected)="onAccountSelected($event)"
+                                      [datasource]="dataRemote"
+                                      (blur) ="onInputFocusLost()"
+                                      (keydown)="onSupplierTyping($event)"
+                                      [minSearchLength]="2">
+                                    </ng2-completer>
+
+                                    <label [hidden]="!(poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync)" class="col-form-label">
+                                      {{selectedAccountName}}
+                                    </label>
+                                  </div>
+                                </div>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']" [ngClass]="{'has-danger': !poDetails.contactId}">
+                            <label class="col-sm-4 col-form-label">Contact</label>
+                            <div class="col-sm-8">
+                              <select data-field-name="Contact"
+                                class="form-control contactName"
+                                name="contactId"
+                                #contactId="ngModel"
+                                [(ngModel)]="poDetails.contactId"
+                                (change)="onContactChange($event.target.value)">
+                                <option *ngFor="let x of accountContacts" [value]="x.contactId">{{x.firstName}}&nbsp;{{x.lastName}}</option>
+                              </select>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                            <label class="col-sm-4 col-form-label"></label>
+                            <div class="col-sm-8 fieldLab">
+                                <label style="font-weight:normal">P:  {{poDetails.contactPhone}}</label>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                            <label class="col-sm-4 col-form-label"></label>
+                            <div class="col-sm-8 fieldLab">
+                                <label style="font-weight:normal">E:&nbsp;<a class="quote-contact-email-link" href="mailto:{{poDetails.contactEmail}}"><u>{{poDetails.contactEmail}}</u></a></label>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                            <label class="col-sm-4 col-form-label">Vendor Address</label>
+                            <div class="col-sm-8">
+                              <label class="readonlyLabel">&nbsp;&nbsp;&nbsp;&nbsp;{{vendorLocation.name}} <br>&nbsp;&nbsp;&nbsp;&nbsp;{{vendorLocation.houseNo}} {{vendorLocation.street}} <br> &nbsp;&nbsp;&nbsp;&nbsp;{{vendorLocation.city}},
+                              {{vendorLocation.stateCode}} {{vendorLocation.postalCode}}</label>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Currency']">
+                              <label class="col-sm-4 col-form-label">Currency</label>
+                              <div class="col-sm-8" [ngClass]="{'has-danger': !poDetails.currencyId}">
+                                <select
+                                  class="form-control"
+                                  name="currencyId"
+                                  #currencyId="ngModel"
+                                  [hidden]="poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync"
+                                  data-field-name="Currency"
+                                  [(ngModel)]="poDetails.currencyId">
+                                  <option *ngFor="let x of currencyList" [value]="x.currencyId">{{x.name}}</option>
+                                </select>
+                                <label [hidden]="!(poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync)" class="col-form-label">
+                                  {{poDetails.currencyId}}
+                                </label>
+                              </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Payment Terms']">
+                              <label class="col-sm-4 col-form-label">Payment Terms</label>
+                              <div class="col-sm-8" [ngClass]="{'has-danger': !poDetails.paymentTermId}">
+                                <select
+                                  data-field-name="Payment Terms"
+                                  class="form-control"
+                                  name="paymentTermId"
+                                  #paymentTermId="ngModel"
+                                  [(ngModel)]="poDetails.paymentTermId">
+                                  <option *ngFor="let x of paymentTerms" [value]="x.PaymentTermID">{{x.Name}}</option>
+                                </select>
+                              </div>
+                          </div>
+                        </div>
+                </div>
+
+                <div class="col-sm-4 mbm-20">
+                  <div class="card card-outline-default">
+                      <div class="card-header detailCard"><strong>Shipping Details</strong></div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Organization']"  [ngClass]="{'has-danger': !poDetails.organizationId}">
+                          <label class="col-sm-4 col-form-label">Organization</label>
+                          <div class="col-sm-8">
+                            <select
+                              class="form-control"
+                              name="organizationDropDown"
+                              #organizationId="ngModel"
+                              (change)="onOrganizationChange($event.target.value)"
+                              [hidden]="poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync"
+                              [(ngModel)]="poDetails.organizationId"
+                              data-field-name="Organization">
+                              <option *ngFor="let o of organizationList" [value]="o.id">{{o?.name}}</option>
+                            </select>
+                            <label [hidden]="!(poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync)" class="col-form-label">
+                              {{orgName}}
+                            </label>
+                          </div>
+                        </div>
+
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Ship To']" [ngClass]="{'has-danger': !poDetails.toWarehouseId}">
+                          <label class="col-sm-4 col-form-label">Ship To</label>
+                          <div class="col-sm-8">
+                              <select
+                                class="form-control ship-location-select"
+                                name="toWarehouseId"
+                                data-field-name="Ship To"
+                                [hidden]="poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync"
+                                [(ngModel)]="poDetails.toWarehouseId"
+                                (change)="onShipToChange($event.target.value)">
+                                <option *ngFor="let w of warehouseList" [value]="w.warehouseId">&nbsp;&nbsp;{{w.warehouseName}}</option>
+                              </select>
+                              <label [hidden]="!(poDetails.externalId || poDetails.hasPendingTransaction || hideAfterSync)" class="col-form-label">
+                                  {{warehouseToDisplayName}}
+                                </label>
+
+                            <!-- {{shipToLocation?.HouseNumber}} {{shipToLocation?.Street}} <br> {{shipToLocation?.City}},
+                            {{shipToLocation?.StateCode}} {{shipToLocation?.PostalCode}} -->
+                          </div>
+                        </div>
+
+                        <!-- <div class="form-group row text-left" *ngxPermissionsOnly="['Ship From']">
+                            <label class="col-sm-4 col-form-label">Ship From</label>
+                            <div class="col-sm-8">
+                              <select
+                                data-field-name="Ship From"
+                                class="form-control ship-location-select"
+                                name="shipFromLocationId"
+                                [(ngModel)]="poDetails.shipFromLocationId"
+                                (change)="onNonBillingChange($event.target.value)">
+                                <option [value]="-1">None</option>
+                                <option *ngFor="let x of nonBillingLocations" [value]="x.LocationID">&nbsp;&nbsp;{{x.LocationName}}</option>
+                              </select>
+                              {{shipFromLocation?.HouseNumber}} {{shipFromLocation?.Street}} <br> {{shipFromLocation?.City}},
+                              {{shipFromLocation?.StateCode}} {{shipFromLocation?.PostalCode}}
+                            </div>
+                          </div> -->
+
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Shipping Method']">
+                            <label class="col-sm-4 col-form-label">Ship via</label>
+                            <div class="col-sm-8">
+                              <select
+                                class="form-control"
+                                name="shippingMethodId"
+                                data-field-name="Shipping Method"
+                                [(ngModel)]="poDetails.shippingMethodId">
+                                <option [value]="-1">None</option>
+                                <option *ngFor="let sm of shippingMethods" [value]="sm.shippingMethodId">{{sm?.methodName}}</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Ship To']">
+                            <label class="col-sm-4 col-form-label">Drop ship</label>
+                            <div class="col-sm-8" style="display: flex;flex-flow: row;justify-content: start;align-self: center;">
+                              <input
+                                style="width: 30px; height:15px;"
+                                type="checkbox"
+                                class="form-control"
+                                name="isDropShip"
+                                data-field-name="Ship To"
+                                (change)="onDropShipToggle($event.target.value)"
+                                [(ngModel)]="isDropShip" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Incoterms']">
+                            <label class="col-sm-4 col-form-label">Incoterms</label>
+                            <div class="col-sm-8">
+                              <select
+                                class="form-control"
+                                name="incoTermId"
+                                data-field-name="Incoterms"
+                                [(ngModel)]="poDetails.incotermId">
+                                <option [value]="-1">None</option>
+                                <option *ngFor="let it of incotermList" [value]="it.id">{{it?.incotermName}}</option>
+                              </select>
+                            </div>
+                        </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4 mbm-20">
+                  <div class="card card-outline-default">
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Status']">
+                      <label class="col-sm-4 col-form-label">Status</label>
+                      <div class="col-sm-8">
+                        <select
+                          class="form-control"
+                          name="statusDropDown"
+                          [(ngModel)]="poDetails.statusId"
+                          data-field-name="Status">
+                          <option *ngFor="let s of statusList" [value]="s.id">{{s?.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Order Date']">
+                        <label class="col-sm-4 col-form-label">Order Date</label>
+                        <div class="col-sm-8">
+                          <input
+                            [ngClass]="{'has-danger': !poDetails.orderDate}"
+                            data-field-name="Order Date"
+                            #orderDate
+                            class="date-picker form-control"
+                            [(ngModel)]="poDetails.orderDate"
+                            name="orderDate"
+                            type="date"/>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+
+            <div class="row mbm-20 bottom-30">
+              <div class="col-sm-12 bottom-30">
+                  <div class="card card-outline-default">
+                      <div  class="card-header detailCard"><strong>Notes</strong></div>
+                        <div class="row w-100 p-4 form-group" *ngxPermissionsOnly="['PONotes']">
+                          <label class="col-sm-1 col-form-label" style="white-space: nowrap">Notes:</label>
+                          <div class="col-sm-10">
+                              <label class="form-control readonlyLabel" type="text" *ngIf="onReadonly">{{poDetails.poNotes}}</label>
+                            <textarea
+                              *ngIf="!onReadonly"
+                              data-field-name="PONotes"
+                              class="form-control shippingNotes"
+                              name="PONotes" rows="5"
+                              [(ngModel)]="poDetails.poNotes"></textarea>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+            </div>
+        </div>
+
+        <div class="col-sm-2">
+          <div class="card card-outline-default ownership-section">
+              <div class="card-header detailCard">
+                <strong>Owners</strong>
+                <i 
+                  class="far fa-edit pull-right" 
+                  (click)="onOwnershipClick()"
+                  *ngIf="poId"
+                ></i>
+              </div>
+                <div class="form-group">
+                  <ownership-view
+                    [objectId]="poId"
+                    [objectTypeId]="objectTypeIdForPo">
+                  </ownership-view>
+                </div>
+            </div>
+
+            <az-kpi-details [purchaseOrder]="poDetails"></az-kpi-details>
+
+        </div>
+      </div>
+
+    </form>
+
+    <simple-notifications [options]="notifyOptions"></simple-notifications>
+
+    <div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <ownership-assignment
+        [objectId]="poId"
+        [objectTypeId]="objectTypeIdForPo">
+      </ownership-assignment>
+    </div>
+    </div>

@@ -1,0 +1,95 @@
+.qc-photo:hover {
+    cursor: pointer;
+}
+
+.close{
+    span:hover {
+        color: red;
+    }
+}
+
+
+.dropzone{
+    border:none;
+    background-color: white;
+}
+
+.dropzone .file-is-over {
+    background-color: black;
+    opacity: .5;
+}
+
+.file-upload{
+    background-color: white !important;
+}
+
+.qc-photo img {
+    max-width: 220px;
+    max-height: 220px;
+}
+
+.deleteButton{
+    margin-top:-22px;
+}
+
+hr{
+    color:grey;
+}
+
+.imageHr{
+    color:black;
+}
+.images{
+    margin-left:10px;
+}
+
+.dropzone .image[_ngcontent-c11] {
+    display: none !important;
+}
+// Overrides dropzone CSS
+.dropzone { 
+    margin-top:7px;
+    min-height: 70px !important;
+    border-bottom: 0 !important;
+    border: 2px dashed #9C9DA0 !important;
+    margin-left:7px;
+    margin-right:7px;
+}
+
+.qc-photo .x-mark {
+    top: 0;
+    right: 0;
+    padding: 2px;
+   // float:right;
+}
+
+.qc-photo .close {
+    font-size: x-large;
+}
+// .qc-photo:hover .x-mark {
+//     display: block;
+// }
+
+//Override modal close button - color initially white
+
+ //Hides thumbnail preview (since our serverside refresh is taking care of thumbnails)
+ .image-container {
+     display: none !important;
+ }
+
+ .image-upload[_ngcontent-c13]{
+     border:none !important;
+ }
+
+ .x-mark .btn-link{
+    background-color: red;
+ }
+
+ .round {
+    display: inline-block;
+    border-radius: 60px;
+    box-shadow: 0px 0px 2px #888;
+    background-color: #0171A2;
+    color: white;
+    padding: 0.1em 0.5em;
+  }

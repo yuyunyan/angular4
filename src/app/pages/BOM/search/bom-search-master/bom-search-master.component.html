@@ -1,0 +1,297 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div style="width: 100%;">
+        <button type="button"
+          id="btnUploadBOM"
+          data-toggle="modal"
+          data-target="#mdlUploadBOM"
+          class="btn-details btn-affirm">
+            Upload BOM
+        </button>
+        <button type="button"
+          id="btnFlaggedBOM"
+          data-toggle="modal"
+          data-target="#mdlItemsFlagged"
+          class="btn-details btn-affirm pull-right">
+            <i class="fas fa-flag" aria-hidden="true"></i>&nbsp;Create From <span *ngIf="flaggedGridItems && flaggedGridItems.length > 0">({{flaggedGridItems.length}})</span> Flagged
+        </button>
+      </div>
+      <div class="searchMaster" [ngBusy]="busyConfig">
+        <div class="widget-body">
+          <div class="row mbm-20">
+            <div class="col-lg-12 col-12 bottom-30">
+              <div class="row mbm-20 pull-right">
+              </div>
+              <br/>
+              <div widget class="card searchClass">
+                <div class="card-header">
+                  <span>Search</span>
+                  <div class="widget-controls">
+                    <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                  </div>
+                </div>
+                <div class="card-block widget-body">
+                  <br>
+                  <div class="row detailParent">
+                    <div class="col-md-1">
+                        <label class="col-form-label pull-right">Search</label>
+                      </div>
+                    <div class="col-md-2">
+                      <select class="form-control" id="optionTypes" 
+                        name="searchTypeValue" [(ngModel)]="searchTermState.searchTypeValue" (change)="onSelectChange($event.target.value)">
+                        <option  value="P">Part Number</option>
+                        <option  value="M">Manufacturer</option>
+                        <option  value="A">Account</option>
+                        <option  value="X">Multi Part</option>
+                        <option [ngStyle]="{'display': searchTermState.bomListId? 'block': 'none' }" value="B">Bom List</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2" *ngIf="searchTermState.searchTypeValue == 'B'">
+                      <strong>{{searchTermState.bomListId}}</strong>
+                    </div>
+                    <div class="col-md-2" *ngIf="searchTermState.searchTypeValue == 'P'">
+                      <input class="form-control" type="text" id="search" name="optionDropdown" [(ngModel)]="searchTermState.partNumber"/>
+                    </div>
+                    <div class="col-md-2" *ngIf="searchTermState.searchTypeValue == 'X'">
+                      <textarea class="form-control" rows="3" cols="35" name="multiPartInput" [(ngModel)]="searchTermState.partNumber"></textarea>
+                    </div>
+                    <div class="col-md-2" *ngIf="searchTermState.searchTypeValue == 'M'">
+                      <!--<select class="selectClass" (change)="mfrOptionChange($event.target.value)">
+                            <option *ngFor="let m of manufacturers" [value]="m.MfrName">{{m.MfrName}}</option>
+                      </select>-->
+                      <input type="text" class="form-control" id="searchManufacturer" name="optionDropdown" [(ngModel)]="searchTermState.mfrOptionValue"/>
+                    </div>
+                    <div class="col-md-2" *ngIf="searchTermState.searchTypeValue == 'A'">
+                      <select class="form-control" (change)="accountOptionChange($event.target.value)">
+                              <option *ngFor="let a of accountsByObjectType" [value]="a.accountName">{{a.accountName}}</option>
+                      </select>
+                    </div>
+                    <div class="control-label">
+                        <label class="col-form-label pull-right">Date From:</label>
+                    </div>
+                    <div class="col-md-2 date-field">
+                      <input type="date" id="startDate" class="form-control" [ngModel]="searchTermState.startDate | date:'yyyy-MM-dd'" (ngModelChange)="searchTermState.startDateFormat = $event"
+                      />
+                    </div>
+                    <div class="control-label">
+                        <label class="col-form-label pull-right">To:</label>
+                    </div>
+                    <div class="col-md-2 date-field">
+                      <input type="date" class="form-control" [ngModel]="searchTermState.endDate | date:'yyyy-MM-dd'" (ngModelChange)="searchTermState.endDateFormat = $event" />
+                    </div>
+                    <button class="btn-details btn-affirm" (click)="searchClick()">Search</button>
+                  </div>
+
+                  <br>
+                  <div class="row col-md-12 pull-right">
+                    <div class="row col-md-12 optionClass">
+                        <div class="col-md-3">
+                            <label class="col-form-label"><b>Match Options</b></label>&nbsp;&nbsp;
+                            <label class="col-form-label"> <input class="col-form-label" type="checkbox" name="all" checked (change)="selectAll($event)" />Select All</label>
+                          </div>
+                    </div>
+                    <div class="row col-md-12">
+                      <div class="col-md-4">
+                        <label><input type="checkbox" name="salesOrder" class="salesOrder" [(ngModel)]="checkShow.salesOrder" /> Sales Orders</label>
+                      </div>
+                      <div class="col-md-4">
+                        <label><input type="checkbox" name="inventory" [(ngModel)]="checkShow.inventory" />Inventory </label>
+                      </div>
+                      <div class="col-md-4">
+                        <label>  <input type="checkbox" name="purchaseOrder" [(ngModel)]="checkShow.purchaseOrder" />Purchase Orders</label>
+                      </div>
+                    </div>
+                    <div class="row col-md-12">
+                      <div class="col-md-4">
+                        <label> <input type="checkbox" name="vendorQuotes" [(ngModel)]="checkShow.vendorQuotes" />  Vendor Quotes</label>
+                      </div>
+                      <div class="col-md-4">
+                        <label><input type="checkbox" name="customerQuotes" [(ngModel)]="checkShow.customerQuotes" />Customer Quotes</label>
+                      </div>
+                      <div class="col-md-4">
+                        <label><input type="checkbox" name="customerRfqs" [(ngModel)]="checkShow.customerRfqs" /> Customer RFQs</label>
+                      </div>
+                    </div>
+                    <div class="row col-md-12 bottom-30">
+                      <div class="col-md-4">
+                        <label><input type="checkbox" name="outsideOffers" [(ngModel)]="checkShow.outsideOffer" />Outside Offers</label>
+                      </div>
+                      <div class="col-md-4">
+                        <label><input type="checkbox" name="oem" [(ngModel)]="checkShow.bomEmsLists" />BOM OEM/EMS</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="col-md-12">
+       <az-results-summary 
+      [childComValue]="true"
+        [searchId]="searchId"
+        [filterPartNumber]="filterPartNumber"
+        [flaggedGridItems]="flaggedGridItems"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)"
+        (filterPartNoOutPut)="onFilterPartNoChange($event)" >
+    </az-results-summary> 
+    </div>
+    <div class="col-md-12">
+      <az-sales-orders
+        [childComValue]="matchOption.salesOrder"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [flaggedGridItems]="flaggedGridItems"
+        [filterPartNumber]="filterPartNumber"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)" >
+      </az-sales-orders>
+    </div>
+
+    <div class="col-md-12">
+       <az-inventory
+        [childComValue]="matchOption.inventory"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [flaggedGridItems]="flaggedGridItems"
+        [filterPartNumber]="filterPartNumber"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-inventory> 
+    </div>
+    <div class="col-md-12">
+      <az-purchase-orders
+        [childComValue]="matchOption.purchaseOrder"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [filterPartNumber]="filterPartNumber"
+        [flaggedGridItems]="flaggedGridItems"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-purchase-orders>
+    </div>
+    <div class="col-md-12">
+      <az-vendor-quotes
+        [childComValue]="matchOption.vendorQuotes"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [filterPartNumber]="filterPartNumber"
+        [flaggedGridItems]="flaggedGridItems"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-vendor-quotes>
+    </div>
+    <div class="col-md-12">
+      <az-customer-quotes
+        [childComValue]="matchOption.customerQuotes"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [filterPartNumber]="filterPartNumber"
+        [flaggedGridItems]="flaggedGridItems"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-customer-quotes>
+    </div>
+    <div class="col-md-12">
+      <az-customer-rfqs
+        [childComValue]="matchOption.customerRfqs"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [filterPartNumber]="filterPartNumber"
+        [flaggedGridItems]="flaggedGridItems"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-customer-rfqs>
+    </div>
+    <div class="col-md-12">
+      <az-outside-offers
+        [childComValue]="matchOption.outsideOffer"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [flaggedGridItems]="flaggedGridItems"
+        [filterPartNumber]="filterPartNumber"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-outside-offers>
+    </div>
+    <div class="col-md-12">
+       <az-bom-ems
+        [childComValue]="matchOption.bomEmsLists"
+        [searchId]="searchId"
+        [bomUploadId]="bomUploadId"
+        [bomListId]="bomListId"
+        [filterPartNumber]="filterPartNumber"
+        [flaggedGridItems]="flaggedGridItems"
+        (partNumberFlagChanged)="partNumberFlagChanged($event)">
+      </az-bom-ems> 
+    </div>
+    <div class="col-md-12">
+      <div widget class="card" [ngStyle]="{'display': searchTermState.bomListId? 'block': 'none' }">
+        <div class="card-header">
+          <span>Comments</span>
+          <div class="widget-controls">              
+              <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+              <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+              <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a> 
+              <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+          </div>        
+        </div>
+        <div class="card-block widget-body purchase-order-parts-group">
+          <az-comments-full
+              [objectId]="searchTermState.bomListId"
+              [objectTypeId]="bomObjectTypeId"
+              [commentTypeMap]="bomCommentTypeMap">
+          </az-comments-full>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="mdlUploadBOM" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg customize-model-size modal-dialog-bom-upload">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="header-text">
+            Upload BOM
+        </div>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+      </div>
+      <div class="modal-body">
+        <az-bom-upload-form
+          (onCloseModal)="onCloseUploadModal($event)"
+          (onSaveBOMSuccess)="onSaveBOMSuccess($event)"></az-bom-upload-form>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="mdlItemsFlagged" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg customize-model-size">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="header-text">
+            Create...
+        </div>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+      </div>
+      <div class="modal-body">
+        <az-items-flagged-master
+          [flaggedGridItems]="flaggedGridItems"
+          (onCloseModal)="onCloseItemsFlagged($event)"
+          (onSaveItemsFlaggedSuccess)="onSaveItemsFlaggedSuccess($event)"></az-items-flagged-master>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+.ag-fresh .custom-header-wrapper{
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+    align-content: center;
+    height: 100%;
+    i{
+        width: 20px;
+        height: 20px;
+        line-height: inherit;
+        display: inline-flex;
+        align-self: center;
+        justify-content: center;
+    }
+}

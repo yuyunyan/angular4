@@ -1,0 +1,55 @@
+<div class="container-fluid parentMargin">
+    <h5>Quotes</h5><br>
+    <!--<a routerLink="/pages/quotes/quote-details" Uncomment this when the new-quote component is ready, else it shows an api error looking for quoteId-->
+      <input type="text" id="txtQuoteSearch" class="searchBox" (keyup.enter)="SearchQuotes()" [(ngModel)]="searchParameter" [value]="searchParameter" placeholder="Search quotes..." />
+      <button id="btnSearchQuotes" type="button" class="btn-search-small"><i class="fas fa-search" aria-hidden="true" (click)="SearchQuotes()"></i></button>
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="checkbox"  (change)="OnChangeCheckbox()" [(ngModel)] = "includeCanceled"  class="col-form-label"/>Include Canceled
+      <span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><input type="checkbox"  (change)="OnChangeCheckbox()" [(ngModel)] = "includeCompleted" class="col-form-label"/>Include Completed
+
+
+      <ng-container 
+      *ngxPermissionsOnly="['CanCreate19']">
+      <a herf="#">
+        <button 
+          id="btnAddQuote"
+          type="button" 
+          class="btn-details btn-affirm newQuoteBtn"
+          (click)="AddNewQuote()">
+          <i class="fas fa-plus" aria-hidden="true"></i>&nbsp;New Quote
+        </button>
+      </a>
+    </ng-container>
+    
+  <div class="quotesGridOuter">
+  <ag-grid-angular 
+  #agGrid  
+  class="ag-fresh agGridCustom" 
+  [gridOptions]="agGridOptions" 
+  [rowData] = "AcData" 
+  >
+</ag-grid-angular>
+
+<div class="btn-group dropup quotePartsButton">
+  <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+  <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+      <ul class="dropdown-menu">
+          <li><button *ngxPermissionsOnly="['CanExport19']" style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+          <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+          <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+      </ul>
+</div>
+</div>
+  
+  <div class="ag-grid-sort pull-right" style="position: absolute; top: 96.5%; right: 1%">
+    <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -120%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+      <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+    </div>
+    <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -120%; right: 7.5%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+      <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+  </div>
+  <div >
+
+    </div>
+  </div>
+
+</div>

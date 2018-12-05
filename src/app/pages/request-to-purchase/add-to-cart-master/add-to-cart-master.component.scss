@@ -1,0 +1,32 @@
+
+#mdlAddToCart .modal-backdrop {
+    position: absolute !important;
+}
+
+#mdlAddToCart .modal-content{
+    width:65.5%;
+}
+
+.modal-backdrop {
+    display:none;
+}
+
+.cartModal{
+    top:16.5% !important;
+    left: 44% !important;
+    position: fixed !important;
+    width: 100%;
+    z-index:1;
+    display:none;
+}
+
+.hrLine{
+    margin-top: 1px;
+    margin-bottom: 10px;
+    height: 20px;
+    background-color: #242D3A;
+}
+
+.cartTitle{
+    text-align: left !important;
+}

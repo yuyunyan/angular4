@@ -1,0 +1,6 @@
+<div class="container-fluid">
+    <div ng-if="message" class="red">{{message}}</div>
+    <ag-grid-angular #agGrid style="width: 100%; height: 1000px;" class="ag-fresh" [gridOptions]="gridOptions" [rowData] = "userData" (rowDoubleClicked)="onRowDoubleClicked($event)">
+    </ag-grid-angular>
+    <button (click)="save()">Save</button>
+</div>

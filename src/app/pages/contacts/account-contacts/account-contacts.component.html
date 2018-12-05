@@ -1,0 +1,16 @@
+
+<div class="container-fluid">
+    <ng-container *ngIf="accountId"> 
+                    <button *ngxPermissionsOnly="['CanCreate2']" class="btn-details btn-affirm pull-right" (click)="addContactBtn()">New Contact</button> 
+                    <br/>
+                    <br/>            
+                    <ag-grid-angular 
+                        #agGrid 
+                        id="contactGrid"
+                        class="ag-fresh grid-stretched-70-500" 
+                        [gridOptions]="ACGridOptions" 
+                        [rowData] = "ACData" 
+                        (rowDoubleClicked)="onRowDoubleClicked($event)">
+                    </ag-grid-angular>
+    </ng-container>
+</div>

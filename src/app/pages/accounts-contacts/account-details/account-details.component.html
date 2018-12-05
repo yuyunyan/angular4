@@ -1,0 +1,169 @@
+<div class="widget-body parentMargin">
+  <div class="accountId">
+    <h5>Account {{accountNumber}}</h5>
+  </div>
+  <button type="button" id="btnPurchaseOrderDocuments" (click)="documentsClick()" class="btn-details btn-affirm" style="width: 150px;">
+    <!--  right: 225px; top: 20px; -->
+    <i class=" fas fa-file-alt" aria-hidden="true"></i>&ensp;Documents ({{documentCount}})
+  </button>
+  <div widget class="card commentCard">
+    <div class="card-header">
+      <span>Details</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+        <a data-widgster="collapse" href="#" class="transition">
+          <i class="fas fa-chevron-up"></i>
+        </a>
+        <a data-widgster="fullscreen" href="#" class="transition"> 
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        <a data-widgster="restore" href="#" class="transition">
+          <i class="fas fa-compress"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-block widget-body ">
+      <az-account-details-child-component [accountDetailPermissions]="accountPermissions" (isSupplierCheckedEvent)="isSupplierChecked($event)"
+        (isCustomerCheckedEvent)="isCustomerChecked($event)" (accountNumberEvent)="accountNumberEvent($event)">
+      </az-account-details-child-component>
+    </div>
+  </div>
+  <br/>
+
+  <div widget class="card commentCard">
+    <div class="card-header">
+      <span>Contacts</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+        <a data-widgster="collapse" href="#" class="transition">
+          <i class="fas fa-chevron-up"></i>
+        </a>
+        <a data-widgster="fullscreen" href="#" class="transition">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        <a data-widgster="restore" href="#" class="transition">
+          <i class="fas fa-compress"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <az-accountContacts-list></az-accountContacts-list>
+    </div>
+  </div>
+  <br/>
+
+  <div widget class="card commentCard">
+    <div class="card-header">
+      <span>Locations</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+        <a data-widgster="collapse" href="#" class="transition">
+          <i class="fas fa-chevron-up"></i>
+        </a>
+        <a data-widgster="fullscreen" href="#" class="transition">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        <a data-widgster="restore" href="#" class="transition">
+          <i class="fas fa-compress"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-block widget-body ">
+      <az-locations-component></az-locations-component>
+      <br/>
+    </div>
+  </div>
+  <br/>
+  <div widget class="card commentCard" *ngIf="isCustomer">
+    <div class="card-header">
+      <span>Freight Forwarder</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+        <a data-widgster="collapse" href="#" class="transition">
+          <i class="fas fa-chevron-up"></i>
+        </a>
+        <a data-widgster="fullscreen" href="#" class="transition">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        <a data-widgster="restore" href="#" class="transition">
+          <i class="fas fa-compress"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-block widget-body ">
+      <az-freight-forwarder [accountId]="accountId"></az-freight-forwarder>
+      <br>
+    </div>
+  </div>
+  
+  <div *ngIf="isSupplier" widget class="card commentCard partsContainer">
+    <div class="card-header">
+      <span>Focuses</span>
+      <div class="widget-controls">              
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+        </div> 
+    </div>
+    <div class="card-block widget-body" [ngStyle]="{'display': isSupplier ? 'block' : 'none'}">
+      <az-supplier-line-card [accountId]="accountId"></az-supplier-line-card>
+      <br>
+    </div>
+  </div>
+
+  <div widget class="card" style="margin-top: 10px;">
+      <div class="card-header">
+        <span>History</span>
+        <div class="widget-controls">              
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+        </div>        
+      </div>
+      <div class="card-block widget-body">
+       <az-contact-history-grid
+       [accountId]="accountId"
+       [isSupplier]="isSupplier"
+       [isCustomer]="isCustomer"
+      ></az-contact-history-grid>
+      </div>
+    </div>
+
+  <br/>
+  <div widget class="card commentCard">
+    <div class="card-header">
+      <span>Comments</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition">
+          <i class="fas fa-chevron-down"></i>
+        </a>
+        <a data-widgster="collapse" href="#" class="transition">
+          <i class="fas fa-chevron-up"></i>
+        </a>
+        <a data-widgster="fullscreen" href="#" class="transition">
+          <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+        <a data-widgster="restore" href="#" class="transition">
+          <i class="fas fa-compress"></i>
+        </a>
+      </div>
+    </div>
+    <div class="card-block widget-body ">
+      <az-comments-full [objectId]="accountId" [menuType]="menuType" [objectTypeId]="accountObjectTypeId" [commentTypeMap]="accountCommentTypeMap">
+      </az-comments-full>
+    </div>
+  </div>
+  <div id="accountsDocModal">
+    <documents [objectId]="accountId" [objectTypeId]="1" (count)="documentCountChanged($event)"></documents>
+  </div>
+</div>

@@ -1,0 +1,25 @@
+export class SalesOrder{
+    soId:number;
+    recordId:number;
+    soDate:string;
+    customer:string;
+    partNumber:string;
+    mfr:string;
+    qtySold:number;
+    soldPrice:number;
+    dateCode:string;
+    unitCost:number;
+    gp:number;
+    dueDate:string;
+    shipQty:number;
+    orderStatus:string;
+    salesPerson:string;
+    itemId:number;
+    bomQty:number;
+    priceDelta:number;
+    potential:number;
+    bomPrice:number;
+    bomPartNumber:string;
+    bomIntPartNumber:string;
+    bomMfg:string;
+}

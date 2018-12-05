@@ -1,0 +1,44 @@
+.success-message{
+  color: red;
+}
+
+@import url("https://fonts.googleapis.com/css?family=Raleway:400,700");
+.ag-fresh {
+  font-family: "Raleway", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 14px;
+}
+
+.ag-fresh .ag-header-container { 
+  background: #fff;
+}
+.ag-fresh .ag-header { 
+ // border-bottom: 2px solid #000;
+}
+
+.ag-fresh .ag-header-row {
+  font-weight: bold;
+  border: none;
+  background-color:#242D3A !important;
+  color: white !important;
+}
+
+.ag-fresh .ag-row {
+  border-bottom: 1px solid #ddd;
+}
+
+.ag-fresh .ag-row:nth-child(odd){ 
+  border-top: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+.ag-fresh .ag-row:last-child {
+  border-bottom: none;
+}
+.ag-fresh .ag-row:hover {
+  background-color: #d9edf7;
+  border-top: 1px solid #aaa;  
+  border-color: #aaa;
+}
+.ag-fresh .ag-row .ag-cell {
+  color: #333;
+}

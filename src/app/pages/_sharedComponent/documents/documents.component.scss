@@ -1,0 +1,25 @@
+.mdl-documents > div > div.modal-content {
+    width: 825px;
+}
+
+.mdl-documents > div.modal-dialog {
+    right: 11.5%;
+    top: 50%;
+    margin-top: -244px;
+}
+
+// Overrides ngx-file-drop default styling (extra round border-radius)
+.drop-zone{
+    border-radius: 7px !important;
+ //   border: 2px dashed #0782d0 !important;
+}
+
+.document-editable {
+    width: 100%;
+    border: 0px;
+    background-color: initial;
+}
+
+.download-link {
+    cursor: pointer
+}

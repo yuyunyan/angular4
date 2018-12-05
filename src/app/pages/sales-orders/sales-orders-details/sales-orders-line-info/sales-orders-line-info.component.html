@@ -1,0 +1,54 @@
+<div class="modal fade" id="mdlInfoSoLine" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header ">
+				<div class="header-text">
+					Line {{soLineId}} - {{partNumber}}
+				</div>  
+			</div>					
+			<div class="modal-body">
+				<div class="form-group row text-left">
+					<label class="col-sm-3 form-group">Fulfillment</label>
+						<div class="col-sm-7">
+							<span>Internal</span>
+							<br>
+							<span>US7200US -  Sourceability US-FL</span>
+						</div>
+				</div>
+				<div class="form-group row text-left">
+					<label class="col-sm-3 form-group">Delivery Status</label>
+						<div class="col-sm-7">
+							<span>{{soDeliverystatus}}</span>								
+						</div>
+				</div>
+				<div class="form-group row text-left">
+						<label class="col-sm-3 form-group">Invoice Status</label>
+							<div class="col-sm-7">
+								<span>{{soInvoiceStatus}}</span>								
+							</div>
+				</div>
+				<div>
+					<div class="card card-outline-default ">
+						<div class="card-header border-bottom detailCard"><strong>Allocations</strong></div>
+							<div>
+								<az-sales-order-line-allocations [infoSoLineId]="infoSoLineId"></az-sales-order-line-allocations>
+							</div>
+							<br>
+					</div>
+				</div>
+					<br>
+					<div>
+							<div class="card card-outline-default ">
+								<div class="card-header border-bottom detailCard"><strong>Shipments</strong></div>
+									<div>
+										<az-sales-order-line-shipments [infoSoLineId]="infoSoLineId"></az-sales-order-line-shipments>
+									</div>
+									<br>
+							</div>
+						</div>
+			</div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>

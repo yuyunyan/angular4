@@ -1,0 +1,4 @@
+<div class="container">
+    Filter: <input #input 	(keyup.enter)="applyFilter($event)" [(ngModel)]="filterText"
+    [value]="filterText" [ngModel]="text" class="form-control">  <button id="btnClear" #button type="button" class=" btn-default pull-right" (click)="ClearFilter()">Clear</button>
+</div>

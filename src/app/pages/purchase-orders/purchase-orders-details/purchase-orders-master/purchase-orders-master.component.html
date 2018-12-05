@@ -1,0 +1,129 @@
+<div class="container-fluid parentMargin">
+  <div class="top-header">
+    <h5 class="purchaseId">{{posoUtilities.DisplayOrderId(externalId, poId)}}</h5>
+    <div *ngIf="!onNewPurchase">
+      <button type="button"
+      id="btnToPDF"
+      class="btn-details btn-affirm"
+      *ngxPermissionsOnly="['CanPrint']"
+      (click)="toPdf()">
+        <i class="fas fa-file-pdf" aria-hidden="true"></i>&ensp;Print to PDF
+      </button>
+      <button type="button"
+      id="btnExportExcel"
+      class="btn-details btn-affirm">
+        <i class="fas fa-file-export" aria-hidden="true"></i>&ensp;Export to Excel
+      </button>
+      <button type="button"
+      id="btnPurchaseOrderDocuments"
+      (click)="documentsClick()"
+      class="btn-details btn-affirm">
+        <i class=" fas fa-file-alt" aria-hidden="true"></i>&ensp;Documents ({{documentCount}})
+      </button>
+      <button type="button"
+      class="btn-details btn-affirm"
+      *ngxPermissionsOnly="['CanEmail']">
+        <i class="fas fa-envelope" aria-hidden="true"></i>&ensp;Submit via Email
+      </button>
+    </div>
+  </div>
+
+  <div class="scrolling-content">
+    <div class="row mbm-20">
+      <div class="col-lg-12 col-12 bottom-30">
+
+        <div widget class="card">
+          <div class="card-header">
+            <span>Details</span>
+            <div class="widget-controls">
+              <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+              <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+              <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+              <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+            </div>
+          </div>
+          <div class="card-block widget-body">
+            <az-purchase-order-details
+            [poId]="poId"
+            [poVersionId]="poVersionId"
+            [purchaseOrderPermissions]="purchaseOrderPermissions"
+              (newDetails)="newDetails($event)">
+            </az-purchase-order-details>
+          </div>
+        </div>
+        <br/>
+        <div *ngIf="!poId" class="row mbm-20">
+          <h5>Save to show Parts and Extra Items</h5>
+        </div>
+        <div *ngIf="poId" class="row mbm-20">
+          <div class="col-lg-12 col-12 bottom-30">
+            <div widget class="card partsContainer"  *ngIf="hasPermission(['CanEditLines', 'CanViewLines'])">
+              <div class="card-header">
+                <span>Parts</span>
+                <div class="widget-controls">
+                  <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                  <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                  <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                  <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                </div>
+              </div>
+              <div class="card-block widget-body purchase-order-parts-group">
+                <az-purchase-orders-parts
+                [poId]="poId"
+                [poVersionId]="poVersionId"
+                [externalId]="externalId"
+                  (onRowClicked)="selectedPOLineId = $event"
+                  (objectInfo)="onPartObjectInfo($event)">
+                </az-purchase-orders-parts>
+              </div>
+            </div>
+            <br/>
+            <div widget class="card">
+              <div class="card-header">
+                <span>Comments</span>
+                <div class="widget-controls">
+                  <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                  <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                  <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                  <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                </div>
+              </div>
+              <div class="card-block widget-body purchase-order-parts-group">
+                <az-comments-full
+                [objectId]="poId"
+                [objectTypeId]="purchaseOrderObjectTypeId"
+                [commentTypeMap]="poCommentTypeMap">
+                </az-comments-full>
+              </div>
+            </div>
+            <br/>
+
+            <div widget class="card extraItems" *ngIf="hasPermission(['CanEditExtras', 'CanViewExtras'])">
+              <div class="card-header">
+                <span>Extra Items</span>
+                <div class="widget-controls">
+                  <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                  <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                  <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                  <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                </div>
+              </div>
+              <div class="card-block widget-body purchase-order-parts-group">
+                <az-purchase-orders-extra
+                [poId]="poId"
+                [poVersionId]="poVersionId"
+                (onRowClicked)="selectedPOExtraId = $event"
+                  (objectInfo)="onExtraObjectInfo($event)">
+                </az-purchase-orders-extra>
+              </div>
+            </div>
+            <br/>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="purchaseOrderDocModal">
+      <documents [objectId]="poId" [objectTypeId]="22" (count)="documentsCountChanged($event)"></documents>
+    </div>
+  </div>
+</div>

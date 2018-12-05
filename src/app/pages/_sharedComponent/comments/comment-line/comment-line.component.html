@@ -1,0 +1,23 @@
+<li class="media" [ngClass]="{'reply-media': comment.replyToId > 0, 'last-reply': lastChild}">
+	<div class="media-left">
+		<img class="media-object rounded-circle" src="../assets/img/profile/tereza.jpg" alt="author image">
+	</div>
+	<div class="media-body rounded left">
+		<div class="media-heading" style="display: flex; flex-flow: row; align-items: center;">
+			<h5 class="d-inline text-capitalize pull-left" style="font-size: 14px; margin: 0">{{comment?.authorName}}</h5>
+			<p class="d-inline text-capitalize pull-left" style="margin: 0;">&ensp;- {{comment.typeName}} -&ensp;</p>
+			<p class="d-inline pull-left" style="margin: 0;"><i class="far fa-clock"></i>&ensp;{{comment?.created | date:"dd MMMM, yyyy 'at' HH:mm a"}}</p>
+		</div>
+		<p style="text-align: start; margin-top: 0;">{{comment?.comment}}</p>
+	</div>
+	<div class="comment-reply">
+		<button *ngIf="!comment.replyToId" (click)="onBtnClicked()" title="Reply to comment"><i class="fas fa-reply" aria-hidden="true"></i></button>
+	</div>
+</li>
+<ng-container *ngFor="let child of comment.child; let childIdx = index;">
+	<!-- <hr> -->
+	<az-comment-line 
+		[lastChild]="!inCreateMode && (comment.child.length-1 == childIdx)"
+		[comment]="child">
+	</az-comment-line>
+</ng-container>

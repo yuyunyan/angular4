@@ -1,0 +1,147 @@
+<div class="container-fluid parentMargin">
+  <!-- <vertical-split-pane secondary-component-minsize="300" primary-component-initialratio="0.8">
+    <div class="split-pane-content-primary"> -->
+        <div>
+            <h5>Sourcing</h5>
+            <br/>
+
+        </div>
+      <div class="widget-body">        
+        <div class="row mbm-20">
+          <div class="col-lg-12 col-12 bottom-30">
+            <az-sourcing-quotes
+              [quoteLineId]="quoteLineId"
+              [partNumber]="partNumber"
+              [routeToStatusObject]="routeToStatusObject"
+              (quotePart)="onSubmitToSales($event)"
+              (onContentChanged)="contentChanged($event)"
+              (selectedQuoteLineId)="onSelectedQuoteLineId($event)"
+              (objectInfo)="onSelectedQuoteObjectInfo($event)"
+              (selectedRows)="onSelectedRows($event)">
+            </az-sourcing-quotes>
+          </div>
+        </div>
+
+        <div class="sourcingCard">
+        <div widget class="card" [hidden]="!(quoteLineId > 0)" >
+          <div class="card-header">
+            <span>Sourcing</span>
+            <div class="widget-controls">              
+              <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+              <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+              <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+              <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+            </div>        
+          </div>
+
+          <div class="card-block widget-body" style="padding-top:5px;">
+            <div class="row mbm-20">
+              <div class="col-lg-12" style="margin-bottom: 0; padding-bottom:5px;">
+                <strong> {{partNumber}} </strong>
+                <div class="pull-right">
+                  <button type="button" [disabled]="partNumber === null"
+                    id="btnAddSource"
+                    data-toggle="modal"
+                    (click)="onBtnClicked()"
+                    class="btn-details btn-affirm">
+                    New Source
+                  </button>
+                  <button type="button" [disabled]="!quoteLineId"
+                    class="btn-details btn-affirm dropdown-toggle"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-folder-open" aria-hidden="true">&nbsp;&nbsp;</i>Set To
+                  </button>
+                  <div class="dropdown-menu buyer-status-dropdown-menu">
+                    <button type="button"
+                      *ngFor="let rs of (routeStatuses$ | async);"
+                      class="dropdown-item"
+                      (click)="updateQuoteStatus(rs)">
+                      {{rs?.statusName}}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12 col-12 bottom-30">  
+                <div class="clearfix">
+                  <ul class="nav nav-tabs top pull-left">
+                    <li class="nav-item">
+                      <a class="nav-link sourceTab" (click)="tabClicked()" [ngClass]="{'active' : tabIndex == 0}" data-toggle="tab" href="#sources">Sources</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link rfqTab" (click)="RfqtabClicked()" [ngClass]="{'active' : tabIndex == 1}" data-toggle="tab" href="#rfqs">RFQs</a>
+                    </li>
+                  </ul>
+                  <div id="sourcing-control-wrap" [title]="otherBuyerTitle">
+                    <i class="fas fa-users fa-lg" aria-hidden="true"></i>
+                  </div>
+                </div>
+                
+                <div class="tab-content top">
+                  <div class="tab-pane active" id="sources">
+                    <az-part-sources
+                      [itemId]="itemId"
+                      [partNumber]="partNumber"
+                      [objectId]="quoteLineId"
+                      [quoteLineId]="quoteLineId"
+                      [objectTypeId]="quotePartObjectTypeId"
+                      (onSourceSelected)="onSelectedSourceId($event)"
+                      (objectInfo)="onSelectedSourceObjectInfo($event)"
+                      [fromSourcingPage]="true">
+                    </az-part-sources>
+
+                  </div>
+                  <div class="tab-pane" id="rfqs">
+                    <az-sourcing-rfqs
+                      [partNumber]="partNumber"
+                      [partNumberStrip]="partNumberStrip">
+                    </az-sourcing-rfqs>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        <!-- <div class="btn-group dropup" aria-expanded="false">
+          <button (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+          <button data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+            <ul class="dropdown-menu">
+              <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">12Export</button></li>
+              <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+              <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+            </ul>
+        </div> -->
+
+      </div>
+    <!-- </div>
+    <div class="split-pane-content-secondary">
+      <az-comments
+        [objectId]="selectedQuoteLineId"
+        [objectTypeId]="quotePartObjectTypeId"
+        [commentTitle]="'Quote Line Comments'"
+        [objectInfo]="selectedQuoteObjectInfo"
+        (onCommentSaved)="onQuotePartCommentSaved()">
+      </az-comments>
+      <az-comments
+        [objectId]="selectedSourceId"
+        [objectTypeId]="sourceObjectTypeId"
+        [commentTitle]="'Source Line Comments'"
+        [objectInfo]="selectedSourceObjectInfo"
+        (onCommentSaved)="onSourceCommentSaved()">
+      </az-comments>
+      <az-comments
+        [objectId]="sourcesJoinCommentUId"
+        [objectTypeId]="sourcesJoinObjectTypeId"
+        [commentTitle]="'Source Match Comments'"
+        [objectInfo]="sourcesJoinCommentUId? selectedSourceObjectInfo: ''"
+        (onCommentSaved)="onSourceCommentSaved()">
+      </az-comments>
+    </div>
+  </vertical-split-pane> -->
+</div>
+
+<az-sources-dialog [partObject]="partObject"  (sourceAdded)="sourceAdded($event)"></az-sources-dialog>
+<simple-notifications [options]="salesNotifyOptions"></simple-notifications>
+
+

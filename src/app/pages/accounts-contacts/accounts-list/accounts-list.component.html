@@ -1,0 +1,110 @@
+
+<div class="container-fluid parentMargin">
+		<h5>Accounts</h5>
+		<br/>
+      <div class="row">
+          <div class="col-sm-3 searchBoxAlignment">
+              <input 
+              type="text" 
+              [hidden]="viewType==1" 
+              id="txtAccountsSearch" 
+              class="searchBoxAccounts" 
+              (keyup.enter)="searchAccounts()" 
+              [(ngModel)]="searchParameter"
+              [value]="searchParameter"
+              placeholder="Search Accounts..."/>
+              <button [hidden]="viewType==1" id="btnSearchAccounts" type="button" class="btn-search btn-search-small">
+                <i class="fas fa-search" aria-hidden="true" (click)="searchAccounts()"></i>
+              </button>
+
+            </div>
+        <div class="col-sm-1">
+            <select style="margin-top: 0px;" id= "view" [(ngModel)] = "viewType" (change) = "changeViewType($event)"  class="lhs-controls pull-left col-form-label"  >
+                <option value="0" selected>View By Account</option>
+                <option value="1">View By Contact</option>
+              </select>
+          </div>
+
+        <div class="col-sm-2 col-form-label">
+            <input class="" type="checkbox" id="showInactiveAccounts" name="showInactive" [(ngModel)]="showInactive" (change)="onCheckboxStateChange($event)">Show Inactive Accounts
+        </div>
+        <div class="col-sm-5">
+              <button *ngxPermissionsOnly="['CanCreate1']" type="button" class="btn-details btn-affirm pull-right col-form-label" data-toggle="modal" data-target="#mdlCreateAccount"><i class="fas fa-plus" aria-hidden="true"></i>&nbsp;New Account</button>
+              <button (click)="onGroupModalClicked()" type="button" class="btn-details btn-affirm pull-right col-form-label"><i class="fas fa-users" aria-hidden="true"></i>&nbsp;My Groups</button>
+        </div>
+
+          </div>
+          <az-contact-list [hidden]="viewType==0" [accountTypeId]="accountTypeId" [showInactive]= "showInactive" ></az-contact-list>
+
+      <div class="accountsGridOuter">
+
+    <ag-grid-angular 
+      [hidden]="viewType==1" 
+      #agGrid style="width: 100%; height: 700px;" 
+      class="ag-fresh"
+      [gridOptions]="agGridOptions"
+      [frameworkComponents]="frameworkComponents">
+    </ag-grid-angular>
+    <div class="btn-group dropup quotePartsButton">
+      <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+      <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+          <ul class="dropdown-menu">
+              <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+              <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+              <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+          </ul>
+  </div>
+</div>
+
+</div>
+
+<div class="modal fade" id="mdlCreateAccount" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg customize-model-size">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="header-text">
+            Create Account
+        </div>
+        <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+      </div>
+      <div class="modal-body">
+        <az-new-account (savedAccountDetails)="AccountSave($event)" (cancelClick)="cancelClicked()" [accountPage]="accountPage"></az-new-account>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="mdlAccountGroup" tabindex="-1" style="z-index: 110;" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-content" style="width: 100%;">
+      <div class="modal-header">
+        <div class="header-text">
+          My Account Groups
+        </div>
+        <button 
+          type="button" 
+          class="close" 
+          data-dismiss="modal" 
+          #accountGroupCloseBtn>
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Cancel</span>
+        </button>
+      </div>
+
+      <div class="modal-body" style="padding: 15px;">
+        <az-account-group></az-account-group>
+      </div>
+
+      <div class="modal-footer">
+        <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+          <div class="btn-group" role="group">
+            <button (click)="closeModal()" type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Close</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+</div>
+
+<simple-notifications [options]="notifyOptions"></simple-notifications>

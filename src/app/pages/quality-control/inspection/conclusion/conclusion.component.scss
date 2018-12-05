@@ -1,0 +1,80 @@
+
+.label-header {
+    font-weight: 500;
+}
+
+textarea {
+    // width: 700px;
+    width: 100%;
+    height: 125px;
+}
+
+.row input {
+    margin-right: 50px;
+    margin-left: 40px;
+}
+
+.btn-complete { 
+    background-color: #01A282;
+    border: none;
+    color: white;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  font-weight: 500;
+} 
+ 
+.btn-complete:hover {
+  color: white;
+  background-color: #344154;
+}
+
+.conclusion label{
+    color:#3c3d3d;
+	font-weight: bold;
+    margin-top:15px;
+    margin-left:15px;
+    margin-right:15px;
+	text-align: left !important;
+}
+
+.conclusion label button{
+    margin-bottom:15px
+}
+
+.conclusion{
+    margin-top:15px;
+    margin-left:15px;
+    margin-bottom:15px;
+    border-style: solid;
+    border-width: 0.1px;
+    border-color: #c2caca;
+    margin-right:15px;
+}
+
+.quanityNumber{
+    margin-left: 180px;
+}
+.acceptedDiscrepant{
+    margin-left: 149px;
+}
+.rejectedDiscrepant{
+    margin-left: 155px;
+}
+.totalInspected{
+    margin-left: 190px;
+}
+
+#mdlShowConclusionDocuments > .modal-dialog > .modal-content > .modal-body > div > .fa-check-circle {
+    color: #01A282;
+}
+
+//Remove global modal styling to make this modal smaller
+#mdlShowConclusionDocuments > .modal-dialog > .modal-content {
+    width: 100% !important;
+    right: 0% !important;
+}
+
+//remove float-right effect from global button styling
+#mdlShowConclusionDocuments > .modal-dialog > .modal-content > .modal-body > div > .btn-main {
+    float: initial;
+}

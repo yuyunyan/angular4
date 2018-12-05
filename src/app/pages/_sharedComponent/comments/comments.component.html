@@ -1,0 +1,62 @@
+<div widget class="card">
+	<div class="card-header card-header-comments" *ngIf="!modalMode">
+		<span>{{commentTitle}}</span>
+		<div class="widget-controls">              
+			<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+			<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>                    
+		</div>  
+	</div>
+	<div class="card-block widget-body comments-body-group">
+		<div class="card comment-search" *ngIf="!modalMode">
+			<div class="comment-search-wrapper">
+				<input type="text" class="comment-search-input"
+					(keyup.enter)="searchComment()" [(ngModel)]="searchParamter"
+					[value]="searchParamter" placeholder="Search Comments..." />
+				<button type="button" class="btn-search" (click)="searchComment()">
+					<i class="fas fa-search" aria-hidden="true"></i>
+				</button>
+			</div>
+		</div>
+		<div class="card comment-search" *ngIf="!modalMode">
+			<div class="comment-search-wrapper">
+				<input type="text"
+				 	class="comment-search-input"
+					[value]="objectInfo || ''"
+					readonly/>
+				<button 
+					type="button"
+					class="btn-search"
+					*ngIf="objectId"
+					(click)="onReplyCommentClicked(null, null)">
+					<i class="fas fa-plus" aria-hidden="true"></i>
+				</button>
+			</div>
+			</div>
+		<ul slim-scroll [slimScrollOptions]="{height: (comments && comments.length > 0) ? 500 : 200}" class="media-list">
+			<ng-container *ngFor="let comment of comments; trackBy: comment?.commentId; let commentIdx = index;">
+				<az-comment-line
+					[comment]="comment"
+					[commentIdx]="commentIdx"
+					(onRelpyToCommentClicked)="onReplyCommentClicked(comment.commentId, commentIdx)">
+				</az-comment-line>
+				<ng-container #replyTo>
+				</ng-container>
+			</ng-container>
+			<!-- <ng-container #replyTo>
+			</ng-container> -->
+			<div class="comments-reply-wrapper">
+				<az-comments-reply
+					[objectId]="objectId"
+					[objectTypeId]="objectTypeId"
+					[hideCommentType]="true"
+					(onCommentReplyClosed)="onCommentRelplyClose()"
+					(onCommentSaved)="populateNewComment($event)">
+				</az-comments-reply>
+			</div>
+			<li class="comments-reply" *ngIf="!modalMode">
+				<button *ngIf="objectId" title="New comment" (click)="onReplyCommentClicked(null, null)"><i class="fas fa-comments" aria-hidden="true"></i></button>
+				<h6 *ngIf="!objectId">Please select Line</h6>
+			</li>
+		</ul>
+	</div>
+</div>

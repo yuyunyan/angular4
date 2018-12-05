@@ -1,0 +1,180 @@
+<div class="container-fluid">
+  <div class="breakdown-tabs">
+    <ul class="nav nav-tabs" role="tablist">
+        <li *ngFor="let tab of stockBreakdownList; let last = last;" class="nav-item" [ngClass]="tab.index==selectedList.index?'active':''" >
+          <a (click)="stockTab_Click(tab.index)" class="nav-link btn btn-outline-secondary transition" [ngClass]="tab.index==selectedList.index?'active':''"> <!--role="tab" data-toggle="tab" -->
+            <h5>Stock {{tab.index + 1}}</h5>
+          </a>
+        </li>
+        <li *ngIf="!insComplete" class="nav-item add">
+            <a  class="nav-link btn btn-outline-secondary transition btn-main newStock" (click)="newItemStock_Click()">
+              <h5><i class="fas fa-plus" aria-hidden="true"></i></h5>
+            </a>
+          </li>
+    </ul>            
+    <div class="tab-content">
+        <div class="tab-pane active" id="tabBreakdown{{selectedList.itemStockId}}">
+          <form class="itemBreakDown">
+          <div class="row">
+
+            <!-- Quantity label -->
+            <div class="col-sm-3">
+              <label class="col-sm-5 col-form-label">
+                Quantity
+              </label>
+              <div class="col-sm-7 pull-right">
+                <label name="quantity" class="col-form-label">{{selectedList.quantity? selectedList.quantity.toLocaleString(): 0}}</label>
+              </div>
+            </div>
+
+            <!-- Warehouse select -->
+            <div class="col-sm-3 breakdown-warehouse">
+              <label class="col-sm-6 col-form-label">
+                Warehouse
+              </label>
+              <div class="col-sm-6 pull-right">
+                <select name="warehouse" (change)="saveItemStock(selectedList.itemStockId)" disabled class="form-control" [(ngModel)]="selectedList.warehouseId" >
+                  <option disabled selected>List of Warehouses</option>
+                  <option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouseId">{{warehouse.warehouseName}}</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Packaging type select -->
+            <div class="col-sm-3 breakdown-packaging" [ngClass]="{'has-danger':!selectedList.packagingTypeId}">
+              <label class="col-sm-5 col-form-label ">
+              Packaging Type
+              </label>
+              <div class="col-sm-7 pull-right">
+                  <select name="packagingTypeId" (change)="saveItemStock(selectedList.itemStockId)" class="form-control" [(ngModel)]="selectedList.packagingTypeId" >
+                    <option disabled selected>List of Packaging Types</option>
+                    <option *ngFor="let type of packagingTypes" [value]="type.id">{{type.name}}</option>
+                  </select>
+              </div>
+            </div>
+            
+            <!-- Expiration date input -->
+            <div class="col-sm-3 breakdown-expiration" [ngClass]="{'has-danger':!selectedList.expirationDate}">
+              <label class="col-sm-4 col-form-label">
+                Expiration Date
+              </label>
+              <div class="col-sm-8 pull-right">
+                  <input name="expirationDate" (focusout)="saveItemStock(selectedList.itemStockId)" type="date" class="form-control input-exp-date" [(ngModel)]="selectedList.expirationDate">
+              </div>
+            </div>
+            
+           
+            <!-- Save Checklist -->
+            <!-- <button class="btn btn-main save-checklist" (click)="saveItemStock(selectedList.itemStockId)">Save</button> -->
+
+          </div>
+
+          <div class="row">
+
+              <!-- Status select -->
+              <div class="col-sm-3 breakdown-status">
+                <label class="col-sm-5 col-form-label">
+                  Status
+                </label>
+                <div class="col-sm-7 pull-right">
+                 <select name="isRejected" (change)="saveItemStock(selectedList.itemStockId)" class="form-control" [(ngModel)]="selectedList.isRejected"> <!-- [(ngModel)]="stockBreakdownList[index].isRejected" -->
+                    <option value="false" selected>Accepted</option>
+                    <option value="true">Rejected</option>
+                  </select>
+                </div>
+              </div>
+              
+              <!-- Putaway bin -->
+              <div class="col-sm-3 breakdown-warehouse" [ngClass]="{'has-danger':!selectedList.displayWarehouseBinId}">
+                <label class="col-sm-6 col-form-label">
+                  Putaway Bin
+                </label>
+                <div class="col-sm-6 pull-right">
+                  <span class="form-control border-0" *ngIf="selectedList.isRejected == 'true' || selectedList.isRejected == true">{{selectedList.rejectedBinName}}</span>
+                  <span class="form-control border-0" *ngIf="selectedList.isRejected == 'false' || selectedList.isRejected == false">{{selectedList.acceptedBinName}}</span>
+                </div>
+              </div>
+  
+              <!-- Packaging Condition select-->
+              <div class="col-sm-3 breakdown-packaging" [ngClass]="{'has-danger':!selectedList.conditionId}">
+                <label class="col-sm-5 col-form-label ">
+                Packaging Condition
+                </label>
+                <div class="col-sm-7 pull-right">
+                    <select name="conditionId" (change)="saveItemStock(selectedList.itemStockId)" class="form-control" [(ngModel)]="selectedList.conditionId">
+                      <option disabled selected>List of Package Conditions</option>
+                      <option *ngFor="let condition of conditionTypes" [value]="condition.id">{{condition.name}}</option>
+                    </select>
+                </div>
+              </div>
+  
+              <!-- Datecode input -->
+              <div class="col-sm-3 breakdown-expiration " [ngClass]="{'has-danger':!selectedList.dateCode}">
+                <label class="col-sm-4 col-form-label">
+                  DateCode
+                </label>
+                <div class="col-sm-8 pull-right">
+                    <input name="dateCode" (focusout)="saveItemStock(selectedList.itemStockId)" class="form-control" [(ngModel)]="selectedList.dateCode">
+                  </div>
+              </div>
+
+             
+            </div>
+            <div class="row">
+               <!-- Country of origin select -->
+            <div class="col-sm-3 breakdown-coo" [ngClass]="{'has-danger':!selectedList.countryId}">
+                <label class="col-sm-5 col-form-label">
+                  COO
+                </label>
+                <div class="col-sm-7 pull-right">
+                    <select name="countryId" (change)="saveItemStock(selectedList.itemStockId)" class="form-control" [(ngModel)]="selectedList.countryId" >
+                        <option disabled selected>List of Countries</option>
+                        <option *ngFor="let country of countryList" [value]="country.countryId">{{country.name}}</option>
+                      </select>
+                </div>
+              </div>
+
+              <div class="col-sm-3 breakdown-mfrLotNum">
+                <label class="col-sm-6 col-form-label">
+                  Mfr Lot #
+                </label>
+                <div class="col-sm-6 pull-right">
+                    <input name="mfrLotNum" (focusout)="saveItemStock(selectedList.itemStockId)" class="form-control" [(ngModel)]="selectedList.mfrLotNum">
+                  </div>
+              </div>
+
+               <!-- Delete/Add line toggle,Delete Stock Toggle -->
+               <div class="col-sm-9 breakdown-buttons">
+
+                  <button [disabled]="!(selectedRowCount > 0)" (click)="onRowsDelete()" class="btn btn-main">
+                       <i class="fa fa-times" aria-hidden="true"></i>
+                       &nbsp;Delete Lines ({{selectedRowCount}})
+                    </button>
+ 
+                    <button (click)="onAddRow()" class="btn btn-main">
+                       <i class="fas fa-plus" aria-hidden="true"></i>
+                       &nbsp;Add Line
+                    </button>
+
+                    <button [disabled]="insComplete" (click)="onDeleteItemStock(selectedList.itemStockId)" *ngIf="selectedList.index > 0" class="btn btn-main deleteStockBtn">
+                        <i class="fa fa-times" aria-hidden="true"></i>
+                        &nbsp;Delete Stock
+                     </button>
+  
+                 </div>
+                 <br>
+            </div>
+          </form>
+            <div class="row">
+                <ag-grid-angular 
+                  style="width: 100%;height: 400px;" 
+                  id="breakdownLines" 
+                  #agGrid class="ag-theme-balham agGridCustom" 
+                  [gridOptions]="breakdownGrid" ><!-- (rowClicked)="onCellClicked($event)" -->
+                </ag-grid-angular>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
+<simple-notifications [options]="breakdownNotifyOptions"></simple-notifications>

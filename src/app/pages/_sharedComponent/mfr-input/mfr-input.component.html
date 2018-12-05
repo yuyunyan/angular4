@@ -1,0 +1,3 @@
+<div class="divDic" [ngClass]="!selectedValue && !isDisabled? 'required':''">
+    <input #container class="form-control" [disabled]="isDisabled"  [(ngModel)]="selectedValue" name="textinput">
+</div>

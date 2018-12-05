@@ -1,0 +1,91 @@
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+<div class="conclusion"[ngBusy]="busyConfig">
+
+  <div class="row">
+    <div class="col-md-5">
+      <div class="row">
+        <div class="col-md-12">
+          <label class="quanityLabel">Quantity Passed</label>
+          <strong class="quanityNumber">{{quanityPassed|number}}</strong>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label class="quanityLabel">Discrepant -Accepted</label>
+          <strong class="acceptedDiscrepant">{{acceptedDiscrepant|number}}</strong>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <label class="quanityLabel">Discrepant -Rejected</label>
+          <strong class="rejectedDiscrepant">{{rejectedDiscrepant|number}}</strong>
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-md-12">
+          <label class="quanityLabel">Total Inspected</label>
+          <strong class="totalInspected">{{totalInspected|number}}</strong>
+        </div>
+      </div>
+    </div>
+    <div class="form-group col-md-7">
+      <label class="control-label">Quality Score</label>
+      <select [disabled]="insBtnDisabled" class="qualityScore" (change)="onScoreOptionChange($event)" [(ngModel)]="resultIdStatus? selectedResultId:defaultResultOption">
+        <option *ngFor="let option of quantityScoreOptions" [value]="option.id">{{option.name}}</option>
+        <option value="999"> Please select</option>
+      </select>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <label class="col-md-1 control-label">Discrepant Material Summary</label>
+    <div class="col-md-9">
+      <ag-grid-angular id="conclusionGrid" style="width: 100%; height:200px" class="ag-fresh" [gridOptions]="conclusionGrid">
+      </ag-grid-angular>
+    </div>
+  </div>
+<br>
+  <div class="row">
+    <label class="col-md-1 control-label">Conclusion</label>
+    <div class="col-md-9">
+      <textarea [disabled]="insBtnDisabled" maxlength="1024" [(ngModel)]="conc.Conclusion"></textarea>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 text-center">
+      <button [disabled]="insBtnDisabled" class="btn btn-complete saveAndHoldBtn" (click)="saveConclusion(false)">Save and Hold</button>
+    </div>
+    <div class="col-md-6 text-center">
+        <span *ngIf="insBtnDisabled">Inspection has already been completed.</span>
+      <button [disabled]="insBtnDisabled" class="btn btn-complete" (click)="saveConclusion(true)">Complete Inspection</button>
+    </div>
+  </div>
+
+  <div id="mdlShowConclusionDocuments" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="width: 150%; right: 25%;">
+        <div class="modal-header">
+          <div class="header-text">
+            QC Conclusion Documents
+          </div>
+        </div>
+        <div class="modal-body">
+        <div class="col-md-12 text-center">
+          <i class="fas fa-check-circle fa-3x"></i>
+          <br>
+          QC Inspection and Sync Complete, click
+          <button class="btn btn-link pl-0 pr-0" (click)="printMergedReport()">
+            here
+          </button>
+          to print your documents.
+          <br>
+          <button class="btn btn-main" (click)="printMergedReport()">Print</button>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br/>
+</div>

@@ -1,0 +1,16 @@
+<div style="width: 50%; height:100%;">
+	<tree-root 
+		#tree	
+		[nodes]="navTreesData"
+		[options]="options">
+		<ng-template #treeNodeTemplate let-node="node" let-index="index" >
+			<input
+				data-field-name="Navigation Links"
+				(change)="check(node, !node.data.checked)"
+				type="checkbox"
+				[indeterminate]="node.data.indeterminate"
+				[checked]="node.data.checked">
+				{{ node.data.name }}
+		</ng-template>
+	</tree-root>
+</div>

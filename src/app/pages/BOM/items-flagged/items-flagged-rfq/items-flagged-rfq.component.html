@@ -1,0 +1,117 @@
+<form class="form" #rfqItemsFlaggedForm="ngForm">
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Supplier</label>
+        <div class="col-sm-7">
+          <!-- <select 
+            class="form-control"
+            name="accountId"
+            #supplierRFQForm="ngModel"
+            required
+            [disabled]="suppliersList.length < 1"
+            (change)="onAccountVendorChange($event.target.value)"
+            [(ngModel)]="rfq.accountId">
+            <option *ngFor="let s of suppliersList" [value]="s.id"> {{s.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="supplierRFQForm.invalid && (supplierRFQForm.dirty || supplierRFQForm.touched)">
+            Supplier is required.
+          </span> -->
+
+          <ng2-completer   
+                #formSupplier            
+                name="accountCustomerCompleter" 
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote" 
+                [minSearchLength]="2">
+            </ng2-completer>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Contact</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="contactId"
+            #contactRFQForm="ngModel"
+            required
+            [disabled]="accountContacts.length < 1"
+            [(ngModel)]="rfq.contactId">
+            <option *ngFor="let con of accountContacts" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="contactRFQForm.invalid && (contactRFQForm.dirty || contactRFQForm.touched)">
+            Contact is required.
+          </span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+        
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Organization</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="organizationId"
+            #organizationRFQForm="ngModel"
+            required
+            [(ngModel)]="rfq.organizationId">
+            <option *ngFor="let o of organizations" [value]="o.id"> {{o.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="organizationRFQForm.invalid && (organizationRFQForm.dirty || organizationRFQForm.touched)">
+            Organization is required.
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row text-left">
+        <label class="col-sm-1 offset-sm-3 col-form-label">Comment</label>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <textarea class="form-control" name="comment" rows="5" [(ngModel)]="comment"></textarea>
+        </div>
+      </div>
+    </div>    
+  </div>
+</form>
+<az-items-flagged-grid
+  [ngStyle]="{'display': itemsFlagged ? 'block' : 'none'}"
+  [itemsFlagged]="itemsFlagged"
+  (onGridValuesUpdated)="onGridValuesUpdated($event)">
+</az-items-flagged-grid>
+
+<div class="row save-bom-buttons-wrapper">
+  <div class="col-sm-4 offset-sm-4 file-upload-buttons">
+    <button
+      class="btn btn-bom-save"
+      type="button"
+      [disabled]="rfqItemsFlaggedForm.invalid || !isAccountSelected()"
+      (click)="onSaveRFQClicked($event)">
+      <i class="fas fa-check" aria-hidden="true"></i> &nbsp;SAVE
+    </button>
+    <button
+      class="btn btn-bom-cancel"
+      type="button"
+      (click)="onCloseModal.emit()">
+      <i class="fas fa-times" aria-hidden="true"></i> &nbsp;CANCEL
+    </button>
+  </div>
+</div>

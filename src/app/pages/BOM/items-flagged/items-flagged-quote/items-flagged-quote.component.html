@@ -1,0 +1,369 @@
+<div class="row">
+  <div class="col-md-6">
+    <div class="row form-group text-left">
+      <div class="col-sm-7 offset-sm-4">
+        <label class="custom-control custom-radio">
+          <input id="radio1"
+            name="isExistCustomer"
+            type="radio"
+            class="custom-control-input"
+            [value]="true"
+            [(ngModel)]="isExistingCustomer"
+            checked>
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">Existing Customer</span>
+        </label>
+        <label class="custom-control custom-radio">
+          <input id="radio2"
+            name="isExistCustomer"
+            type="radio"
+            class="custom-control-input"
+            [value]="false"
+            [(ngModel)]="isExistingCustomer">
+          <span class="custom-control-indicator"></span>
+          <span class="custom-control-description">New Customer</span>
+        </label>
+      </div>
+    </div>
+  </div>
+</div>
+
+<form class="form" #existingCustomerForm="ngForm" [ngStyle]="{'display': isExistingCustomer ? 'block': 'none'}">
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Customer</label>
+        <div class="col-sm-7">
+          <!-- <select 
+            class="form-control"
+            name="accountId"
+            #formAccountId="ngModel"
+            required
+            [(ngModel)]="quote.accountId"
+            [disabled]="customers.length < 1"
+            (change)="onCustomerChange($event.target.value)">
+            <option *ngFor="let c of customers" [value]="c.id"> {{c.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="formAccountId.invalid && (formAccountId.dirty || formAccountId.touched)">
+            Customer is required.
+          </span> -->
+          <ng2-completer   
+                #formSupplier            
+                name="accountCustomerCompleter" 
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote" 
+                [minSearchLength]="2">
+            </ng2-completer>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Contact</label>
+        <div class="col-sm-7">
+          <select
+            class="form-control"
+            name="contactId"
+            #formContactId="ngModel"
+            required
+            [(ngModel)]="quote.contactId"
+            [disabled]="contactsByAccount.length < 1"
+            (change)="onContactsChange($event.target.value)">
+            <option *ngFor="let con of contactsByAccount" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="formContactId.invalid && (formContactId.dirty || formContactId.touched)">
+            Contact is required.
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row text-left">
+        <label class="col-sm-1 offset-sm-3 col-form-label">Comment</label>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <textarea class="form-control" name="comment" rows="5" [(ngModel)]="comment"></textarea>
+        </div>
+      </div>
+    </div>    
+  </div>
+</form>
+
+<form class="form" #newCustomerForm="ngForm" [ngStyle]="{'display': !isExistingCustomer ? 'block': 'none'}">
+  <!-- <div class="row form-section-description-wrapper">
+    <div class="col-md-6">
+      <div class="row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label" style="font-weight: 900;">Account Information</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Name</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="name"
+            #newCustomerName="ngModel"
+            required
+            [(ngModel)]="newCustomer.name">
+          <span
+            class="help-block text-danger"
+            *ngIf="newCustomerName.invalid && (newCustomerName.dirty || newCustomerName.touched)">
+            Customer is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Website</label>
+        <div class="col-sm-7">
+          <input
+            class="form-control"
+            name="website"
+            [(ngModel)]="newCustomer.website">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Company Type</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="companyTypeId"
+            #newCustomerCompanyTypeId="ngModel"
+            required
+            [(ngModel)]="newCustomer.companyTypeId">
+            <option *ngFor="let c of companyTypes" [value]="c.companyTypeId"> {{c.companyTypeName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="newCustomerCompanyTypeId.invalid && (newCustomerCompanyTypeId.dirty || newCustomerCompanyTypeId.touched)">
+            Company Type is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Organization</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="organizationId"
+            [(ngModel)]="organizationId">
+            <option *ngFor="let o of organizations" [value]="o.id"> {{o.name}}</option>
+          </select>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Account Type</label>
+        <div class="col-sm-7">
+          <div class = "input-group w-100" *ngFor="let accountType of accountTypesBoundData">
+            <span class="input-group-addon">
+              <input name="options"
+                type = "checkbox" 
+                (change)="accountType.checked = $event.target.checked"
+                [checked]="accountType.checked"
+                />
+            </span>
+            <span class="input-group-addon checkbox-label-wrapper">
+              <label for="accountType" >{{accountType.accountTypeName}}</label>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row form-section-description">
+    <div class="col-md-6">
+      <div class="row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label" style="font-weight: 900;">Contact Information</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">First Name</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="firstName"
+            #newContactFirstName="ngModel"
+            required
+            [(ngModel)]="newContact.firstName">
+          <span
+            class="help-block text-danger"
+            *ngIf="newContactFirstName.invalid && (newContactFirstName.dirty || newContactFirstName.touched)">
+            First name is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Last Name</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="lastName"
+            #newContactLastName="ngModel"
+            required
+            [(ngModel)]="newContact.lastName">
+          <span
+            class="help-block text-danger"
+            *ngIf="newContactLastName.invalid && (newContactLastName.dirty || newContactLastName.touched)">
+            Last name is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Title</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="title"
+            [(ngModel)]="newContact.title">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Note</label>
+        <div class="col-sm-7">
+          <textarea
+            class="form-control"
+            name="note"
+            rows="3"
+            [(ngModel)]="newContact.note">
+          </textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Office Ph</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="officePhone"
+            [(ngModel)]="newContact.officePhone">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Mobile Ph</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="mobilePhone"
+            [(ngModel)]="newContact.mobilePhone">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Fax</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="fax"
+            [(ngModel)]="newContact.fax">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="email"
+            [(ngModel)]="newContact.email">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Company Type</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="preferredContactMethodId"
+            #newCustomerPreferredContactMethodId="ngModel"
+            required
+            [(ngModel)]="newCustomer.preferredContactMethodId">
+            <option *ngFor="let p of preferredContactMethods" [value]="p.id"> {{p.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="newCustomerPreferredContactMethodId.invalid && (newCustomerPreferredContactMethodId.dirty || newCustomerPreferredContactMethodId.touched)">
+            Prefered contact is required.
+          </span>
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+  
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row text-left">
+        <label class="col-sm-1 offset-sm-3 col-form-label">Comment</label>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <textarea class="form-control" name="comment" rows="5" [(ngModel)]="comment"></textarea>
+        </div>
+      </div>
+    </div>    
+  </div> -->
+  <az-new-account (savedAccountDetails)="AccountSave($event)" (cancelClick)="cancelClicked()"></az-new-account>
+</form>
+
+<az-items-flagged-grid
+  [ngStyle]="{'display': itemsFlagged ? 'block' : 'none'}"
+  [itemsFlagged]="itemsFlagged"
+  (onGridValuesUpdated)="onGridValuesUpdated($event)">
+</az-items-flagged-grid>
+
+<div class="row save-bom-buttons-wrapper" [ngStyle]="{'display': !isExistingCustomer ? 'none': 'block'}">
+  <div class="col-sm-4 offset-sm-4 file-upload-buttons">
+    <button
+      class="btn btn-bom-save"
+      type="button"
+      [disabled]="!(((existingCustomerForm.valid && isAccountSelected()) && isExistingCustomer) || (newCustomerForm.valid && !isExistingCustomer))"
+      (click)="onSaveQuoteClicked($event)">
+      <i class="fas fa-check" aria-hidden="true"></i> &nbsp;SAVE
+    </button>
+    <button
+      class="btn btn-bom-cancel"
+      type="button"
+      (click)="onCloseModal.emit()">
+      <i class="fas fa-times" aria-hidden="true"></i> &nbsp;CANCEL
+    </button>
+  </div>
+</div>

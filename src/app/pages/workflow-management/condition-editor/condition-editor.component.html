@@ -1,0 +1,59 @@
+<ng-container>
+	<div class="modal-dialog">
+		<div class="modal-content" style="width: 260%; right: 80%; margin-top: 20%;">
+			<div class="modal-header" style="height: 50px;">
+				<div class="header-text" style="font-size: large;">
+					Conditions
+				</div>
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+			</div>
+
+			<div class="modal-body" style="padding: 10px 5px;">
+				<div class="condition-input-control">
+					<select 
+						class="form-control"
+						(change)="onConditionChanged($event.target.value)"
+						[(ngModel)]="condition.conditionId"  
+						name="conditionId">
+						<option 
+							*ngFor="let stateEngineCondition of stateEngineConditions" 
+							[value]="stateEngineCondition.conditionId">
+							{{stateEngineCondition?.conditionName}}
+						</option>
+					</select>
+				</div>
+				<div class="condition-input-control">
+					<select 
+						class="form-control"
+						(change)="onComparisonChanged($event.target.value)"
+						[(ngModel)]="condition.comparison"  
+						name="comparison">
+						<option 
+							*ngFor="let comparisonValue of comparisonData" 
+							[value]="comparisonValue.id">
+							{{comparisonValue.value}}
+						</option>
+					</select>
+				</div>
+				<az-input-dropdown
+					[preSelectedValue]="preSelectedValue"
+					[dropdownOptions]="stateEngineDynamicValues"
+					[clearObjectState]="clearInputObject"
+					(onValueUpdated)="onValueUpdated($event)">
+				</az-input-dropdown>
+			</div>
+
+			<div class="modal-footer">
+				<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+					<div class="btn-group" role="group">
+						<button type="button" id="save-condition" class="btn btn-default btn-modal" (click)="conditionSaveClicked()" data-action="save" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+					</div>
+					<div class="btn-group" role="group">
+						<button id="condition-modal-close" type="button" class="btn btn-modal" data-dismiss="modal" role="button"><i class="fa fas fa-times" aria-hidden="true"></i> &nbsp; Close</button>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</ng-container>

@@ -1,0 +1,140 @@
+<div class="container-fluid ">
+    <div class="addDeletebtn">
+        <button (click)="onAddRow()" class="btn-gridButtons" *ngxPermissionsOnly="['CanEditLines']">Add Row</button>
+        <button (click)="deleteRows()" class="btn-gridButtons" *ngxPermissionsOnly="['CanEditLines']">Delete Rows</button>
+    </div>
+
+        <span class="ag-grid-sort pull-right">
+    <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -13%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 50px;">
+            <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+    </div>
+    <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -13%; right: 3%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px; z-index: 1;">
+             <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+        </div>
+        <button class="btn-gridButtons" (click)="routeQuoteLines($event)"><i class="fa fa-repeat" aria-hidden="true"></i>&nbsp;<span>Route Selected</span></button>
+        </span>
+        <div class="quotePartsGridOuter">
+            <ag-grid-angular
+                id="partsGrid"
+                #agGrid
+                style="width: 100%;"
+                class="ag-theme-balham"
+                [gridOptions]="partsGrid"
+                (rowSelected)="onQuoteLineSelected($event.node)"
+                (rowClicked)="onCellClicked($event)">
+            </ag-grid-angular>
+        
+            <div class="btn-group dropup quotePartsButton">
+                <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+                <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+                    <ul class="dropdown-menu">
+                        <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+                        <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+                        <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+                    </ul>
+            </div>          
+        </div>
+        
+        <div widget class="card subclass" *ngIf="hasPermission('CanLinkSources')">
+            <div class="card-header">
+                <span *ngIf="showGrid" >Sources for {{partNumber}}</span>
+                <span *ngIf="!showGrid">Click <i class="fa fa-globe" aria-hidden="true"></i> on a line above to see Sources</span>
+                <div class="widget-controls">              
+                    <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+                </div>        
+            </div>
+            
+            <div [hidden]="!showGrid" class="card-block widget-body">
+                <ul class="nav nav-tabs top">
+                    <li class="nav-item">
+                        <a (click)="tabClick($event)" class="nav-link" [ngClass]="{'active' : tabIndex == 0}" data-toggle="tab" href="#sources">Quoted Sources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a (click)="tabClick($event)" class="nav-link" [ngClass]="{'active' : tabIndex == 1}" data-toggle="tab" href="#rfqs">Pending RFQs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a (click)="tabClick($event)" class="nav-link" [ngClass]="{'active' : tabIndex == 2}" data-toggle="tab" href="#allSources">All Sources</a>
+                    </li>
+                </ul>
+                <div class="tab-content top">
+                    <div class="tab-pane active" id="sources">
+                        <az-quote-sources
+                            [itemId]="itemId"
+                            [partNumber]="partNumber"
+                            [objectId]="quoteLineId"
+                            [quantity]="quantity"
+                            [quotesPartSources]="'quoted'"
+                            [objectTypeId]="quotePartObjectTypeId"
+                            [renderCommentCount]="true"
+                            (onSourceUpdated)="onSourceUpdated($event)"
+                            (objectInfo)="onSelectedSourceObjectInfo($event)"
+                            [showAll]="false"
+                            [showInventory]="true"
+                            [quoteLineId]="quoteLineId" >
+                        </az-quote-sources>
+                    </div>
+                    <div class="tab-pane" id="rfqs">
+                        <az-sourcing-rfqs
+                            [partNumberStrip]="partNumberStrip">
+                        </az-sourcing-rfqs>
+                    </div>
+                    <div class="tab-pane" id="allSources">
+                        <az-quote-sources
+                            [itemId]="itemId"
+                            [partNumber]="partNumber"
+                            [objectId]="quoteLineId"
+                            [quantity]="quantity"
+                            [quotesPartSources]="'all'"
+                            [objectTypeId]="quotePartObjectTypeId"
+                            [renderCommentCount]="true"
+                            (onSourceUpdated)="onSourceUpdated($event)"
+                            (objectInfo)="onSelectedSourceObjectInfo($event)"
+                            [showAll]="true"
+                            [showInventory]="true"
+                            [quoteLineId]="quoteLineId">
+                        </az-quote-sources>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div id="divRouteModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <route-to-modal
+        [quoteLineIds]="routeQuoteLineIds"
+        (onRouteToCompeleted)="onRouteToCompeleted($event)">
+    </route-to-modal>
+</div>
+
+<div id="quote-part-comment-preview">
+    <az-comment-hover
+        [objectId]="hoverObjectId"
+        [objectTypeId]="quotePartObjectTypeId"
+        [objectInfo]="hoverObjectInfo">
+    </az-comment-hover>
+</div>
+
+<div id="quote-part-comment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+		<div class="modal-content" style="width: 150%; right: 25%;">
+			<div class="modal-header">
+				<div class="header-text">
+					{{clickedObjectInfo}}
+				</div>
+			</div>
+			<div class="modal-body">
+				<az-comments
+                    [objectId]="clickedQuoteLineId"
+                    [objectTypeId]="quotePartObjectTypeId"
+                    [commentTitle]="'Quote Line Comments'"
+                    (onCommentSaved)="onQuoteExtraCommentSaved()">
+                </az-comments>
+			</div>
+		</div>
+	</div>
+</div>
+
+    

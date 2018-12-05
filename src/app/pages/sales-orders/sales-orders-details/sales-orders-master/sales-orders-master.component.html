@@ -1,0 +1,119 @@
+<div class="container-fluid parentMargin">
+  <div class="top-header">
+    <h5 class="salesId">{{sopoUtilities.DisplayOrderId(externalId, soId)}}</h5>
+    <div class="row">
+      <div class="col-sm-8">
+        <div *ngxPermissionsOnly="['CanPrint']">
+          <button type="button" id="btnPrintSO" class="btn-details btn-affirm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+            aria-expanded="false" *ngxPermissionsOnly="['CanPrint']">
+            <i class="fas fa-file-pdf" aria-hidden="true"></i>&ensp;Print to PDF
+          </button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" (click)="toInternalPdf()">Internal Sales Order</a>
+            <a class="dropdown-item" (click)="toConfirmationPdf()">Sales Order Confirmation</a>
+            <a class="dropdown-item" (click)="toProFormaPdf()">Pro Forma Invoice</a>
+          </div>
+          <button type="button" class="btn-details btn-affirm" (click)="documentsClick()">
+            <i class="fas fa-file-alt" aria-hidden="true"></i>&ensp;Documents ({{documentCount}})
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scrolling-content">
+    <div widget class="card">
+      <div class="card-header">
+        <span>Details</span>
+        <div class="widget-controls">
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+        </div>
+      </div>
+      <div class="card-block widget-body" style="padding-top: 5px;">
+        <az-sales-orders-details
+        [soPermissions]="soPermissions"
+        [soId]="soId"
+        [soVersionId]="soVersionId"
+          (detailsOutput)="detailsChanged($event)">
+        </az-sales-orders-details>
+      </div>
+    </div>
+
+    <br/>
+
+
+    <div widget class="card partsContainer" *ngIf="hasPermission(['CanEditLines', 'CanViewLines'])">
+      <div class="card-header">
+        <span>Parts</span>
+        <div class="widget-controls">
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+        </div>
+      </div>
+      <div class="card-block widget-body sales-order-parts-group">
+        <az-sales-orders-parts
+        [soId]="soId"
+        [deliveryRuleId]="deliveryRuleId"
+        [soVersionId]="soVersionId"
+        [objectTypeId]="soLineObjectTypeId"
+        (onRowClicked)="selectedSOLineId = $event"
+        (objectInfo)="onSelectedPartInfo($event)">
+        </az-sales-orders-parts>
+      </div>
+    </div>
+    <br/>
+
+
+    <div widget class="card">
+      <div class="card-header">
+        <span>Comments</span>
+        <div class="widget-controls">
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+        </div>
+      </div>
+      <div class="card-block widget-body sales-order-parts-group">
+        <az-comments-full
+        [objectId]="soId"
+        [objectTypeId]="salesOrderObjectTypeId"
+        [commentTypeMap]="soCommentTypeMap">
+        </az-comments-full>
+      </div>
+    </div>
+    <br/>
+
+
+    <div widget class="card extraItems" *ngIf="hasPermission(['CanEditExtras', 'CanViewExtras'])">
+      <div class="card-header">
+        <span>Extra Items</span>
+        <div class="widget-controls">
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+        </div>
+      </div>
+      <div class="card-block widget-body sales-order-parts-group">
+        <az-sales-orders-extra
+        [soId]="soId"
+        [soVersionId]="soVersionId"
+        (onRowClicked)="selectedSOExtraId = $event"
+          (objectInfo)="onSelectedExtraInfo($event)">
+        </az-sales-orders-extra>
+      </div>
+    </div>
+    <br/>
+
+
+    <div id="salesOrderDocuments">
+      <documents [objectId]="soId" [objectTypeId]="17" (count)="documentCountChanged($event)"></documents>
+    </div>
+  </div>
+</div>

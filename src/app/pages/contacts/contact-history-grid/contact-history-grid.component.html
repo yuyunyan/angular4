@@ -1,0 +1,22 @@
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link" *ngIf="isAccount" id="nav-quotes-tab-1" data-toggle="tab" href="#nav-quotes" role="tab" aria-controls="nav-home" aria-selected="true">Quotes</a>
+    <a class="nav-item nav-link"  *ngIf="isAccount" id="nav-so-tab-2" data-toggle="tab" href="#nav-so" role="tab" aria-controls="nav-profile" aria-selected="false">Sales Orders</a>
+    <a class="nav-item nav-link" *ngIf="isVendor" id="nav-sources-tab-3" data-toggle="tab" href="#nav-sources" role="tab" aria-controls="nav-contact" aria-selected="false">Sources</a>
+    <a class="nav-item nav-link" *ngIf="isVendor" id="nav-po-tab-4" data-toggle="tab" href="#nav-po" role="tab" aria-controls="nav-contact" aria-selected="false">Purchase Orders</a>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div *ngIf="isAccount" class="tab-pane show quoteGrid" id="nav-quotes" role="tabpanel" aria-labelledby="nav-quotes-tab">
+      <az-quote-line-history-grid [accountId]="accountId" [contactId]="contactId"></az-quote-line-history-grid>
+  </div>
+    <div *ngIf="isAccount" class="tab-pane" id="nav-so" role="tabpanel" aria-labelledby="nav-so-tab">
+     <az-sales-order-line-history-grid [accountId]="accountId" [contactId]="contactId"></az-sales-order-line-history-grid>
+    </div>
+  <div *ngIf="isVendor" class="tab-pane" id="nav-sources" role="tabpanel" aria-labelledby="nav-sources-tab"> 
+    <az-sources-history-grid [accountId]="accountId" [contactId]="contactId"></az-sources-history-grid>
+</div>
+  <div *ngIf="isVendor" class="tab-pane" id="nav-po" role="tabpanel" aria-labelledby="nav-po-tab">
+   <az-purchase-order-line-history-grid [accountId]="accountId" [contactId]="contactId"></az-purchase-order-line-history-grid>
+  </div>
+</div>

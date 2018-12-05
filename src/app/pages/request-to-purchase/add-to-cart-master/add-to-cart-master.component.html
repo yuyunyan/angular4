@@ -1,0 +1,15 @@
+<div id="mdlAddToCart" class="modal cartModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog" >
+    <div class="modal-content">
+      <div class="modal-body">
+        <h6 class="cartTitle">Cart</h6>
+        <hr class="hrLine">
+        <div *ngFor="let vendor of vendorList">
+          <az-add-to-cart-item [vendor]="vendor"></az-add-to-cart-item>
+          <br>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

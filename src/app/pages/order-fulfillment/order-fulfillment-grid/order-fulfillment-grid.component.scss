@@ -1,0 +1,97 @@
+.comment-col-div{
+    color: white;
+    width: 100%;
+    height: 100%;
+    line-height: 27px;
+    cursor: pointer;
+    background-color:#01A282;
+}
+
+.grid-control-wrapper{
+	position: absolute;
+	top: 70%;
+	right: 5%;
+	min-width: 300px;
+}
+
+@media screen and (max-width: 1600px) {
+	.grid-control-wrapper{
+		position: absolute;
+		top: 100%;
+		right: 20%;
+        min-width: 300px;
+	}
+
+	.card-block{
+		padding-bottom: 2rem;
+    }
+
+    .availablility-grid-on{
+        padding-bottom: 40px;
+    }
+}
+
+
+
+.cross-row-quote-source{
+    color: #AFA9BD;
+}
+
+.checkmark-row-quote-source, .allocated-po-inv{
+    background-color: #FFFDA0 !important;
+    div, a, span:not(.cell-btn-text){
+        font-weight: 900 !important;
+    }
+}
+
+.leadtime-editor-wrapper{
+    display: flex;
+    flex-flow: row;
+    justify-content: start;
+    align-items: center;
+    height: 100%;
+}
+
+.source-match-cell{
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-right: 0;
+        color: white;
+        width: 60px;
+        height: 28px;
+        span{
+            height: 24px;
+        }
+    }
+    .source-match-unknown{
+        background-color: grey;
+    }
+    .source-is-match{
+        background-color: #01A282;
+    }
+    .source-not-match{
+        background-color: #990000;
+    }
+}
+
+.underallocated-checkbox-wrapper{
+    display: inline-flex;
+    align-items: center;
+    margin-left: 20px;
+}
+
+.search-bar-wrapper{
+    display: inline-flex;
+    flex-flow: row;
+    justify-content: flex-start;
+    width: 220px;
+    input{
+        width: 200px;
+    }
+    button{
+        width: 35px;
+        margin-left: 8px;
+    }
+}

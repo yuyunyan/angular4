@@ -1,0 +1,135 @@
+<form
+  [readonlyField]="onReadonly"
+  [objectPermissions]="rfqPermissions"
+  (onFormStatusChange)="onFormStatusChange($event)"
+  (onOwnershipClick)="onOwnershipClick($event)">
+
+<div class="row detailParent" *ngxPermissionsOnly="['CanView27']">
+    <!--Left Side-->
+    <div class="col-md-4 bottom-30">
+        <div class="card card-outline-default">
+            <div class="card-header detailCard"><strong>RFQ Details</strong></div>
+
+          <div class="form-group row text-sm-left" *ngxPermissionsOnly="['Supplier']"
+          [ngClass]="{'has-danger': !rfqDetails.supplierId || !accountString}">
+            <label class="col-sm-4 form-control-label m-t-5">Supplier</label>
+            <div class="col-sm-8">
+                <!-- <label class="form-control vendorSuplierName" type="text" *ngIf="onReadonly">{{accountString}}</label>  -->
+                <div id="vendorName" >
+                  <ng2-completer
+                    #formSupplier
+                    [clearUnselected]="true"
+                    [inputClass]="'Supplier-Input form-control'"
+                    name="accountSupplierCompleter"
+                    [(ngModel)]="accountString"
+                    (blur)= "focusLost()"
+                    (selected)="onSupplierChange($event)"
+                    [datasource]="dataRemote"
+                    [minSearchLength]="2">
+                  </ng2-completer>
+                </div>
+            </div>
+          </div>
+
+          <div class="form-group row text-left" *ngxPermissionsOnly="['Supplier']">
+            <label class="col-sm-4 form-control-label m-t-5">Status</label>
+            <div class="col-sm-8">
+              <label class="readonlyLabel col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;{{selectedSupplier?.statusName}}</label>
+            </div>
+          </div>
+
+          <div class="form-group row text-left" *ngxPermissionsOnly="['Supplier']">
+            <label class="col-sm-4 form-control-label m-t-5">Rating</label>
+            <div class="col-sm-8">
+                <label class="readonlyLabel col-form-label">&nbsp;&nbsp;&nbsp;&nbsp;{{selectedSupplier?.supplierRating}}</label>
+            </div>
+          </div>
+
+          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']"
+          [ngClass]="{'has-danger': !rfqDetails.contactId}" >
+            <label class="col-sm-4 form-control-label m-t-5">Contact</label>
+            <div class="col-sm-8">
+              <select data-field-name="Contact" class="form-control" name="contactSelect" [(ngModel)]="rfqDetails.contactId" (change)="onContactChange($event.target.value)">
+                  <option *ngFor="let x of accountContacts" [value]="x.contactId">{{x.firstName}} {{x.lastName}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+            <label class="col-sm-4 col-form-label"></label>
+            <div class="col-sm-8 fieldLab">
+                <label style="font-weight:normal">&nbsp;&nbsp;P: {{contactDetails.officePhone}}</label>
+            </div>
+          </div>
+
+          <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+            <label class="col-sm-4 col-form-label"></label>
+            <div class="col-sm-8 so-contact-email-wrap fieldLab">
+              <label style="font-weight:normal">&nbsp;&nbsp;E:&nbsp;<a class="so-contact-email-link" href="mailto:{{contactDetails.email}}"><u>{{contactDetails.email}}</u></a></label>
+            </div>
+          </div>
+      </div>
+    </div>
+    <!--END: Left Side-->
+
+    <!--Right Side-->
+    <div class="col-md-4 bottom-30">
+        <div class="card card-outline-default">
+       <div class="form-group row text-left" *ngxPermissionsOnly="['Status']"
+       [ngClass]="{'has-danger': !rfqDetails.statusId}">
+        <label class="col-sm-4 col-form-label">Status *</label>
+        <div class="col-sm-8">
+           <select data-field-name="Status" name="statusSelect" class="form-control" [(ngModel)]="rfqDetails.statusId">
+              <option *ngFor="let x of statuses" [value]="x.id">{{x.name}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="form-group row text-left" *ngxPermissionsOnly="['Currency']">
+        <label class="col-sm-4 col-form-label">Currency</label>
+        <div class="col-sm-8">
+           <select data-field-name="Currency" name="statusCurrency" class="form-control" [(ngModel)]="rfqDetails.currencyId">
+              <option *ngFor="let x of currencies" [value]="x.id">{{x.name}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    </div>
+
+    <simple-notifications [options]="notifyOptions"></simple-notifications>
+
+    <div class="col-md-2"></div>
+
+    <div class="col-md-2 bottom-30">
+        <div class="card card-outline-default accountTypes">
+            <div class="card-header detailCard"><strong>
+              Owners
+              <i 
+                class="far fa-edit pull-right" 
+                (click)="onOwnershipClick()"
+                *ngIf="rfqId"
+              ></i>
+            </strong></div>
+              <div class="form-group">
+                  <ownership-view
+                  [objectId]="rfqId"
+                  [objectTypeId]="objectTypeId">
+                </ownership-view>
+              </div>
+          </div>
+      </div>
+  </div>
+    <!--END: Right Side-->
+</form>
+
+<div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <ownership-assignment
+    [objectId]="rfqId"
+    [objectTypeId]="objectTypeId"
+    >
+  </ownership-assignment>
+</div>
+
+
+<div id="rfqDetailsDocModal">
+    <documents [objectId]="rfqId" [objectTypeId]="27" (count)="documentCountChanged($event)"></documents>
+</div>

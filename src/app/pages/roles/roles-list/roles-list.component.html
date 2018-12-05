@@ -1,0 +1,16 @@
+﻿
+  <div class="role-list-control-bar row col-sm-10">
+    <button class="btn-details btn-affirm" (click)="addNewRole()">
+      <i class="fas fa-plus" aria-hidden="true"></i>&ensp;New Role
+    </button>
+    <div>
+      <button id="btnSearchRoles" type="button" class="btn-search btn-search-small pull-right">
+        <i class="fas fa-search" aria-hidden="true" (click)="searchRoles()"></i>
+      </button>
+      <input placeholder="Search for roles..." type="text" id="txtItemSearch" class="searchBox pull-right" style="width: 150px;" (keyup.enter)="searchRoles()" [(ngModel)]="searchString"
+        [value]="searchString" />
+    </div>
+  </div>
+  <ag-grid-angular id="roleListGrid" style="width: 80%; height:100%; max-height: 600px;" class="ag-fresh" [gridOptions]="gridOptions"
+    [rowData]="userData" (rowClicked)="onRowClicked($event)">
+  </ag-grid-angular>

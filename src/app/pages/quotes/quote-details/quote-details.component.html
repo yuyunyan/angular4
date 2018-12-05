@@ -1,0 +1,315 @@
+
+<report-modal [reportUrl]="reportUrl"></report-modal>
+<form
+  #quoteForm="ngForm"
+  [readonlyField]="onReadonly"
+  [objectPermissions]="quotePermissions"
+  (onFormStatusChange)="onFormStatusChange($event)"
+  (onOwnershipClick)="onOwnershipClick($event)">
+
+
+
+
+
+<div class="row detailParent">
+    <div class="col-sm-10">
+      <div style="height:100%;" class="row mbm-20">
+
+        <div class="col-sm-4">
+          <div style="height:100%;" class="bottom-30">
+            <div class="card card-outline-default ">
+                <div class="card-header border-bottom detailCard"><strong>Quote Details</strong></div>
+
+              <div class="form-group row text-sm-left" *ngxPermissionsOnly="['Customer']"
+                [ngClass]="{'has-danger': !quoteDetails.customerId && hasError}">
+                <label class="col-sm-4 col-form-label">Customer</label>
+                <div class="col-sm-8">
+                    <!-- <label class="customerName form-control" type="text" *ngIf="onReadonly">{{accountString}}</label>  -->
+                    <div>
+                      <ng2-completer
+                        [inputClass]="'Customer-Input form-control'"
+                        name="accountCompleter"
+                        (selected)="onAccountSelected($event)"
+                        (blur)="onInputFocusLost()"
+                        [(ngModel)]="accountString"
+                        [datasource]="dataRemote2"
+                        (keydown)="onInputKeydown($event)"
+                        [minSearchLength]="2">
+                      </ng2-completer>
+                    </div>
+                </div>
+              </div>
+
+              <div class="form-group row text-right" *ngxPermissionsOnly="['Contact']"
+                [ngClass]="{'has-danger': !quoteDetails.contactId && hasError}">
+                <label class="col-sm-4 col-form-label">Contact</label>
+                <div class="col-sm-8">
+                  <select
+                    data-field-name="Contact"
+                    class="form-control"
+                    name="contactDropDown"
+                    [(ngModel)]="quoteDetails.contactId"
+                    (change)="onContactsChange($event.target.value)">
+                    <option *ngFor="let con of contactsByAccount" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                  <label class="col-sm-4 col-form-label"></label>
+                    <label class="col-sm-8 col-form-label" style="font-weight:normal">P: {{contact?.phone}}</label>
+                </div>
+
+              <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                <label class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-8">
+                  <label style="font-weight:normal">E:&nbsp;<a class="quote-contact-email-link" href="mailto:{{contact?.email}}"><u>{{contact?.email}}</u></a></label>
+                </div>
+              </div>
+
+              <div class="form-group row text-right" *ngxPermissionsOnly="['Currency']"
+                [ngClass]="{'has-danger': !quoteDetails.currencyId && hasError}">
+                <label class="col-sm-4 col-form-label">Currency</label>
+                  <div class="col-sm-8">
+                    <select
+                        class="form-control"
+                        name="currency"
+                        data-field-name="Currency"
+                        [(ngModel)]="quoteDetails.currencyId">
+                      <option *ngFor="let c of currencyList" [value]="c.currencyId">{{c?.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row text-right" *ngxPermissionsOnly="['Payment Terms']"
+                  [ngClass]="{'has-danger': !quoteDetails.paymentTermId && hasError}">
+                  <label class="col-sm-4 col-form-label">Payment Terms</label>
+                    <div class="col-sm-8">
+                      <select
+                          class="form-control"
+                          name="paymentTerm"
+                          data-field-name="Payment Terms"
+                          [(ngModel)]="quoteDetails.paymentTermId">
+                        <option *ngFor="let pt of paymentTermList" [value]="pt.paymentTermId">{{pt?.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <div class="col-sm-4">
+          <div style="height:100%;" class="bottom-30">
+              <div class="card card-outline-default ">
+                  <div class="card-header border-bottom detailCard"><strong>Shipping Details</strong></div>
+
+                 <div class="form-group row text-right" *ngxPermissionsOnly="['Ship To']">
+            <label class="col-sm-4 col-form-label">Ship To</label>
+            <div class="col-sm-8">
+              <select
+                class="form-control"
+                name="addressDropDown"
+                [(ngModel)]="quoteDetails.shipToId"
+                (change)="onLocationChange($event.target.value)"
+                data-field-name="Ship To">
+                <option id="quoteDetailInputs" *ngFor="let location of shipLocations" [value]="location.locationId">{{location?.name}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group row text-left fullAddress" *ngxPermissionsOnly="['Ship To']">
+              <div class="col-sm-8 offset-sm-4">
+                <label id="quoteDetailInputs" class="quote-shipping-address">{{address? getLocationFullAddress(address) : ''}}</label>
+              </div>
+            </div>
+
+            <!-- <div class="form-group row text-right" *ngxPermissionsOnly="['Shipping Method']"
+        [ngClass]="{'has-danger': !quoteDetails.shippingMethodId && hasError}">
+        <label class="col-sm-4 col-form-label">Ship Via</label>
+        <div class="col-sm-8">
+          <select
+            class="form-control"
+            name="shipMethodId"
+            data-field-name="Shipping Method"
+            [(ngModel)]="quoteDetails.shippingMethodId">
+            <option *ngFor="let sm of shippingMethodList" [value]="sm.shippingMethodId">{{sm?.methodName}}</option>
+          </select>
+        </div>
+      </div> -->
+
+      <!-- <div class="form-group row text-right" *ngxPermissionsOnly="['Incoterms']"
+      [ngClass]="{'has-danger': !quoteDetails.incotermId && hasError}">
+      <label class="col-sm-4 col-form-label">Incoterms</label>
+      <div class="col-sm-8">
+        <select
+          class="form-control"
+          name="incoTermId"
+          data-field-name="Incoterms"
+          [(ngModel)]="quoteDetails.incotermId">
+          <option *ngFor="let it of incotermList" [value]="it.id">{{it?.incotermName}}</option>
+        </select>
+      </div>
+    </div> -->
+    <div class="form-group row text-right" *ngxPermissionsOnly="['Status']"
+    [ngClass]="{'has-danger': !quoteDetails.statusId && hasError}">
+    <label class="col-sm-4 col-form-label">Status</label>
+    <div class="col-sm-8">
+      <select
+        class="form-control"
+        name="statusDropDown"
+        [(ngModel)]="quoteDetails.statusId"
+        data-field-name="Status">
+        <option *ngFor="let st of status" [value]="st.id">{{st?.name}}</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="form-group row text-right" *ngxPermissionsOnly="['Quote Type']"
+  [ngClass]="{'has-danger': !quoteDetails.quoteTypeId && hasError}">
+  <label class="col-sm-4 col-form-label">Quote Type</label>
+  <div class="col-sm-8">
+    <select
+      class="form-control"
+      name="quoteTypeDropDown"
+      data-field-name="Quote Type"
+      [(ngModel)]="quoteDetails.quoteTypeId">
+      <option *ngFor="let q of quoteTypes" [value]="q.id">{{q?.name}}</option>
+    </select>
+  </div>
+
+</div>
+
+<div class="form-group row text-right" *ngxPermissionsOnly="['Valid For']">
+  <label class="col-sm-4 col-form-label">Quote Valid (Days)</label>
+  <div class="col-sm-8">
+    <input data-field-name="Valid For" class="form-control" type="text" name="validInput" [(ngModel)]="quoteDetails.validDays">
+    <!-- <input data-field-name="Incoterms" type="text" class="form-control" name="incoLocInput" [(ngModel)]="quoteDetails.incotermLocation"> -->
+  </div>
+</div>
+    </div>
+    </div>
+    </div>
+
+    <div class="col-sm-4">
+        <div style="height:100%;" class="bottom-30">
+          <div class="card card-outline-default ">
+
+
+
+
+
+
+
+      <div class="form-group row text-right" *ngxPermissionsOnly="['Project']">
+          <label class="col-sm-4 col-form-label">Project</label>
+          <div class="col-sm-8">
+            <select
+              class="form-control"
+              name="projectId"
+              data-field-name="Project">
+              <option selected value="0">None</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group row text-right" *ngxPermissionsOnly="['Organization']"
+        [ngClass]="{'has-danger': !quoteDetails.organizationId && hasError}">
+        <label class="col-sm-4 col-form-label">Organization</label>
+        <div class="col-sm-8">
+          <select
+            class="form-control"
+            name="organizationDropDown"
+            [(ngModel)]="quoteDetails.organizationId"
+            data-field-name="Organization">
+            <option *ngFor="let o of organizationList" [value]="o.id">{{o?.name}}</option>
+          </select>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+       </div>
+       </div>
+
+    <!--
+    <div style="margin-left:0%;" class="form-group row text-right"><b>Owner</b></div>
+    <!-- &nbsp;<i style="font-size: 22px;color:#01A282" class="fas fa-plus-circle"></i> -->
+    <!-- <hr class="hr"/>
+    <div>
+        <ownership-view
+        [objectId]="quoteId"
+        [objectTypeId]="objectTypeIdForQuote">
+      </ownership-view>
+    </div> -->
+    <!-- </div> -->
+
+    <div class="col-sm-2 owners">
+    <div class="card card-outline-default ownership-section">
+        <div class="card-header detailCard">
+          <strong>Owners</strong>
+          <i
+            class="far fa-edit pull-right" 
+            (click)="onOwnershipClick()"
+            *ngIf="quoteId"
+          ></i>
+        </div>
+          <div class="form-group">
+        <ownership-view
+            [objectId]="quoteId"
+            [objectTypeId]="objectTypeIdForQuote">
+          </ownership-view>
+        </div>
+    </div>
+
+      <az-kpi-details [quote]="quoteHeader"></az-kpi-details>
+
+    </div>
+
+
+
+    <!-- <div class="col-md-1" style="max-width: 18rem;"> -->
+
+    <!-- <div class="col-md-4">
+      <p class="lead" style="text-align: center"><u>Owner</u></p>
+      <ownership-view
+        [objectId]="quoteId"
+        [objectTypeId]="objectTypeIdForQuote">
+      </ownership-view>
+    </div> -->
+  </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+
+<div id="quoteDetailsDocModal">
+  <documents [objectId]="quoteId" [objectTypeId]="19" (count)="countChanged($event)"></documents>
+</div>
+
+<div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <ownership-assignment
+    [objectId]="quoteId"
+    [objectTypeId]="objectTypeIdForQuote">
+  </ownership-assignment>
+</div>
+
+
+<div id="customerExist" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-header">
+            <h6 class="modal-title">Important Note:</h6>
+          </div>
+      <div class="modal-content">
+          <br/>
+          <div class="modalcontent">
+            <p><b>Note : This customer doesn't exist in the database. Please choose existing one.</b></p>
+          <br/>
+        </div>
+            <div class="modal-footer">
+                <button (click)="CloseCNoteModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+      </div>
+
+<!-- .ag-bl-full-height {
+  height: 100%;
+  /* overflow: auto; */
+  position: relative; -->

@@ -1,0 +1,128 @@
+<div id="mdlCreateQuote" class="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="header-text">
+                  Create Quote
+                </div>
+            </div>
+            <div class="modal-body">
+              <ag-grid-angular 
+                id="linesToPurchaseOrderGrid" 
+                #agGrid 
+                style="width: 92%; display:inline-block; height: 150px !important;" 
+                class="ag-fresh"         
+                [gridOptions]="createQuoteGrid">
+              </ag-grid-angular>
+            </div>
+            <div class="container-fluid">
+
+                <div class="form-group row" [ngClass]="{'has-danger': !accountString}">
+                    <label class="col-3 col-form-label">Customer</label>
+                    <div class="col-9">
+                            <ng2-completer
+                              [inputClass]="'Customer-Input form-control'"
+                              name="accountCompleter"
+                              (selected)="onAccountSelected($event)"
+                              (blur)="onInputFocusLost()"           
+                              [(ngModel)]="accountString" 
+                              [datasource]="dataRemote2" 
+                              (keydown)="onInputKeydown($event)"
+                              [minSearchLength]="2">
+                            </ng2-completer>
+                    </div>
+                  </div>
+
+                <div class="form-group row" [ngClass]="{'has-danger': !quoteDetails.contactId}">
+                    <label class="col-3 col-form-label">Contact</label>
+                    <div class="col-9">
+                        <select 
+                        data-field-name="Contact" 
+                        class="form-control" 
+                        (change)="onOptionSelected()"
+                        name="contactId" 
+                        [(ngModel)]="quoteDetails.contactId" 
+                        (change)="onContactsChange($event.target.value)">
+                        <option [ngValue]="undefined" selected>Select from contacts</option>
+                        <option *ngFor="let con of contactsByAccount" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                <div class="form-group row" [ngClass]="{'has-danger': !quoteDetails.currencyId}">
+                    <label class="col-3 col-form-label">Currency</label>
+                    <div class="col-9">
+                        <select
+                          class="form-control"
+                          (change)="onOptionSelected()"
+                          name="quoteDetails.currencyId"
+                          [(ngModel)]="quoteDetails.currencyId">
+                         <option [ngValue]="undefined" selected>Select from currency list</option>
+                        <option *ngFor="let x of currencyList" [value]="x.currencyId">{{x.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="form-group row" [ngClass]="{'has-danger': !quoteDetails.paymentTermId}">
+                      <label class="col-3 col-form-label">Payment Terms</label>
+                      <div class="col-9">
+                        <select
+                          class="form-control" 
+                          (change)="onOptionSelected()"
+                          name="quoteDetails.paymentTermId" 
+                          [(ngModel)]="quoteDetails.paymentTermId">
+                          <option [ngValue]="undefined" selected>Select from payment term list</option>
+                          <option *ngFor="let x of paymentTermList" [value]="x.paymentTermId">{{x.name}}</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="form-group row" [ngClass]="{'has-danger': !quoteDetails.organizationId}">
+                        <label class="col-3 col-form-label">Organization</label>
+                        <div class="col-9">
+                            <select 
+                            class="form-control" 
+                            name="organizationId" 
+                            (change)="onOptionSelected()"
+                            [(ngModel)]="quoteDetails.organizationId"
+                            data-field-name="Organization">
+                            <option [ngValue]="0" selected>Select from organization list</option>
+                            <option *ngFor="let o of organizationList" [value]="o.id">{{o?.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+            </div>
+            <div class="modal-footer">
+              <div>
+                <span class="notValid" *ngIf="formIsNotValid">*All fields are required/Invalid fields</span>
+                <i style="color:green" class="fas fa-check-circle fa-3x" *ngIf="quoteSuccess"></i>
+                <span *ngIf="quoteSuccess">Quote successfully created</span>
+
+              </div>
+                <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                  <div class="btn-group" role="group">
+                    <button 
+                      type="button" 
+                      (click)="createQuote()"  
+                      class="btn btn-default btn-modal" 
+                      data-action="save" 
+                      role="button">
+                    <i class="fas fa-check" aria-hidden="true"></i>&nbsp; Accept</button>
+                  </div>
+
+                  <div class="btn-group" role="group">
+                    <button 
+                      type="button" 
+                      (click)="closeModal()"  
+                      class="btn btn-modal" 
+                      data-dismiss="modal" 
+                      role="button">
+                    <i class="fa fa-times" aria-hidden="true"></i>&nbsp; Cancel</button>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+
+      </div>
+    </div>
+
+

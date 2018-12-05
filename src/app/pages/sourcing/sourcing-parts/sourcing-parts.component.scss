@@ -1,0 +1,67 @@
+.comment-col-div{
+	color: white;
+	width: 100%;
+	height: 100%;
+	line-height: 27px;
+	cursor: pointer;
+	background-color:#01A282;
+}
+
+.grid-control-wrapper{
+	position: absolute; 
+	top: 95%; 
+	right: 1%; 
+	min-width: 300px;
+}
+
+@media screen and (max-width: 1600px) {
+	.grid-control-wrapper{
+		position: absolute; 
+		top: 100%; 
+		right: 20%; 
+		min-width: 300px;
+	}
+
+	.card-block{
+		padding-bottom: 2rem;
+	}
+}
+
+.btn-details .btn-affirm{
+	margin-bottom:-10px;
+}
+
+.sourcingBtn{
+	margin-top: 2px;
+}
+
+.source-nav-link, .source-nav-tabs{
+	border-top-left-radius: 0 !important;
+	border-top-right-radius: 0 !important;
+}
+
+.source-nav-item{
+	background-color: darkgray;
+	margin-right: 5px;
+	width: 100px;
+	word-wrap: normal;
+}
+
+.buyer-status-dropdown-menu{
+	padding: 0 !important;
+	min-width: 100px;
+}
+
+.route-btn:hover{
+	color: white;
+}
+
+.quotePartsButton button{
+	background-color: #9C9DA0;
+}
+
+.dropdown-item{
+	background-color:white !important;
+	cursor: pointer;
+
+}

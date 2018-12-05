@@ -1,0 +1,62 @@
+<div widget class="card">
+  <div class="card-header">
+    <span>Transactions</span>
+    <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+  </div>
+  <div class="card-block widget-body">
+    <div class="container-fluid">
+      <ag-grid-angular 
+        #agGrid style="width: 100%; height: 500px;" class="ag-fresh" [gridOptions]="transactionsGridOptions">
+      </ag-grid-angular>
+    </div>
+    <br>
+  </div>
+</div>
+
+<div class="modal fade" id="payloadModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="grid-header"> </div>
+        <button type="button" class="close" data-dismiss="modal" #invCloseBtn>
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Cancel</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <div>
+            <p>{{payload}}</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="errorsModal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div class="grid-header"> </div>
+        <button type="button" class="close" data-dismiss="modal" #invCloseBtn>
+          <span aria-hidden="true">×</span>
+          <span class="sr-only">Cancel</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <p>{{error}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

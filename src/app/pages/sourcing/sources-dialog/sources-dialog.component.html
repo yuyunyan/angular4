@@ -1,0 +1,189 @@
+<div class="modal fade" id="dlgAddSource" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content source-new-modal">
+			<div class="modal-header">
+				<div class="header-text">
+					Add Source
+				</div>
+				<button type="button" class="close" data-dismiss="modal" #sourceCloseBtn><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+			</div>
+
+			<div class="modal-body">
+				<form class="form-addsource" #newSourceForm="ngForm">
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="supplierDropdown">Supplier</label>
+						<div class="col-9">
+							<ng2-completer #accountCompleter 
+								[inputClass]="'Account-Typeheader form-control'"  
+								name="accountCompleter" 
+								#accountCompleter="ngModel"
+								[(ngModel)]="model.supplierName"
+								(selected)="onAccountSelected($event)"
+								(blur) ="onInputFocusLost()"
+								(keydown)=onSupplierTyping($event)
+								[datasource]="dataRemote" 
+								[minSearchLength]="2"
+								[fillHighlighted]=false>
+							</ng2-completer>  
+							<span class="help-block text-danger" *ngIf="!model.supplierId && (accountCompleter.dirty || accountCompleter.touched)">Supplier is required.</span>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label" for="contactId">Contact</label>
+						<div class="col-9">
+							<select data-field-name="Contact" class="form-control" name="contactId" [(ngModel)]="model.contactId">
+								<option *ngFor="let contact of contacts" [value]="contact.contactId">{{contact.firstName}}&nbsp;{{contact.lastName}}</option>  
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="typeId">Type</label>
+						<div class="col-9">
+							<select class="form-control" required name="typeId" #newType="ngModel"  [(ngModel)]="model.typeId">
+								<option *ngFor="let type of types" [value]="type.id">{{type.name}}</option> 
+							</select>
+							<span class="help-block text-danger" *ngIf="newType.invalid && (newType.dirty || newType.touched || newSourceForm.submitted)">Type is required. </span>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="mpn">MPN</label>
+						<div class="col-9">
+							<ng2-completer   
+								#formPartNumber
+								[inputClass]="'Item-Typeheader form-control'"         
+								name="partNumberCompleter" 
+								(selected)="onPartNumberSelected($event)"
+								(keyup)="onPartNumberTyping($event)"
+								[datasource]="dataRemoteItems" 
+								[(ngModel)]="tempPartNumber"
+								[minSearchLength]="2">
+							</ng2-completer>
+							<span class="help-block text-danger" *ngIf="newMPNInvalid">MPN is required.</span>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="mfr">Mfr</label>
+						<div class="col-9">
+							<ng2-completer   
+								#formPartNumber
+								[inputClass]="'Mfr-Typeheader form-control'"         
+								name="mfrCompleter" 
+								(selected)="onMfrSelected($event)"
+								(keyup)="onMfrTyping()"
+								[datasource]="dataRemoteMfrs" 
+								[(ngModel)]="model.mfr"
+								[minSearchLength]="2">
+							</ng2-completer>
+							<span class="help-block text-danger" *ngIf="newMfrInvalid">Mfr is required.</span>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="commodityDropdown">Commodity</label>
+						<div class="col-9">
+							<select class="form-control" required name="commodityId" #newCommodity="ngModel" [(ngModel)]="model.commodityId">
+								<option *ngFor="let commodity of commodities" [value]="commodity.id">{{commodity.name}}</option> 
+							</select>
+							<span class="help-block text-danger" *ngIf="newCommodity.invalid && (newCommodity.dirty || newCommodity.touched || newSourceForm.submitted)">Commodity is required. </span>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="qty">Qty</label>
+						<div class="col-3">
+							<input class="form-control" required type="number" name="qty" #newQty="ngModel" [(ngModel)]="model.qty">
+							<span class="help-block text-danger" *ngIf="newQty.invalid && (newQty.dirty || newQty.touched || newSourceForm.submitted)">Quantity is required. </span>
+						</div>
+						<div class="col-1"></div>
+						<label class="col-2 col-form-label" for="moq">MOQ</label>
+						<div class="col-3">
+							<input class="form-control" type="number" id="moq" name="moq" [(ngModel)]="model.moq">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="dateCode">Date Code</label>
+						<div class="col-3">
+							<input class="form-control" required type="text" id="dateCode" name="dateCode" #newDateCode="ngModel" [(ngModel)]="model.dateCode">
+							<span class="help-block text-danger" *ngIf="newDateCode.invalid && (newDateCode.dirty || newDateCode.touched || newSourceForm.submitted)">Date Code is required. </span>
+						</div>
+						<div class="col-1"></div>
+						<label class="col-2 col-offset-1 col-form-label" for="spq">SPQ</label>
+						<div class="col-3">
+							<input class="form-control" type="number" id="spq" name="spq" [(ngModel)]="model.spq">
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label req-source-label" for="cost">Cost</label>
+						<div class="col-3">
+							<input class="form-control" required type="number" id="cost" name="cost" #newCost="ngModel" [(ngModel)]="model.cost">
+							<span class="help-block text-danger" *ngIf="newCost.invalid && (newCost.dirty || newCost.touched || newSourceForm.submitted)">Cost is required. </span>
+						</div>
+						<div class="col-3">
+							<select class="form-control" required name="currency" #newCurrency="ngModel" [(ngModel)]="model.currency">
+								<option *ngFor="let currency of currencies" [value]="currency.id">{{currency.id}}</option> 
+							</select>
+							<span class="help-block text-danger" *ngIf="newCurrency.invalid && (newCurrency.dirty || newCurrency.touched || newSourceForm.submitted)">Currency is required. </span>
+						</div>                        
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label" for="validDays">Valid For</label>
+						<div class="col-3">
+							<input class="form-control" type="number" id="validDays" name="validDays" [(ngModel)]="model.validDays">
+						</div>
+						<div class="col-1">
+							Days
+						</div>                        
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label" for="leadTime">Lead Time</label>
+						<div class="col-3">
+							<input class="form-control" type="number" id="leadTime" name="leadTime" [(ngModel)]="model.leadTime" />
+						</div>
+						<div class="col-2">
+							<select class="form-control typeDropdown" name="timeType" [(ngModel)]="timeType">
+								<option value="0">Days</option> 
+								<option value="1">Weeks</option> 
+							</select>
+						</div>                        
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label" for="packagingDropdown">Packaging</label>
+						<div class="col-9">
+							<select class="form-control" name="packagingDropdown" [(ngModel)]="model.packagingId">
+								<option *ngFor="let type of packagingTypes" [value]="type.id">{{type.name}}</option> 
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label" for="notes">Notes</label>
+						<div class="col-9">
+							<input class="form-control" type="text" id="notes" name="notes" [(ngModel)]="model.notes">
+						</div>                                              
+					</div>
+    
+					<div class="modal-footer">
+						<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+							<div class="btn-group" role="group">
+								<button type="submit" (click)="onSave()" id="btnSaveSource" class="btn btn-default btn-modal" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+							</div>
+    
+							<div class="btn-group" role="group">
+								<button type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fa fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+							</div>
+						</div>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

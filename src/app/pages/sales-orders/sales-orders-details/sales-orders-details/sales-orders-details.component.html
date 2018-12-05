@@ -1,0 +1,345 @@
+<div class="container-fluid" id="wrapper" [ngBusy]="busyConfig">
+  <form
+  #soForm="ngForm"
+  [readonlyField]="onReadonly"
+  [objectPermissions]="soPermissions"
+  [showSync]="showSync"
+  (onFormStatusChange)="onFormStatusChange($event)"
+  (ngSubmit)="onSubmit()"
+  (onOwnershipClick)="onOwnershipClick($event)">
+
+  <div class="row detailParent">
+    <div class="col-sm-10">
+      <div class="row bottom-30">
+        <div class="col-sm-4">
+            <div style="height:100%;" class="mbm-20">
+                <div class="card card-outline-default ">
+                    <div class="card-header border-bottom detailCard"><strong>Sales Order Details</strong></div>
+                      <div class="form-group row text-left">
+                        <label class="col-sm-4 col-form-label">Customer</label>
+                        <div class="col-sm-8">
+                          <div>
+                            <ng2-completer
+                              #formSupplier
+                              [inputClass]="'Customer-Input form-control'"
+                              type="text" name="accountCustomerCompleter"
+                              [(ngModel)]="soDetails.accountName"
+                              (selected)="onAccountSelected($event)"
+                              (blur)="onCompleterBlur()"
+                              [datasource]="dataRemote"
+                              [minSearchLength]="2">
+                            </ng2-completer>
+                          </div>
+                          <span class="help-block text-danger" *ngIf="invalidCustomer">Customer is required. </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                        <label class="col-sm-4 col-form-label req-sales-order-label">Contact</label>
+                        <div class="col-sm-8">
+                          <select required data-field-name="Contact" class="form-control" name="contactId" #soContact="ngModel" [(ngModel)]="soDetails.contactId"
+                            (change)="onContactChange($event.target.value)">
+                            <option *ngFor="let c of contacts" [value]="c.contactId">{{c.firstName}} {{c.lastName}}</option>
+                          </select>
+                          <span class="help-block text-danger" *ngIf="soContact.invalid && (soContact.dirty || soContact.touched || soForm.submitted)">Contact is required. </span>
+                        </div>
+                      </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                      <label class="col-sm-4 col-form-label"></label>
+                      <div class="col-sm-8 fieldLab">
+                        <label style="font-weight:normal">P: {{contact?.phone}}</label>
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Contact']">
+                      <label class="col-sm-4 col-form-label"></label>
+                      <div class="col-sm-8 so-contact-email-wrap fieldLab">
+                        <label style="font-weight:normal">E:&nbsp;
+                          <a class="so-contact-email-link" href="mailto:{{contact?.email}}">
+                            <u>{{contact?.email}}</u>
+                          </a>
+                        </label>
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Customer']">
+                      <label class="col-sm-4 col-form-label">Bill To</label>
+                      <div class="col-sm-8">
+                        <label class="col-form-label" style="font-weight:normal">&nbsp;&nbsp;&nbsp;&nbsp;{{billLocation?.houseNo}} {{billLocation?.street}} {{billLocation?.city}} &#44; &nbsp;{{billLocation?.formattedState}}
+                          {{billLocation?.postalCode}}</label>
+                      </div>
+                    </div>
+
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Customer PO']">
+                    <label class="col-sm-4 col-form-label req-sales-order-label">Customer Po</label>
+                    <div class="col-sm-8">
+                      <input required data-field-name="Customer PO" type="text" #soCustomerPo="ngModel" class="form-control" name="customerPoInput"
+                        [(ngModel)]="soDetails.customerPo">
+                      <span class="help-block text-danger" *ngIf="soCustomerPo.invalid && (soCustomerPo.dirty || soCustomerPo.touched || soForm.submitted)">Customer Po is required. </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Currency']">
+                    <label class="col-sm-4 col-form-label req-sales-order-label">Currency</label>
+                    <div class="col-sm-8">
+                      <select required data-field-name="Currency" class="form-control" name="currencyId" #soCurrency="ngModel" [(ngModel)]="soDetails.currencyId">
+                        <option *ngFor="let c of currencyList" [value]="c.currencyId">{{c?.name}}</option>
+                      </select>
+                      <span class="help-block text-danger" *ngIf="soCurrency.invalid && (soCurrency.dirty || soCurrency.touched || soForm.submitted)">Incoterm is required. </span>
+                    </div>
+                  </div>
+
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Payment Terms']">
+                    <label class="col-sm-4 col-form-label req-sales-order-label">Payment Terms</label>
+                    <div class="col-sm-8">
+                      <select data-field-name="Payment Terms" class="form-control" name="paymentTermId" [(ngModel)]="soDetails.paymentTermId" required
+                        #soPaymentTerm="ngModel">
+                        <option *ngFor="let t of paymentTermList" [value]="t.paymentTermId">{{t?.name}}</option>
+                      </select>
+                      <span class="help-block text-danger" *ngIf="soPaymentTerm.invalid && (soPaymentTerm.dirty || soPaymentTerm.touched || soForm.submitted)">Payment Term is required. </span>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div style="height:100%;" class="mbm-20">
+                <div class="card card-outline-default ">
+                    <div  class="card-header border-bottom detailCard"><strong>Shipping Details</strong></div>
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Ship To']">
+                        <label class="col-sm-4 col-form-label">Ship To</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Ship To" class="form-control" name="addressDropDown" [(ngModel)]="soDetails.shipLocationId" (change)="onShipLocationChange($event.target.value)">
+                            <option *ngFor="let sl of shipLocations" [value]="sl.locationId"> {{sl.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Ship To']">
+                        <label class="col-sm-4 col-form-label"></label>
+                        <div class="col-sm-8">
+                          <label class="shipTo">&nbsp;{{shipAddress?.houseNo}} {{shipAddress?.street}} {{shipAddress?.city}} &#44; {{shipAddress?.formattedState}}
+                            {{shipAddress?.postalCode}}</label>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Delivery Rule']">
+                        <label class="col-sm-4 col-form-label">Delivery Rule</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Delivery Rule" class="form-control" name="deliveryRuleId" [(ngModel)]="soDetails.deliveryRuleId">
+                            <option *ngFor="let dr of deliveryRuleList" [value]="dr.deliveryRuleId">{{dr?.deliveryRuleName}}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Freight Payment']">
+                        <label class="col-sm-4 col-form-label">Freight Billing</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Freight Payment" class="form-control" name="freightPaymentId" [(ngModel)]="soDetails.freightPaymentId"
+                            (change)="freightBillingChange($event)">
+                            <option *ngFor="let fp of freightPaymentMethodList" [value]="fp.freightPaymentMethodId">{{fp?.methodName}}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Shipping Method']">
+                        <label class="col-sm-4 col-form-label req-sales-order-label">Ship via</label>
+                        <div class="col-sm-8">
+                          <select required data-field-name="Shipping Method" class="form-control" #soShipVia="ngModel" name="carrierId" [disabled]="isDisabled"
+                            [(ngModel)]="soDetails.carrierId" (change)="carrierSelectChange($event)">
+                            <option *ngFor="let c of carriers" [value]="c.carrierId">{{c?.carrierName}}</option>
+
+                          </select>
+                          <span class="help-block text-danger" *ngIf="soShipVia.invalid && (soShipVia.dirty || soShipVia.touched || soForm.submitted)">ShipVia is required. </span>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Carrier Method']">
+                        <label class="col-sm-4 col-form-label req-sales-order-label">Ship Method</label>
+                        <div class="col-sm-8">
+                          <select required data-field-name="Carrier Method" class="form-control" #soCarrierMethod="ngModel" name="carrierMethodId"
+                            [(ngModel)]="soDetails.carrierMethodId">
+                            <option *ngFor="let cm of CarrierMethods" [value]="cm.methodId">{{cm?.methodName}}</option>
+                          </select>
+                          <span class="help-block text-danger" *ngIf="soCarrierMethod.invalid && (soCarrierMethod.dirty || soCarrierMethod.touched || soCarrierMethod.submitted)">ShipMethod is required. </span>
+                        </div>
+                      </div>
+
+                    <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Customer Account</label>
+                      <div class="col-sm-8">
+                        <input [disabled]="isDisabled" data-field-name="Freight Account" type="text" class="form-control" name="freightAccount" [(ngModel)]="soDetails.freightAccount">
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Incoterms']">
+                      <label class="col-sm-4 col-form-label req-sales-order-label">Incoterms</label>
+                      <div class="col-sm-8">
+                        <select required data-field-name="Incoterms" #soIncoterm="ngModel" class="form-control" name="incotermId" [(ngModel)]="soDetails.incotermId">
+                          <option *ngFor="let inco of incotermList" [value]="inco.id">{{inco?.incotermName}}</option>
+                        </select>
+                        <span class="help-block text-danger" *ngIf="soIncoterm.invalid && (soIncoterm.dirty || soIncoterm.touched || soForm.submitted)">Incoterm is required. </span>
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Ultimate Destination']">
+                      <label class="col-sm-4 col-form-label">Ultimate Destination</label>
+                      <div class="col-sm-8">
+                        <select data-field-name="Ultimate Destination" class="form-control" name="countriesDropDown" [(ngModel)]="soDetails.countryId">
+                          <option *ngFor="let c of countries" [value]="c.CountryID">{{c.CountryName}}</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Ultimate Destination']">
+                      <label class="col-sm-4 col-form-label">Ship Requirement</label>
+                      <div class="col-sm-8">
+                        <select data-field-name="Ultimate Destination" class="form-control" name="regionsDropDown" [(ngModel)]="soDetails.shipFromRegionId">
+                          <option [value]="null"></option>
+                          <option *ngFor="let r of regionsList" [value]="r.ShipfromRegionID">{{r.RegionName}}</option>
+                        </select>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div style="height:100%;" class="mbm-20">
+                <div class="card card-outline-default ">
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Status']">
+                    <label class="col-sm-4 col-form-label req-sales-order-label">Status</label>
+                    <div class="col-sm-8">
+                      <select required data-field-name="Status" class="form-control" name="statusDropDown" #soStatus="ngModel" [(ngModel)]="soDetails.statusId">
+                        <option *ngFor="let s of status" [value]="s.id">{{s.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Order Date']">
+                    <label class="col-sm-4 col-form-label">Order Date</label>
+                    <div class="col-sm-8">
+                      <input data-field-name="Order Date" type="date" class="form-control" name="orderDate" [(ngModel)]="soDetails.orderDate">
+                    </div>
+                  </div>
+
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Project']">
+                    <label class="col-sm-4 col-form-label">Project</label>
+                    <div class="col-sm-8">
+                      <select data-field-name="Project" class="form-control" name="projectId" [(ngModel)]="soDetails.projectId">
+                        <option *ngFor="let p of projectList" [value]="p.projectId">{{p?.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="form-group row text-left" *ngxPermissionsOnly="['Organization']">
+                    <label class="col-sm-4 col-form-label">Organization</label>
+                    <div class="col-sm-8">
+                      <select data-field-name="Organization" class="form-control" name="id" [(ngModel)]="soDetails.organizationId">
+                        <option *ngFor="let o of organizations" [value]="o.id">{{o?.name}}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </div>
+
+      <div class="row mbm-20 bottom-30">
+          <div class="col-sm-12 bottom-30">
+            <div>
+              <div class="card card-outline-default">
+                  <div class="card-header detailCard"><strong>Notes</strong></div>
+            <div class="row w-100 p-4 form-group" *ngxPermissionsOnly="['ShippingNotes']">
+              <label class="col-sm-1 col-form-label">Shipping Notes</label>
+              <div class="col-sm-10">
+                <label class="form-control readonlyLabel" type="text" *ngIf="onReadonly ">{{soDetails.shippingNotes}}</label>
+                <textarea
+                *ngIf="!onReadonly"
+                data-field-name="ShippingNotes"
+                class="form-control shippingNotes"
+                name="ShippingNotes" rows="5"
+                [(ngModel)]="soDetails.shippingNotes"></textarea>
+              </div>
+            </div>
+            </div>
+            </div>
+          </div>
+        </div>
+
+      <div class="row mbm-20 bottom-30">
+        <div class="col-sm-12 bottom-30">
+            <div class="card card-outline-default">
+              <div class="row w-100 p-4 form-group" *ngxPermissionsOnly="['QCNotes']">
+                <label class="col-sm-1 col-form-label">QC Notes</label>
+                <div class="col-sm-10">
+                  <label class="shippingContent form-control readonlyLabel" type="text" *ngIf="onReadonly">{{soDetails.qcNotes}}</label>
+                  <textarea
+                  *ngIf="!onReadonly"
+                  data-field-name="QCNotes"
+                  class="form-control shippingNotes"
+                  name="qcNotes"
+                  rows="5"
+                  [(ngModel)]="soDetails.qcNotes"></textarea>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+
+      <div class="col-sm-2">
+        <div class="card card-outline-default ownership-section">
+          <div class="card-header detailCard">
+            <strong>Owners</strong>
+            <i
+              class="far fa-edit pull-right" 
+              (click)="onOwnershipClick()"
+              *ngIf="soId"  
+            ></i>
+          </div>
+            <div class="form-group">
+              <ownership-view
+                [objectId]="soId"
+                [objectTypeId]="objectTypeIdForSo">
+              </ownership-view>
+            </div>
+        </div>
+
+        <az-kpi-details [salesOrder]="soDetails"></az-kpi-details>
+
+      </div>
+  </div>
+    <br/>
+    <br/>
+  </form>
+  <simple-notifications [options]="notifyOptions"></simple-notifications>
+</div>
+
+<div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <ownership-assignment [objectId]="soId" [objectTypeId]="objectTypeIdForSo">
+  </ownership-assignment>
+</div>
+<div id="salesExist" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-header">
+            <h6 class="modal-title">Important Note:</h6>
+          </div>
+      <div class="modal-content">
+          <br/>
+          <div class="modalcontent">
+            <p><b>Note : This customer doesn't exist in the database. Please choose existing one.</b></p>
+          <br/>
+        </div>
+            <div class="modal-footer">
+                <button (click)="CloseCNoteModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+      </div>
+      </div>
+
+      <report-modal [reportUrl]="confirmationReportUrl" [cssSelectorClass]="confirmationReportCssSelector"></report-modal>
+      <report-modal [reportUrl]="internalReportUrl" [cssSelectorClass]="internalReportCSsSelector"></report-modal>
+      <report-modal [reportUrl]="proformaReportUrl" [cssSelectorClass]="proformaReportCSsSelector"></report-modal>

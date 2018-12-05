@@ -1,0 +1,115 @@
+
+.breakdown-tabs .tab-content {
+    border-top:none;
+}
+
+.breakdown-tabs ul li{
+    border-color: grey !important;
+}
+.breakdown-tabs ul li:not(.add){
+        background-color: darkgray;
+        // margin-right: 5px;
+        width: 120px;
+        border: 1px;
+        border-style: solid;
+}
+
+.breakdown-tabs ul li.add{
+    width: 50px;
+    background-color: #01A282;
+    border-color: transparent !important;
+    border-style: solid;
+    border-width: 1px;
+}
+.breakdown-tabs ul li:first-child {
+        border-top-left-radius: 6px;
+}
+.breakdown-tabs ul li:last-child {
+        border-top-right-radius: 6px;
+}
+
+.breakdown-tabs ul {
+    background-color: transparent;
+    height: 35px;
+}
+
+.breakdown-tabs ul li a:not(.active){
+    color: white;
+}
+.breakdown-tabs ul li a.active{
+    color: black;
+}
+
+
+@media only screen and (max-width: 1440px) and (min-width: 1280px) {
+    
+    .itemParent select,input {
+        width : 100px;
+    }
+    
+    
+    }
+
+@media screen and (width: 1920px){
+    .breakdown-warehouse {
+        margin-left: -55px;
+    }
+    
+    .breakdown-warehouse div select {
+        width: 150px;
+    }
+    .breakdown-packaging {
+        margin-left: 20px;
+    }
+    .breakdown-packaging div select {
+        margin-left: -20px;
+        width: 175px;
+    }
+    .breakdown-expiration {
+        margin-left: -30px;
+    }
+    
+    .breakdown-expiration div input {
+        width: 140px;
+        margin-left: -10px;
+    }
+    
+    .breakdown-coo {
+        //margin-left: 25px;
+    }
+
+    .breakdown-mfrLotNum{
+        margin-left: -55px;
+    }
+    
+    .breakdown-coo div select{
+       width: 135px;
+    }
+    
+    .breakdown-status div select {
+        //margin-left: -20px;
+        width: 135px;
+    }
+    
+    .breakdown-buttons {
+        margin-left: -45px;
+    }
+    .flex-30 {
+        flex: 0 0 30.0%;
+        max-width: 30.0%;
+    }
+    
+    .save-checklist {
+        margin-left: 20px;
+    }
+
+    }
+    
+    // Overrides pages.component.scss 
+        .btn > .fa-check, .btn > .fa-times {
+            display: initial;
+            color: white;
+            position: initial;
+            top: initial;
+            left: initial;
+        }

@@ -1,0 +1,70 @@
+<form 
+	[readonlyField]="onReadonly" 
+	[objectPermissions]="RuleDetailPermissions" 
+	(onFormStatusChange)="onFormStatusChange($event)"
+	[hideMenu]="true">
+	<div class="row az-row form-group">
+		<label class="col-sm-2 col-form-label">Rule Name</label>
+		<div class="col-sm-4 flex-span">
+			<input
+				type="text"
+				data-field-name="Rule Name"
+				class="form-control" 
+				name="ruleName" 
+				[(ngModel)]="ruleDetail.ruleName">
+		</div>
+		<label class="col-sm-1 col-form-label">Order</label>
+		<div class="col-sm-1 flex-span">
+			<input
+				type="number"
+				min="0"
+				step="1"
+				pattern="\d+"
+				data-field-name="Rule Order"
+				class="form-control" 
+				name="ruleOrder" 
+				[(ngModel)]="ruleDetail.ruleOrder">
+		</div>
+	</div>
+	<div class="row az-row form-group">
+		<label class="col-sm-2 col-form-label">Trigger</label>
+		<div class="col-sm-4">
+			<select 
+				class="form-control" 
+				name="triggerId" 
+				data-field-name="Trigger"
+				[(ngModel)]="ruleDetail.triggerId">
+				<option 
+					*ngFor="let trigger of (triggerOptions$ | async)" 
+					[value]="trigger.triggerId">
+					{{trigger.triggerName}}
+				</option>
+			</select>
+		</div>
+	</div>
+
+	<div class="row az-row az-col" style="margin: 0 auto;">
+		<div class="dropzone box box-yellow col-md-12 az-col">
+			<div *ngFor="let condition of ruleDetail.conditions">
+				<az-dnd-container *ngIf="condition.type === 'ruleGroup'"
+					[onReadonly]="onReadonly"
+					[list]="ruleDetail.conditions"
+					[model]="condition">
+				</az-dnd-container>
+			</div>
+		</div>
+	</div>
+</form>
+
+<az-rule-actions 
+	[onReadonly]="onReadonly"
+	(onActionGridChanged)="onActionGridChanged($event)"></az-rule-actions>
+<div 
+	id="condition-editor-modal" 
+	class="modal fade" 
+	style="z-index: 110;"
+	tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	<condition-editor>
+	</condition-editor>
+</div>
+

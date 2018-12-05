@@ -1,0 +1,18 @@
+<div class="card card-outline-default">
+    <div class="card-header detailCard"><strong>KPI</strong></div>
+    <div class="form-group" *ngIf="quote">
+        <div><strong>Quote Total:</strong> {{quote.quoteTotal | currency}}</div>
+        <div><strong>Quote Cost:</strong> {{quote.quoteCost | currency}}</div>
+        <div><strong>Gross Profit:</strong> {{quote.grossProfit | currency}}</div>
+        <div><strong>Margin:</strong> {{quote.margin | percent:'1.2'}}</div>
+    </div>
+    <div class="form-group" *ngIf="salesOrder">
+        <div><strong>Order Total:</strong> {{salesOrder.soPrice | currency}}</div>
+        <div><strong>Order Cost:</strong> {{salesOrder.soCost | currency}}</div>
+        <div><strong>Gross Profit:</strong> {{salesOrder.soProfit | currency}}</div>
+        <div><strong>Margin:</strong> {{salesOrder.soGpm | percent:'1.2'}}</div>
+    </div>
+    <div class="form-group" *ngIf="purchaseOrder">
+        <div><strong>Order Cost:</strong> {{purchaseOrder.cost | currency}}</div>
+    </div>
+</div>

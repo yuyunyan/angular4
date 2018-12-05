@@ -1,0 +1,43 @@
+<div class="container" style="width: 100%; margin-left:unset; margin-right:unset;">
+	<div class="comment-full-control-bar">
+		<input 
+			type="text" 
+			id="commentSearchInput" class="form-control" 
+			(keyup.enter)="searchComments()" 
+			[(ngModel)]="searchParameter"
+			placeholder="Search Comments..." />
+			<button type="button" class="btnCommentSearch">
+				<i class="fas fa-search" aria-hidden="true" (click)="searchComments()"></i>
+			</button>
+	</div>
+	<div class="row" style="flex-wrap: unset; margin-left: 0;">
+		<ul class="nav nav-sidebar flex-column comment-nav col-sm-1" style="padding: 0;">
+			<li class="nav-item btn btn-secondary comment-nav-item"
+				[ngStyle]="{'display': (item.menuType == menuType || item.menuType == 'All')? 'inline-block': 'none'}"
+				*ngFor="let item of menuItems;"
+				(click)="onItemClicked($event, item.value)">
+				{{item?.title}}
+				<span *ngIf="item.commentsCount" class="comments-count pull-right">{{item.commentsCount}}</span>
+			</li>
+		</ul>
+		<div class="col-11" style="margin-top: 10px;">
+			<ul slim-scroll [slimScrollOptions]="{height: (comments && comments.length > 0) ? 300 : 200}" class="media-list">
+				<ng-container *ngFor="let comment of filteredComments; trackBy: comment?.commentId; let commentIdx = index;">
+					<az-comment-line 
+						[comment]="comment"
+						[commentIdx]="commentIdx"
+						(onRelpyToCommentClicked)="onReplyCommentClicked(comment.commentId, commentIdx)">
+					</az-comment-line>
+					<ng-container #replyTo>
+					</ng-container>
+					<hr>
+				</ng-container>
+				<ng-container #replyTo>
+				</ng-container>
+				<li class="comments-full-reply">
+					<button title="New comment" (click)="onReplyCommentClicked(null, null)"><i class="fas fa-comments" aria-hidden="true"></i></button>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>

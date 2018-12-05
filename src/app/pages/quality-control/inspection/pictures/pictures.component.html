@@ -1,0 +1,47 @@
+<div class="dropzone">
+  <div class="row">
+  <image-upload class="imageUpload" buttonCaption="Select Image" dropBoxMessage="or DROP HERE" (onFileUploadFinish)="imageFinishedUploading($event)"></image-upload>
+</div>
+</div>
+<br/>
+
+<div class="images">
+  <p><b>Uploaded Images :</b></p>
+      <hr>
+      <br/>
+
+<div class="dropzone-existing" dropzone action="#" id="qcPhotoDropzone">
+  <div class="row">
+    <div class="qc-photo col-md-2"  *ngFor="let img of images; let i = index">
+      <div>
+        <div class="row">
+          <div class="col-md-1">
+            <p class="round"><b>{{i+1}}</b></p>
+          </div>
+          <div class="col-md-8">
+            <img data-toggle="modal" data-target="#mdlAdditionalImagePreview" (click)="PreviewImage(img.url)" src="{{img.url}}" onerror="this.src='/assets/img/404-placeholder.png';">
+          </div>
+          <div class="col-md-1 deleteButton close">
+            <span><i (click)="deleteImage(img.id)" class="fa fas fa-times" aria-hidden="true"></i></span>
+          </div>
+        </div>
+        <br/>
+      </div>
+    </div>
+  </div>
+  <br/>
+  <br/>
+</div>
+</div>
+
+
+<div class="modal fade" id="mdlAdditionalImagePreview" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">    
+      <div class="modal-body">
+      	<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+        <img src="{{previewImageUrl}}" class="imagepreview" style="width: 100%;" onerror="this.src='/assets/img/404-placeholder.png';">
+      </div>
+    </div>
+  </div>
+</div>

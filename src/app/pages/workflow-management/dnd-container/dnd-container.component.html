@@ -1,0 +1,88 @@
+<div class="az-panel az-panel-default" [dndType]="model.type"
+	[dndDraggable]
+	[dndDragDisabled]="!model.parentGroupId && !model.tempId || onReadonly"
+	(dndMoved)="removeItem(model, list)"
+	(dndDragEnd)="onDragEnded($event)"
+	[dndObject]="model">
+	<div class="az-panel-heading" style="display: flex; flex-flow:row; justify-content:space-between;">
+		<div class="heading-selection-wrapper">
+			When 
+			<select type="text" [(ngModel)]="model.isAll" name="isAll" data-field-name="Is All">
+				<option value="true">All</option>
+				<option value="false">Any</option>
+			</select> of the following conditions are met:
+		</div>
+		<div [ngStyle]="{display: onReadonly? 'none' :'inline-block'}">
+			<button
+				(click)="onCreateGroup(model, list)"
+				class="btn-details btn-affirm btn-main">
+				<i class="fas fa-plus" aria-hidden="true"></i>&nbsp;
+				Group
+			</button> 
+			<button
+				(click)="onCreateCondition(model, list)"
+				class="btn-details btn-affirm btn-main">
+				<i class="fas fa-plus" aria-hidden="true"></i>&nbsp;
+				Condition
+			</button>
+			<button
+				[ngStyle]="{'display': !model.parentGroupId? 'none': 'inline-block'}"
+				(click)="removeItem(model, list)"
+				class="btn-icons btn-main">
+				<i class="fa fas fa-times" aria-hidden="true"></i>
+			</button> 
+		</div>
+	</div>
+	<div 
+		class="az-panel-body" 
+		[dndList]="{allowedTypes: ['ruleGroup','ruleCondition']}"
+		[dndModel]="model.columns"
+		[dndPlaceholder]="placeholder">
+		<ng-container *ngFor="let item of model.columns">
+			<!-- <ng-container *ngIf="isArray(item)">
+				<ng-container *ngFor="let subItem of item">
+				<az-dnd-container *ngIf="subItem.type === 'ruleGroup'"
+				[list]="item"
+				[model]="subItem"></az-dnd-container>
+				<div *ngIf="subItem.type === 'ruleCondition'" [dndType]="subItem.type"
+				[dndDraggable]="{draggable:true, effectAllowed:'move'}"
+				(dndMoved)="removeItem(subItem, item)"
+				[dndObject]="subItem" class="col-md-12">{{subItem?.description}}</div>
+				</ng-container>
+			</ng-container> -->
+			<az-dnd-container *ngIf="item.type === 'ruleGroup'" 
+				[onReadonly]="onReadonly"
+				[list]="model.columns"
+				[model]="item">
+			</az-dnd-container>
+			<div *ngIf="item.type === 'ruleCondition'" [dndType]="item.type"
+				[dndDraggable]="{draggable:true, effectAllowed:'move'}"
+				[dndDragDisabled]="onReadonly"
+				(dndMoved)="removeItem(item, model.columns)"
+				(dndDragEnd)="onDragEnded($event)"
+				[dndObject]="item" class="col-md-12"
+				style="display: flex; flex-flow:row; justify-content:space-between;">
+				<div class="heading-selection-wrapper">
+					<strong>{{item?.conditionName}}</strong>
+					&nbsp;{{GetRuleConditionDescription(item)}}
+					&nbsp;<strong>{{item.valueId? item.valueName: item.staticValue}}</strong>
+				</div>
+				<div [ngStyle]="{display: onReadonly? 'none' :'flex'}" class="rule-condition-edit-btn-group">
+					<button
+						(click)="onCreateCondition(item, model.columns)"
+						class="btn-icons btn-main">
+						<i class="fas fa-pen-square" aria-hidden="true"></i>
+					</button> 
+					<button
+						(click)="removeItem(item, model.columns)"
+						class="btn-icons btn-main">
+						<i class="fa fas fa-times" aria-hidden="true"></i>
+					</button>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+</div>
+<div class="dndPlaceholder col-md-12"
+	#placeholder>
+</div>

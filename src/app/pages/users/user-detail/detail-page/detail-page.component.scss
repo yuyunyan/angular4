@@ -1,0 +1,71 @@
+#u13963_img {
+
+    max-width: 195px;
+    max-height: 190px;
+     margin-left: 55px;
+}
+
+.uploadPic{
+    margin-left: 63px;   
+}
+
+#fileInput{
+    margin-left:15px;
+}
+
+.accountDetailParent input,select,option{
+	font-family: 'Roboto',sans-serif;
+	margin-bottom: 3%;
+	font-weight: 400;
+	font-size: 0.8rem;
+	margin-bottom: 10px;
+	margin-top:7px;
+}
+
+#changePasswordModal{
+    margin-top: 100px;
+}
+
+#changePasswordModal .modal-title{
+    margin-top: -6px;
+}
+
+.accountDetailParent label{
+	color:#3c3d3d;
+	font-weight: bold;
+	margin-top:4px;
+	text-align: left !important;
+}
+	
+.accountDetailParent .col-sm-4{
+	padding-right : 10px !important;
+}
+
+.accountDetailParent .form-group {
+    margin-bottom: 0rem;
+}
+
+.accountColumnBorder {
+    border-style: solid;
+    border-width: 0.1px;
+    margin-right: 7px;
+    margin-top: 7px;
+    margin-left: 70px;
+    border-color: #c2caca;
+    margin-bottom: 10px;
+}
+
+#newPasswordSet{
+    color:green;
+    margin-left: 10px;
+}
+
+.valid{
+    color:green;  
+}
+.info{
+    margin-top: 8px;
+}
+.modal-body{
+    text-align: inherit;
+}

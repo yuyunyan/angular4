@@ -1,0 +1,40 @@
+<!-- <button (click)="showImages()" data-toggle="modal" [attr.data-target]="modalPopupTargetId"><i class="fas fa-plus"></i></button>
+<p *ngIf="imageCount > 0" class="image-count">
+  &nbsp;({{imageCount}})
+</p> -->
+<div class="modal fade images-modal" [attr.id]="modalPopupId"  tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="grid-header">Pictures</div>
+                <button type="button" class="close" data-dismiss="modal" #sourceCloseBtn><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+            </div>
+            <div class="modal-body">
+              <image-upload class="img-upload-contaner" buttonCaption="Select Image" [extensions]="['jpeg','jpg','png','tiff','tif','gif','raw','bmp']" dropBoxMessage="DROP ON ME" (onFileUploadFinish)="imageFinishedUploading($event)"></image-upload>
+
+                <div [attr.id]="carouselId" class="carousel slide" data-ride="carousel">
+                    <!-- <ol class="carousel-indicators">
+                      <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                      <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                    </ol>  -->
+                    <div class="carousel-inner" role="listbox">
+                      <div *ngFor="let image of images; let i = index" class="carousel-item" [ngClass]="i==0?'active':''">
+                        <h5 class="carousel-count text-center" >Picture {{i+1}}/{{images.length}}</h5>
+                        <img class="d-block w-100p h-100p" [src]="image.url" alt="First slide" class="carousel-image" onerror="this.src='/assets/img/404-placeholder.png';" >
+                        <button class="btn btn-danger delete-carasoule-image" (click)="deleteImage(image.id)"><i class="fas fa-trash-alt" aria-hidden="true"></i>&nbsp;Delete</button>
+                      </div>
+                      
+                    </div>
+                    <a class="carousel-control-prev" href="#{{carouselId}}" role="button" data-slide="prev">
+                      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#{{carouselId}}" role="button" data-slide="next">
+                      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                      <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

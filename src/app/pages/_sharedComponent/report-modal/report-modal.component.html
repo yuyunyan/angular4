@@ -1,0 +1,17 @@
+<div class="{{modalParentClass}}">
+  <div class="modal fade mdlReportViewer" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" [ngClass]="{'large-content': display == 'landscape' }">
+        <div class="modal-header" style="min-height: 35px;">
+          <div class="header-text">
+            View Report  
+          </div>
+          <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+        </div>
+        <div class="modal-body">
+               <iframe src="http://localhost:62829/ReportViewer/quote.html" [ngClass]="{'large-content': display == 'landscape' }" style="visibility:hidden"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

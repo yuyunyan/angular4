@@ -1,0 +1,368 @@
+<div class="parentMargin">
+    <div>
+        <h6>{{contactDetails.firstName}} {{contactDetails.lastName}} - "{{contactDetails.accountName}}"</h6>
+        <br/>
+    </div>
+<div widget class="card" style="margin-top: 10px;">
+    <div class="card-header">
+      <span>Details</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block card-block-contact widget-body">
+        <form
+          [readonlyField]="onReadonly"
+          [objectPermissions]="contactPermissions"
+          (onFormStatusChange)="onFormStatusChange($event)"
+          (onOwnershipClick)="onOwnershipClick($event)"
+          (onDeleteClick)="onDeleteClick($event)"
+          #contactDetailForm="ngForm">
+          <div class="row detailParent">
+              <div class="col-sm-10">
+                <div class="row">
+                <div class="col-sm-6 bottom-30">
+                  <div class="card card-outline-default ">
+                        <div class="card-header border-bottom detailCard"><strong>Contact Details</strong></div>
+                          <div class="form-group row text-left">
+                            <label class="col-sm-4 col-form-label">Account Name</label>
+                            <div class="col-sm-8 col-form-label">
+                              <a (click)="backToAccountParent()" href="javascript:void(0)">{{contactDetails.accountName}}</a>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['IsActive']">
+                            <label class="col-sm-4 col-form-label">Active</label>
+                            <div class="col-sm-8" style="display:flex; flex-flow:row; align-items:center;">
+                              <input
+                                id="activeContactCheckbox"
+                                name="isActive"
+                                type="checkbox"
+                                data-field-name="IsActive"
+                                (change)="contactDetails.isActive = $event.target.checked"
+                                [checked]="contactDetails.isActive"/>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Salutation']">
+                              <label class="col-sm-4 col-form-label">Salutation</label>
+                              <div class="col-sm-8" style="display: flex;">
+                                <select data-field-name="Salutation" class="form-control" [(ngModel)]="contactDetails.salutation"  name="salutation">
+                                  <option value="Mr">Mr</option>
+                                  <option value="Ms">Ms</option>
+                                  <option value="Miss">Miss</option>
+                                  <option value="Mrs">Mrs</option>
+                                  <option value="Dr">Dr</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['First Name']">
+                              <label class="col-sm-4 col-form-label">First Name</label>
+                              <div class="col-sm-8">
+                                <input
+                                  data-field-name="First Name"
+                                  type="text"
+                                  class="form-control"
+                                  maxlength="40"
+                                  required
+                                  [attr.maxlength]="nameMaxLength"
+                                  #contactFirstName="ngModel"
+                                  [(ngModel)]="contactDetails.firstName"
+                                  name="firstName" />
+                                  <span
+                                    class="help-block text-danger"
+                                    [hidden]="(contactFirstName.untouched && !contactDetailForm.submitted) || contactFirstName.valid">
+                                    First Name is required field.
+                                  </span>
+                              </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Last Name']">
+                              <label class="col-sm-4 col-form-label">Last Name</label>
+                              <div class="col-sm-8">
+                                <input
+                                  data-field-name="Last Name"
+                                  type="text"
+                                  [attr.maxlength]="nameMaxLength"
+                                  maxlength="40"
+                                  class="form-control"
+                                  [(ngModel)]="contactDetails.lastName"
+                                  required
+                                  #contactLastName="ngModel"
+                                  name="lastName"/>
+                                <span
+                                  class="help-block text-danger"
+                                  [hidden]="(contactLastName.untouched && !contactDetailForm.submitted) || contactLastName.valid">
+                                  Last Name is required field.
+                                </span>
+                              </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Office Phone']">
+                                <label class="col-sm-4 col-form-label">Office Phone</label>
+                                <div class="col-sm-8">
+                                  <input  data-field-name="Office Phone" type="text"  [(ngModel)]="contactDetails.officePhone" name="officePhone" class="form-control" maxlength="30">
+                                </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Mobile Phone']">
+                              <label class="col-sm-4 col-form-label">Mobile Phone</label>
+                                <div class="col-sm-8">
+                                  <input data-field-name="Mobile Phone" type="text" [(ngModel)]="contactDetails.mobilePhone" name="mobilePhone" class="form-control" maxlength="30">
+                                </div>
+                            </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Fax']">
+                                <label class="col-sm-4 col-form-label">Fax</label>
+                                <div class="col-sm-8">
+                                  <input data-field-name="Fax" type="text" [(ngModel)]="contactDetails.fax" name="fax" class="form-control" maxlength="30">
+                                </div>
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Email']">
+                                <label class="col-sm-4 col-form-label">Email</label>
+                                <div class="col-sm-8">
+                                  <input data-field-name="Email" type="text" [(ngModel)]="contactDetails.email" name="email" class="form-control" maxlength="240" #accountEmail="ngModel"
+                                    [pattern]="emailRegExp">
+                                  <span class="help-block text-danger"
+                                    [hidden]="(accountEmail.untouched && !contactDetailForm.submitted) || accountEmail.valid">
+                                    Please enter a valid email address.
+                                  </span>
+                                </div> 
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Preferred']">
+                                <label class="col-sm-4 col-form-label">Preferred Contact Method</label>
+                                <div class="col-sm-8">
+                                  <select data-field-name="Preferred" class="form-control" [(ngModel)]="contactDetails.preferredContactId"  name="accountDropDown">
+                                    <option class="col-form-label" *ngFor="let methond of preferredContactMethods" [value]="methond.id">{{methond.name}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                </div>
+                </div>
+
+                <div class="col-sm-6 bottom-30">
+                    <div class="card card-outline-default ">
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Birthdate']">
+                      <label class="col-sm-4 col-form-label">Date of Birth</label>
+                      <div class="col-sm-8">
+                        <input
+                          type="date"
+                          class="dateofbirth form-control"
+                          name="birthDate"
+                          data-field-name="Birthdate"
+                          [ngModel]="contactDetails.birthDate | date:'yyyy-MM-dd'"
+                          (ngModelChange)="birthDateCopy= $event"/>
+                      </div>
+                    </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Gender']">
+                        <label class="col-sm-4 col-form-label">Gender</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Gender" class="form-control" [(ngModel)]="contactDetails.gender"  name="gender">
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Marital Status']">
+                        <label class="col-sm-4 col-form-label">Marital Status</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Marital Status" class="form-control" [(ngModel)]="contactDetails.maritalStatus" name="maritalStatus">
+                            <option value="Single">Single</option>
+                            <option value="Married">Married</option>
+                            <option value="Divorced">Divorced</option>
+                            <option value="Separated">Separated</option>
+                            <option value="Widowed">Widowed</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Kids Names']">
+                        <label class="col-sm-4 col-form-label">Kids Names</label>
+                        <div class="col-sm-8">
+                          <input data-field-name="Kids Names" class="form-control" [(ngModel)]="contactDetails.kidsNames" name="kidsNames" type="text" maxlength="40">
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Title']">
+                        <label class="col-sm-4 col-form-label">Job Title</label>
+                        <div class="col-sm-8">
+                          <input data-field-name="Title" class="form-control" [(ngModel)]="contactDetails.title" name="title" type="text" maxlength="100">
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Department']">
+                        <label class="col-sm-4 col-form-label">Department</label>
+                        <div class="col-sm-8">
+                          <input data-field-name="Department" class="form-control" [(ngModel)]="contactDetails.department" name="department" type="text" maxlength="100">
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Job Function']">
+                        <label class="col-sm-4 col-form-label">Job Function</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Job Function" class="form-control" [(ngModel)]="contactDetails.jobFunctionId" name="jobFunctionId">
+                            <option *ngFor="let jobFunction of jobFunctions" [value]="jobFunction.jobFunctionId">{{jobFunction?.jobFunctionName}}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Reports To']">
+                        <label class="col-sm-4 col-form-label">Reports To</label>
+                        <div class="col-sm-8">
+                          <input data-field-name="Reports To" class="form-control" [(ngModel)]="contactDetails.reportsTo" name="reportsTo" type="text" maxlength="240">
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Shipping Location']">
+                        <label class="col-sm-4 col-form-label">Shipping Location</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Shipping Location" class="form-control" (change)="onLocationChange($event.target.value)" [(ngModel)]="contactDetails.locationId" name="locationsDropDown">
+                            <option *ngFor="let location of locationsBoundArrayData" [value]="location.locationId">{{location.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['Shipping Location']">
+                        <label class="col-sm-4 col-form-label">Address</label>
+                        <div class="col-sm-8">
+                          <label class="readonlyLabel col-form-label">{{address? getLocationFullAddress(address) : ''}}</label>
+                        </div>
+                      </div>
+                      </div>
+                </div>
+                </div>
+
+                <div class="row mbm-20">
+                    <div  class="col-sm-12 bottom-30">
+                      <div class="card card-outline-default">
+                          <div class="card-header border-bottom detailCard"><strong>Notes</strong></div>
+                        <div class="row w-100 p-3 form-group" *ngxPermissionsOnly="['Note']">
+                          <label class="col-sm-1 col-form-label"><b>Note</b></label>
+                          <div class="col-sm-11">
+                              <label style="font-weight: normal" rows="5" class="col-form-label" type="text" *ngIf="onReadonly">{{contactDetails.note}}</label>
+                            <textarea
+                              *ngIf="!onReadonly"
+                              class="form-control"
+                              name="note"
+                              rows="5"
+                              data-field-name="Note"
+                              [(ngModel)]="contactDetails.note">
+                          </textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              </div>
+
+            <div class="col-sm-2">
+              <div class="card card-outline-default ownership-section">
+                  <div class="card-header detailCard">
+                    <strong>Owners</strong>
+                    <i class="far fa-edit pull-right" (click)="onOwnershipClick()"></i>
+                  </div>
+                    <div class="form-group">
+                      <ownership-view
+                        [objectId]="contactId"
+                        [objectTypeId]="objectTypeId">
+                      </ownership-view>
+                    </div>
+              </div>
+            </div>
+            </div>
+
+        </form>
+      </div>
+  </div>
+
+<div widget class="card" style="margin-top: 10px;">
+    <div class="card-header">
+      <span>Projects & Focuses</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-4" id="contactProjectsGrid" [ngStyle]="{'display': showProjectGrid()? 'block' : 'none'}">
+            <az-contact-projects-grid
+              [accountId]="accountId"
+              [contactId]="contactId"
+              [objectPermissionList]="objectPermissionList">
+            </az-contact-projects-grid>
+          </div>
+          <div class="col-sm-4" id="contactFocusesGrid" [ngStyle]="{'display': showFocusGrid() ? 'block' : 'none'}">
+            <az-contact-focuses-grid
+              [accountId]="accountId"
+              [contactId]="contactId"
+              [objectPermissionList]="objectPermissionList">
+            </az-contact-focuses-grid>
+          </div>
+        </div>
+        <br/>
+    </div>
+  </div>
+
+  <div widget class="card" style="margin-top: 10px;">
+    <div class="card-header">
+      <span>History</span>
+      <div class="widget-controls">              
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+      </div>        
+    </div>
+    <div class="card-block widget-body">
+     <az-contact-history-grid
+     [accountId]="accountId"
+     [contactId]="contactId"></az-contact-history-grid>
+    </div>
+  </div>
+
+<div widget class="card" style="margin-top: 10px;">
+  <div class="card-header">
+    <span>Comments</span>
+    <div class="widget-controls">
+      <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+      <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+      <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+      <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+    </div>
+  </div>
+  <div class="card-block widget-body">
+    <az-comments-full
+      [objectId]="contactId"
+      [menuType]="menuType"
+      [objectTypeId]="contactObjectTypeId"
+      [commentTypeMap]="contactCommentTypeMap">
+    </az-comments-full>
+  </div>
+</div>
+
+
+
+
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+
+<div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <ownership-assignment
+    [objectId]="contactId"
+    [objectTypeId]="objectTypeId"
+    (newOwnersList)="newOwnersAdded($event)">
+  </ownership-assignment>
+</div>
+</div>

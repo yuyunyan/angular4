@@ -1,0 +1,133 @@
+<div class="modal fade" style="right: 31%;" id="mdlToPurchaseOrder" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+		<div class="modal-content">
+
+			<div class="modal-header ">
+				<div class="header-text">
+					Create Purchase Order
+				</div>  
+				<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+			</div>
+					
+			<div class="modal-body poPartsContainer">
+				<ag-grid-angular 
+					id="linesToPurchaseOrderGrid" 
+					#agGrid style="width: 100%;height:200px !important" class="ag-fresh" 
+					[gridOptions]="soLinesGrid">
+				</ag-grid-angular>
+
+				<form class="form-customerpo">
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Buyer Name</label>
+						<div class="col-9">
+							<label class="col-form-label">{{buyerName}}</label>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Vendor</label>
+						<div class="col-9">
+							<label class="col-form-label">{{accountName}}</label>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Contact</label>
+						<div class="col-9">
+							<select class="Vendor-Input form-control" [(ngModel)]="contactId" name="contactId">
+								<option disabled value="0" >Vendor contacts </option>
+								<option *ngFor="let con of contactsByAccount" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Organization</label>
+						<div class="col-9">
+							<select class="Vendor-Input form-control" [(ngModel)]="organizationId" name="organizationId" (change)="onOrganizationChange($event.target.value)">
+								<option disabled value="0" >Organizations</option>
+								<option *ngFor="let o of organizationList" [value]="o.id">{{o?.name}}</option>
+							</select>              
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Ship To</label>
+						<div class="col-9">
+							<select class="Vendor-Input form-control" [(ngModel)]="warehouseTo" name="shipTo">
+								<option disabled value="0" >Sourceability addresses </option>
+								<option *ngFor="let w of warehouseList" [value]="w.warehouseId">
+									{{w.warehouseName}}
+									<!-- {{location && location.LocationName ? 
+										location.LocationName.length > 30? location.LocationName.substring(0, 30): location.LocationName
+										: ''}} -->
+								</option>
+							</select>              
+						</div>
+					</div>
+
+					<!-- <div class="form-group row">
+						<label class="col-3 col-form-label">Ship From</label>
+						<div class="col-9">
+							<select class="Vendor-Input form-control" [(ngModel)]="shipFrom" name="shipFrom">
+									<option value="0">None</option>
+									<option *ngFor="let x of shipFromLocations" [value]="x.LocationID">{{x.LocationName}}</option>
+							</select>
+						</div>
+					</div> -->
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Payment Terms</label>
+						<div class="col-9">
+							<select
+								class="form-control" 
+								name="paymentTermId" 
+								[(ngModel)]="paymentTermId">
+								<option disabled value="0" >Select from payment term list</option>
+								<option *ngFor="let x of paymentTermList" [value]="x.paymentTermId">{{x.name}}</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-3 col-form-label">Incoterms</label>
+						<div class="col-9">
+							<select
+								class="form-control" 
+								name="incoTermId"
+								[(ngModel)]="incoTermId">
+								<option value="0" >None</option>
+								<option *ngFor="let x of incoTermList" [value]="x.id">{{x.incotermName}}</option>
+							</select>
+						</div>
+					</div>
+
+				</form>
+			</div>
+
+			<div class="modal-footer">
+				<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+					<div class="btn-group" role="group">
+						<button 
+							type="button" 
+							(click)="createPurchaseOrder()"  
+							class="btn btn-default btn-modal" 
+							data-action="save" 
+							role="button"  
+							[disabled]="(!(contactId > 0)) || !(paymentTermId > 0) ||(!(warehouseTo > 0)) || (createPODisabled)" >
+						<i class="fas fa-check" aria-hidden="true"></i>&nbsp; Accept</button>
+					</div>
+
+					<div class="btn-group" role="group">
+						<button 
+							type="button" 
+							class="btn btn-modal" 
+							data-dismiss="modal" 
+							role="button">
+						<i class="fas fa-times" aria-hidden="true"></i>&nbsp; Cancel</button>
+					</div>
+				</div>
+			</div>
+					
+		</div>
+  </div>
+</div>

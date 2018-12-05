@@ -1,0 +1,21 @@
+.rule-list-control-bar{
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.btnNewRule, .btnNewAction {
+  background-color: #01A282;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 2px;
+  font-weight: 500;
+  margin: 4px 0;
+  padding-left: 15px;
+  padding-right: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  height: 30px;
+}

@@ -1,0 +1,104 @@
+<div class="container-fluid parentMargin">
+  <!-- <vertical-split-pane secondary-component-minsize="200" primary-component-initialratio="0.7">
+    <div class="split-pane-content-primary"> -->
+      <div style="width:100%;">
+        <h5 class="pull-left">Orders Fulfillment</h5>
+        <br/>
+        <br/>
+
+        <div>
+          <input type="text" id="txtOrderSearch" class="searchBox"
+            (keyup.enter)="searchOrderFulfillment()" [(ngModel)]="searchParameter"
+            placeholder="Search Orders Fulfillment..."/>
+          <button class="btn-search-small" type="button" (click)="searchOrderFulfillment()">
+            <i class="fas fa-search" aria-hidden="true"></i>
+          </button>
+          <span class="underallocated-checkbox-wrapper">
+            <input type="checkbox" [(ngModel)] = "underallocatedOnly" 
+              (change)="OnChangeFulfillment($event)"/>
+            Underallocated Only
+        </span>
+        </div>
+
+      </div>
+      
+      <div ng-if="message" class="red">{{message}}</div>
+      
+      <div class="orderFullGridOuter">
+      <ag-grid-angular id="orderFulfillmentGrid" #agGrid style="width: 100%; height: 500px;" class="ag-fresh" 
+        [gridOptions]="gridOptions" 
+        (rowDoubleClicked)="onRowDoubleClicked($event)"
+        (rowClicked)="onCellClicked($event)">
+      </ag-grid-angular>
+  
+      <div class="ag-grid-sort pull-right grid-control-wrapper">
+          <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -120%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 50px;">
+                <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+          </div>
+          <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -120%; right: 7.5%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+            <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+          </div>
+      </div>
+      <div class="btn-group dropup quotePartsButton">
+          <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+          <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+              <ul class="dropdown-menu">
+                  <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+                  <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+                  <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+              </ul>
+      </div>
+    </div>
+
+      <p>
+        <az-availability (availabilityChanged)='availabilityChanged($event)' 
+          [soId] = "orderNo" 
+          [soLineId]="soLineId"
+          [soVersionId]="soVersionId"
+          [soLineNum]="soLineNum"
+          [originalOrderQty]="originalOrderQty" 
+          [partNumber]="partNumber"
+          [neededQty]="neededQty" 
+          [itemId]="itemId"
+          [soLineObjectTypeId]="soLineObjectTypeId">
+        </az-availability>
+      </p>
+    <!-- </div>
+    <div class="split-pane-content-secondary">
+        <az-comments
+            [objectId]="selectedSOLineId"
+            [objectTypeId]="soLineObjectTypeId"
+            [objectInfo]="soObjectInfo"
+            (onCommentSaved)="onSOLineCommentSaved()">
+        </az-comments>
+    </div>
+  </vertical-split-pane> -->
+</div>
+
+<div id="so-part-comment-preview">
+  <az-comment-hover
+    [objectId]="hoverObjectId"
+    [objectTypeId]="soLineObjectTypeId"
+    [objectInfo]="hoverObjectInfo">
+  </az-comment-hover>
+</div>
+  
+<div id="so-part-comment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 150%; right: 25%;">
+      <div class="modal-header">
+        <div class="header-text">
+          {{clickedObjectInfo}}
+        </div>
+      </div>
+      <div class="modal-body">
+        <az-comments
+          [objectId]="clickedSOLineId"
+          [objectTypeId]="soLineObjectTypeId"
+          [commentTitle]="'SO Line Comments'"
+          (onCommentSaved)="onSOPartCommentSaved()">
+        </az-comments>
+      </div>
+    </div>
+  </div>
+</div>

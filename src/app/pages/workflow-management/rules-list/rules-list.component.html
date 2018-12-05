@@ -1,0 +1,21 @@
+<div class="rule-list-control-bar">
+	<select 
+		style="width: 70%; margin: 7px 0;"
+		class="form-control"
+		[(ngModel)]="ruleObjectTypeId"
+		(change)="onRuleObjectTypeChange()"
+		name="ruleObjectTypeId">
+		<option *ngFor="let ruleObjectType of (ruleObjectTypes$ | async)"
+			[value]="ruleObjectType.objectTypeId">{{ruleObjectType.name}}</option>
+	</select>
+	<button class="btnNewRule" (click)="onAddRule()">
+		<i class="fas fa-plus" aria-hidden="true"></i>&ensp;New Rule
+	</button>
+</div>
+<ag-grid-angular 
+	id="ruleListGrid" 
+	style="width: 100%; height:400px" class="ag-fresh" 
+	[gridOptions]="gridOptions" 
+	[rowData]="ruleData"
+	(rowClicked)="onRowClicked($event)">
+</ag-grid-angular>

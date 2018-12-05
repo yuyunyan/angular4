@@ -1,0 +1,59 @@
+<div class="register-container">
+    <div class="col-xl-4 col-md-6 col-10 offset-xl-4 offset-md-3 offset-1">
+        <div class="card">
+            <div class="card-block text-center">
+                <h2 class="card-title">Sign up to Sourceability</h2>
+                <a routerLink="/login" class="btn btn-link transition bottom-15">Already have an account? Sign in!</a>
+                 
+                <form [formGroup]="form" (ngSubmit)="onSubmit(form.value)" class="text-left">
+                    <div class="form-group">
+                        <input [formControl]="firstname" class="form-control checking-field" placeholder="First Name" type="text"> 
+                        <span class="help-block" *ngIf="form.get('firstname').touched">
+                            <span class="text-danger" *ngIf="form.get('firstname').hasError('required')">First Name is required</span>
+                        </span>
+                    </div>
+                        <div class="form-group">
+                        <input [formControl]="lastname" class="form-control checking-field" placeholder="Last Name" type="text"> 
+                        <span class="help-block" *ngIf="form.get('lastname').touched">
+                            <span class="text-danger" *ngIf="form.get('lastname').hasError('required')">Last Name is required</span>
+                        </span>              
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="username" class="form-control checking-field" placeholder="Username" type="text"> 
+                        <span class="help-block" *ngIf="form.get('username').touched">
+                            <span class="text-danger" *ngIf="form.get('username').hasError('required')">Username is required</span>
+                        </span> 
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="email" class="form-control checking-field" placeholder="Email" type="text"> 
+                        <span class="help-block" *ngIf="form.get('email').touched">
+                            <span class="text-danger" *ngIf="form.get('email').hasError('required')">Email is required</span>
+                            <span class="text-danger" *ngIf="form.get('email').hasError('invalidEmail')">Invalid email address</span>
+                        </span> 
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="password" class="form-control checking-field" placeholder="Password" type="password" minlength="6">
+                         <span class="help-block" *ngIf="form.get('password').touched">
+                            <span class="text-danger" *ngIf="form.get('password').hasError('required')">Password is required</span>
+                            <span class="text-danger" *ngIf="form.get('password').hasError('minlength')">Password isn't long enough, minimum of 6 characters</span>
+                        </span>                     
+                    </div>
+                    <div class="form-group">
+                        <input [formControl]="confirmPassword" class="form-control checking-field" placeholder="Confirm Password" type="password">
+                        <span class="help-block" *ngIf="form.get('confirmPassword').touched">
+                            <span class="text-danger" *ngIf="form.get('confirmPassword').hasError('required')">Confirm Password is required</span>
+                            <span class="text-danger" *ngIf="form.get('confirmPassword').hasError('mismatchedPasswords')">Passwords do not match</span>
+                        </span> 
+                    </div>            
+                    <div class="form-group">
+                        <button [disabled]="!form.valid" class="btn btn-main btn-block" type="submit">Sign up</button>
+                    </div>
+                    <div class="form-group" *ngIf="registrationFailed">
+                        <label  class="error-registration">Registration failed. {{failureMessage}}</label>
+                    </div>
+                </form>
+            </div>
+             <simple-notifications [options]="notifyOptions"></simple-notifications>
+        </div>
+    </div>
+</div>

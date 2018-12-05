@@ -1,0 +1,1 @@
+<input #QtyFailed type="number" min="0" step="1" (focusout)="onFocusOut($event)" onClick="this.select();" class="small-number-input" [(ngModel)]="params.data.qtyFailed" [disabled]="(params.data.showQtyFailed == 0)" />

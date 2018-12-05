@@ -1,0 +1,170 @@
+<form class="form" #purchaseOrderItemsFlaggedForm="ngForm">
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Supplier</label>
+        <div class="col-sm-7">
+          <!-- <select 
+            class="form-control"
+            name="accountId"
+            #supplierForm="ngModel"
+            required
+            [disabled]="suppliersList.length < 1"
+            (change)="onAccountVendorChange($event.target.value)"
+            [(ngModel)]="poDetails.accountId">
+            <option *ngFor="let s of suppliersList" [value]="s.id"> {{s.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="supplierForm.invalid && (supplierForm.dirty || supplierForm.touched)">
+            Supplier is required.
+          </span> -->
+          <ng2-completer   
+                #formSupplier            
+                name="accountCustomerCompleter" 
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote" 
+                [minSearchLength]="2">
+            </ng2-completer>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Contact</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="contactId"
+            #contactForm="ngModel"
+            required
+            [disabled]="accountContacts.length < 1"
+            (change)="onContactChange($event.target.value)"
+            [(ngModel)]="poDetails.contactId">
+            <option *ngFor="let con of accountContacts" [value]="con.contactId">{{con.firstName}} {{con.lastName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="contactForm.invalid && (contactForm.dirty || contactForm.touched)">
+            Contact is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Phone</label>
+        <div class="col-sm-7 col-form-label">
+          {{poDetails.contactPhone}}
+        </div>
+      </div>
+  
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">E-mail</label>
+        <div class="col-sm-7 col-form-label">
+          {{poDetails.contactEmail}}
+        </div>
+      </div>
+  
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Vendor Address</label>
+        <div class="col-sm-7 col-form-label">
+          {{billingAddress?.name}} <br> {{billingAddress?.houseNo}} {{billingAddress?.street}} <br> {{billingAddress?.city}},
+          {{billingAddress?.stateCode}} {{billingAddress?.postalCode}}
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+        
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Organization</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="organizationId"
+            #organizationForm="ngModel"
+            required
+            [(ngModel)]="poDetails.organizationId">
+            <option *ngFor="let o of organizations" [value]="o.id"> {{o.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="organizationForm.invalid && (organizationForm.dirty || organizationForm.touched)">
+            Organization is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">ShipTo</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="toLocationID"
+            #shipForm="ngModel"
+            required
+            [disabled]="nonBillingLocations.length < 1"
+            (change)="onShipFromChange($event.target.value)"
+            [(ngModel)]="poDetails.toLocationID">
+            <option *ngFor="let l of nonBillingLocations" [value]="l.LocationID"> {{l.LocationName}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="shipForm.invalid && (shipForm.dirty || shipForm.touched)">
+            Ship To is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label"></label>
+        <div class="col-sm-7 col-form-label">
+          {{shipToAddress?.LocationName}} <br> {{shipToAddress?.HouseNumber}} {{shipToAddress?.Street}} <br> {{shipToAddress?.City}},
+          {{shipToAddress?.StateCode}} {{shipToAddress?.PostalCode}}
+        </div>
+      </div>
+
+    </div>
+  </div>
+  
+  <div class="row">
+    <div class="col-md-2">
+      <div class="row text-left">
+        <label class="col-sm-1 offset-sm-3 col-form-label">Comment</label>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row form-group">
+        <div class="col-sm-12">
+          <textarea class="form-control" name="comment" rows="5" [(ngModel)]="comment"></textarea>
+        </div>
+      </div>
+    </div>    
+  </div>
+</form>
+
+<az-items-flagged-grid
+  [ngStyle]="{'display': itemsFlagged ? 'block' : 'none'}"
+  [itemsFlagged]="itemsFlagged"
+  [itemIdRequired]="true"
+  (onGridValuesUpdated)="onGridValuesUpdated($event)">
+</az-items-flagged-grid>
+
+<div class="row save-bom-buttons-wrapper">
+  <div class="col-sm-4 offset-sm-4 file-upload-buttons">
+    <button
+      class="btn btn-bom-save"
+      type="button"
+      [disabled]="purchaseOrderItemsFlaggedForm.invalid || !isAccountSelected()"
+      (click)="onSavePOClicked($event)">
+      <i class="fas fa-check" aria-hidden="true"></i> &nbsp;SAVE
+    </button>
+    <button
+      class="btn btn-bom-cancel"
+      type="button"
+      (click)="onCloseModal.emit()">
+      <i class="fas fa-times" aria-hidden="true"></i> &nbsp;CANCEL
+    </button>
+  </div>
+</div>

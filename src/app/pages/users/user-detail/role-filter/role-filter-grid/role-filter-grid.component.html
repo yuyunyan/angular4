@@ -1,0 +1,10 @@
+<div class="col-md-12">
+	<button (click)="onAddRole()" class="btn btn-main">Add Role</button>
+</div>	
+<ag-grid-angular
+	id="generalRolesGrid"
+	#agGrid
+	style="width: 100%; height:500px;"
+	class="ag-fresh" 
+	[gridOptions]="generalRolesGrid">
+</ag-grid-angular>

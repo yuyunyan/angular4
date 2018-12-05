@@ -1,0 +1,71 @@
+.ag-icon-cell{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+	height: 100%;
+	a{
+		padding-right: 4px;
+	}
+}
+
+.lhs-controls {
+	height : 30px;
+	width : fit-content;
+}
+
+.btn-search-small {
+	height: 30px;
+	width:30px;
+	border:none;
+    background-color: #01A282;
+    border-color: #01A282;
+    border-radius: 2px;
+    margin-right : 25px;
+    color:white;
+}
+.btn-show-all {
+	background-color: #01A282;
+	border: none;
+	color: white;
+	cursor: pointer;
+	border-radius: 2px;
+	font-weight: 500;
+	margin-left: 12px;
+	padding-left: 15px;
+	padding-right: 15px;
+	height: 30px;
+  }
+  .btn-quote {
+	
+	background-color: #01A282;
+	border: none;
+	color: white;
+	cursor: pointer;
+	border-radius: 2px;
+	font-weight: 400;
+	margin:4px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 0px;
+	height: 30px;
+  }
+  .disable {
+	pointer-events: none;
+	cursor: default;
+ }
+
+ .part-source-search-bar{
+	width: 100%;
+	display: flex;
+	height: 35px;
+	flex-flow: row;
+	justify-content: space-between;
+	align-content: center;
+	margin-bottom: 6px;
+	.part-source-search .ag-part-source-search{
+		display: flex;
+		align-content: center;
+	}
+ }
+

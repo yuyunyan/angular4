@@ -1,0 +1,75 @@
+<div class="modal fade" id="poAllocationWindow" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<div class="grid-header">Allocate Purchase Order {{poId||''}} - {{partNumber||''}} </div>
+				<button type="button" class="close" data-dismiss="modal" #sourceCloseBtn><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+			</div>
+
+			<div class="modal-body">
+				<div>
+					<p style="text-align: start">Purchase Order 
+						<a 
+							(click)="onPoNumberClicked()"
+							style="text-decoration: underline" 
+							href="javascript:void(0)">{{poId}}
+						</a> Ln {{poLineNum}}
+					</p>
+					<p style="text-align: start">Sales Order 
+						<a 
+							(click)="onSoNumberClicked()"
+							style="text-decoration: underline" 
+							href="javascript:void(0)">{{soId}}
+						</a> Ln {{soLineNum}}</p>
+				</div>
+				<form class="form-addsource" (ngSubmit)="onSave()">
+					<div class="form-group row">
+						<label class="col-5 col-form-label" for="neededQty">Qty Needed:</label>
+						<div class="col-7">
+							<label class="col-form-label" for="neededQty">{{neededQty? neededQty.toLocaleString(): '0'}}</label>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-5 col-form-label" for="qty">Qty on PO:</label>
+						<div class="col-7">
+							<label class="col-form-label" for="qty">{{poLineQty? poLineQty.toLocaleString(): ''}}</label>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-5 col-form-label" for="qty">Qty to Allocate:</label>
+						<div class="col-7">
+							<input class="form-control" 
+								type="number" 
+								[(ngModel)]="allocateQty" 
+								name="allocateQty" 
+								min="1"
+								(keypress)="validateIntegerInput(event)"/>
+						</div>
+					</div>
+
+					<div class="modal-footer">
+						<div class="btn-group btn-group-justified" role="group" aria-label="group button">
+							<div class="btn-group" role="group">
+								<button type="submit" id="btnSaveSource" class="btn btn-default btn-modal" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+							</div>
+							<div class="btn-group" role="group">
+								<button type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+							</div>
+						</div>
+					</div>
+
+					<div class="form-group row" *ngIf="AllocationQtyCheck()">
+						<label class="col-12 col-form-label red-icon" >{{errorMessage}}</label>
+					</div>
+
+					<div class="form-group row" *ngIf="warningMessage">
+						<label class="col-12 col-form-label red-icon" >{{warningMessage}}</label>
+					</div>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

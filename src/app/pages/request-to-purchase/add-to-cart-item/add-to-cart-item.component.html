@@ -1,0 +1,16 @@
+<h6 class="vendorTitle">{{vendorName}}</h6>
+<br>
+<br>
+    <ag-grid-angular 
+        id="linesToPurchaseOrderGrid" 
+        #agGrid 
+        style="width: 292px; display:inline-block; height: 150px !important;" 
+        class="ag-fresh"         
+        [gridOptions]="sourceLinesGrid">
+    </ag-grid-angular>
+    <div>
+    <p class="totalCostMargin">{{totalCost}}&nbsp; USD</p>
+</div>
+    <button
+    class="CreatePoBtn pull-right"
+    (click)="createPO()">Create PO</button>

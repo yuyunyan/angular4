@@ -1,0 +1,70 @@
+<div class="container-fluid" style="width: 100%; height: 100%;">
+	<div class="row" style="height:100%;">
+		<div class="col-sm-6">
+			<az-roles-list
+				(onNewRoleBtnClicked)="onNewRoleBtnClicked($event)"
+				(onRoleRowClicked)="onRoleRowClicked($event)">
+			</az-roles-list>
+		</div>
+		<div class="col-sm-6"  [ngStyle]="{'display': (selectedRoleId || selectedRoleId == 0) ? 'block' : 'none'}">
+			<form [readonlyField]="onReadonly" [objectPermissions]="roleDetailPermissions" (onFormStatusChange)="onFormStatusChange($event)" (onDeleteClick)="onDeleteClick()">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="row form-group">
+							<label class="col-sm-4 col-form-label">Role Name</label>
+							<div class="col-sm-8 flex-span">
+								<input
+									type="text"
+									data-field-name="Role Name"
+									class="form-control" 
+									name="roleName" 
+									[(ngModel)]="roleName">
+							</div>
+						</div>
+						<div class="row form-group">
+							<label class="col-sm-4 col-form-label">Role Type</label>
+							<div class="col-sm-8" [ngClass]="{'flex-span': _LockRoleType}">
+								<select 
+									*ngIf="!_LockRoleType"
+									class="form-control" 
+									name="roleTypeId" 
+									data-field-name="Role Type"
+									[(ngModel)]="roleTypeId" 
+									(change)="onTypeChange($event.target.value)">
+									<option *ngFor="let o of roleTypeOptions" [value]="o.id"> {{o.name}}</option>
+								</select>
+								<span *ngIf="_LockRoleType">{{roleType?.name}}</span>
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div [ngStyle]="{'display': (roleTypeId && roleTypeId != 8) ? 'block' : 'none'}">
+							<az-roles-permissions
+								[onReadonly]="onReadonly"
+								[permissionsData]="permissionsData"
+								(onSavingPermissions)="currentPermissions = $event">
+							</az-roles-permissions>
+						</div>
+						
+						<div [ngStyle]="{'display': (roleTypeId && roleTypeId == 8) ? 'block' : 'none'}">
+							<az-roles-nav-links
+								[navTreesData]="navTreesData"
+								(onSavingNavLinks)="currentNavLinks = $event">
+							</az-roles-nav-links>
+						</div>
+					</div>
+					<div class="col-sm-12">
+						<div [ngStyle]="{'display': (roleTypeId && roleTypeId != 8) ? 'block' : 'none'}">
+							<az-roles-fields
+								[onReadonly]="onReadonly"
+								[fieldsData]="fieldsData"
+								(onSavingFields)="currentFields = $event">
+							</az-roles-fields>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<simple-notifications [options]="notifyOptions"></simple-notifications>

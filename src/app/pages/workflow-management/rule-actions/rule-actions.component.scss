@@ -1,0 +1,11 @@
+.rule-actions-control-bar{
+	display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.invalid-target-input{
+  background: rgba(232, 84, 12, 0.3) !important;
+}

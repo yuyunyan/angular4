@@ -1,0 +1,64 @@
+<div class="modal fade" id="dlgReserveQty" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="grid-header">Reserve Quantity for Order {{orderNo}}</div>
+                <button type="button" class="close" data-dismiss="modal" #sourceCloseBtn><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-addsource" (ngSubmit)="onSave()">
+                    <div class="form-group row">
+                        <label class="col-5 col-form-label" for="qty">Qty to allocate:</label>
+                        <div class="col-7">
+                            <label *ngIf="lineOrderQty == 0" class="col-form-label" for="qty"> {{neededQty}}/ {{originalOrderQty}}</label>
+                            <label *ngIf="lineOrderQty > 0" class="col-form-label" for="qty"> {{neededQty}}/ {{lineOrderQty}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5 col-form-label" for="qty">Qty available on lot:</label>
+                        <div class="col-7">
+                            <label class="col-form-label" for="qty">  {{availableToRsrv}}/ {{outOfQty}}</label>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-5 col-form-label" for="qty">Reserve from lot:</label>
+                        <div class="col-7">
+                            <input class="form-control" type="number" min="0" name="qty" #qty="ngModel" [(ngModel)]="quantityToSet" onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 48 && event.charCode <= 57"> 
+                            <span
+                                class="help-block text-danger"
+                                *ngIf="lineOrderQty > 0 && (quantityToSet > neededQty || quantityToSet > lineOrderQty) ">
+                                Allocation quantity cannot exceed the quantity available.
+                                
+                            </span>
+                            <span
+                            class="help-block text-danger"
+                            *ngIf="lineOrderQty == 0 && (quantityToSet > neededQty || quantityToSet > availableToRsrv) ">
+                            Allocation quantity cannot exceed the quantity available.
+                            
+                        </span>
+                        <span
+                        class="help-block text-danger"
+                        *ngIf="quantityToSet < 0 ">
+                        Quantity cannot be less than zero.
+                        
+                    </span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                        <div class="btn-group" role="group">
+                            <button type="submit" id="btnSaveSource" class="btn btn-default btn-modal" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+                        </div>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-12 col-form-label red-icon" >{{errorMessage}}</label>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,177 @@
+<div class="container-fluid parentMargin">
+
+  <div class="top-header">
+    <h5>{{quoteId}}</h5>
+    <div class="row">
+      <div class="col-sm-9 quote-details-header header-background quoteTopButtons" *ngIf="quoteId && quoteVersionId">
+        <!-- <button type="button"
+            id="btnToEmail"
+            class="btn-details btn-affirm"
+            *ngxPermissionsOnly="['CanPrint']"
+            data-toggle="modal"
+            data-target="#sendQuote">
+            <i class="fas fa-file-pdf" aria-hidden="true"></i>&ensp;Submit via Email
+        </button> -->
+        <button type="button"
+            id="btnToPDF"
+            class="btn-details btn-affirm"
+            *ngxPermissionsOnly="['CanPrint']"
+            (click)="toPdf()">
+            <i class="fas fa-file-pdf" aria-hidden="true"></i>&ensp;Print to PDF
+        </button>
+        <button type="button"
+            id="btnToSalseOrder"
+            class="btn-details btn-affirm"
+            *ngxPermissionsOnly="['CanCreate16']"
+          (click)="toSalesOrder()">
+          <i class="fa fa-money" aria-hidden="true"></i>&ensp;To Sales Order
+        </button>
+        <button type="button"
+            *ngIf="!disableDocuments()"
+            id="btnDocuments"
+            class="btn-details btn-affirm"
+            (click)="documentsClick()">
+          <i class=" fas fa-file-alt" aria-hidden="true"></i>&ensp;Documents ({{totalDocumentsCount}})
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scrolling-content">
+    <div class="row mbm-20">
+      <div class="col-lg-12 col-12 bottom-30">
+        <!--{{message}}-->
+
+       <div widget class="card">
+            <div class="card-header details">
+                <span>Details</span>
+                <div class="widget-controls">
+                    <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                    <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                    <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                    <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                </div>
+            </div>
+            <div class="card-block widget-body">
+                <az-quote-details
+                    [quoteId]="quoteId"
+                    [quoteVersionId]="quoteVersionId"
+                    [quotePermissions]="quotePermissions"
+                    (totalDocuments)="totalDocuments($event)"
+                    (quoteHeader)="quoteHeaderChanged($event)" >
+                </az-quote-details>
+        <br/>
+        <div *ngIf="!quoteId" class="row mbm-20">
+          <h5>Save to show Parts and Extra Items</h5>
+        </div>
+
+        <div *ngIf="quoteId" class="row mbm-20 ">
+          <div class="col-lg-12 col-12 bottom-30">
+            <div widget class="card partsContainer" *ngIf="hasPermission(['CanEditLines', 'CanViewLines'])">
+              <div class="card-header">
+                <span>Parts</span>
+                <div class="widget-controls">
+                  <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                  <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                  <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                  <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                </div>
+              </div>
+              <div class="card-block widget-body">
+                <az-quote-parts
+                [quoteId]="quoteId"
+                [quoteVersionId]="quoteVersionId"
+                (onItemsChanged)="itemsChanged($event)"
+                (onPartsSelectionChanges)=onPartsSelectionChanges($event)
+                (onRowClicked)="selectedQuoteLineId = $event"
+                (selectedSourceId)="selectedSourceId = $event"
+                (selectedSourceObjectInfo)="selectedSourceObjectInfo = $event"
+                  (objectInfo)="selectedQuoteObjectInfo = $event">
+                </az-quote-parts>
+              </div>
+            </div>
+            <br/>
+            <div widget class="card">
+              <div class="card-header">
+                <span>Comments</span>
+                <div class="widget-controls">
+                  <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                  <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                  <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                  <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+                </div>
+              </div>
+              <div class="card-block widget-body">
+                <az-comments-full
+                [objectId]="quoteId"
+                [objectTypeId]="quoteObjectTypeId"
+                [commentTypeMap]="quoteCommentTypeMap">
+                </az-comments-full>
+              </div>
+            </div>
+            <br/>
+
+          </div>
+        </div>
+      </div>
+    <div class="modal fade" id="mdlToSalesOrder" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="header-text">
+              Create Sales Order
+            </div>
+            <button type="button" class="close" data-dismiss="modal" role="button">
+              <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+            </button>
+          </div>
+
+          <div class="modal-body">
+            <ag-grid-angular id="linesToSalesOrderGrid" #agGrid style="width: 100%; height: 100%; max-height: 300px;" class="ag-fresh"
+              [gridOptions]="linesGrid">
+            </ag-grid-angular>
+          <br><br>
+          <div class="container-fluid">
+            <form class="form-customerpo">
+              <div class="form-group row">
+                <label class="col-3 col-form-label" for="customerPO">Customer PO</label>
+                <div class="col-9">
+                  <input class="form-control" type="text" id="customerPO" [(ngModel)]="customerPO" name="customerPO" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-3 col-form-label" for="customerPO">Attach File</label>
+                <div class="col-9">
+                  <input class="form-control" (change)="fileChange($event)" type="file" id="upload" name="upload" />
+                  <span class="errorMessage" *ngIf='fileSizeTooLarge'>File size is too large. Please select a file that is less than 25 MB in size.</span>
+                  <span>{{fileName}}</span>
+                </div>
+              </div>
+            </form>
+          </div>
+
+      <div class="modal-footer">
+        <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+          <div class="btn-group" role="group">
+            <button type="button" (click)="createSalesOrder()" class="btn btn-default btn-modal" data-action="save" role="button" [disabled]="(customerPO.length === 0) || (createSODisabled)">
+              <i class="fas fa-check" aria-hidden="true"></i>&nbsp; Accept</button>
+          </div>
+
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-modal" data-dismiss="modal" role="button">
+              <i class="fa fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+   </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+<simple-notifications [options]="quoteDetailsNotifyOptions"></simple-notifications>
+<az-quote-email [quoteHeader]="quoteHeader"></az-quote-email>

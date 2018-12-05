@@ -1,0 +1,27 @@
+.card {
+    width: 100% !important;
+    height: 300px;
+    margin-left:0% !important;
+    margin-right:0% !important;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+    -webkit-box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
+    box-shadow: 1px 1px 5px 0px rgba(0, 0, 0, 0.25);
+    position: relative;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.25rem;
+}
+
+.dropLeft{
+    margin-right:-100%;
+}

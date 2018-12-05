@@ -1,0 +1,120 @@
+.btn-upload {
+	background-color: #008CBA;
+	border-color: #008CBA;
+	color: white;
+	cursor: pointer;
+	border-radius: 2px;
+	font-weight: 500;
+	margin: 0 4px;
+	padding-left: 15px;
+	padding-right: 15px;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+
+.file-upload-control{
+	min-width: 280px;
+	display: flex;
+	flex-flow: row;
+	align-content: center;
+	span{
+		margin: 0 10px;
+		padding: 0;
+		display: inline-block;
+		vertical-align: middle;
+		line-height: inherit;
+		font-size: 16px;
+		font-weight: 200
+	}
+	i{
+		vertical-align: middle;
+		line-height: inherit;
+	}
+	.delete-file{
+		font-size: 16px;
+		opacity: .8;
+		cursor: pointer;
+		z-index: 99;
+		vertical-align: middle;
+	}
+}
+
+.file-upload-control-checkbox{
+	display: flex;
+	flex-flow: row;
+	align-content: center;
+	input.run-match-checkbox{
+		margin-right: 0 5px;
+		display: inline-block;
+		align-items: center;
+		align-self: center;
+		width: 15px;
+		height: 15px;
+	}
+	label{
+		line-height: inherit;
+		display: inline-block;
+		vertical-align: middle;
+		padding: 0;
+		margin: 0 5px;
+	}
+}
+
+.file-preview-wrapper{
+	margin: 20px 0;
+	display: flex;
+	align-content: center;
+}
+
+.save-bom-buttons-wrapper{
+	margin: 10px 0;
+}
+
+.file-upload-save-layout-checkbox{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+	input.save-layout-checkbox{
+		margin-right: 0 5px;
+		display: inline-block;
+		align-items: center;
+		align-self: center;
+		width: 15px;
+		height: 15px;
+	}
+	label{
+		line-height: inherit;
+		display: inline-block;
+		vertical-align: middle;
+		padding: 0;
+		margin: 0 5px;
+	}
+}
+
+.file-upload-buttons{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+
+	.btn-bom-cancel, .btn-bom-save{
+		width: 150px;
+		background-color: #008CBA;
+		border-color: #008CBA;
+		color: white;
+		cursor: pointer;
+		border-radius: 2px;
+		font-weight: 500;
+		margin: 0 10px;
+		padding-left: 15px;
+		padding-right: 15px;
+		padding-top: 0px;
+		padding-bottom: 0px;
+	}
+}
+
+.completer-input{
+	width: 100%;
+}
+

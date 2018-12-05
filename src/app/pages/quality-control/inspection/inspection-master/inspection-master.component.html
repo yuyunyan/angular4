@@ -1,0 +1,115 @@
+<div class="container-fluid parentMargin">
+
+    <button type="button"
+    (click)="documentsClick()"
+    class="btn-details btn-affirm">
+    <i class=" fas fa-file-alt" aria-hidden="true"></i>&ensp;Documents ({{totalDocumentsCount}})
+  </button>
+    <div *ngIf="inspectionComplete" class="col-sm-2 qc-print-container pull-left" >  <!--*ngxPermissionsOnly="['CanPrint']" -->
+    <button type="button" class="btn-details btn-affirm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <i class="fas fa-file-pdf" aria-hidden="true"></i>&ensp;Print to PDF
+    </button>
+    <div class="dropdown-menu qc-dropdown">
+        <a class="dropdown-item" (click)="toPdf(inspectionReportCssSelector)">Inspection Report</a>
+      <a class="dropdown-item" (click)="toPdf(identifiedStockReportCssSelector)">Identified Stock</a>
+      <!-- <a class="dropdown-item" (click)="toPdf(discrepantIdentifiedStockReportCssSelector)">Discrepant Identified Stock</a> -->
+    </div>
+  </div>
+    
+<br/>
+  <div widget class="card">
+    <div class="card-header">
+      <span>Details</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <az-inspection-details [inspectionId]="inspectionId" (documentCount)="totalDocuments($event)" (completed)="inspectionCompleted($event)" (resultIdEmitter)="resultIdEmitterChange($event)" (poQuantity)="poQuantityChange($event)" [quanityPassed]="totalQtyPassed" [acceptedDiscrepant]="totalQtyAccepted" [rejectedDiscrepant]="totalQtyRejected" [conclusionDataInput]="conclusionData"></az-inspection-details>
+    </div>
+  </div>
+  <br/>
+  <div widget class="card">
+    <div class="card-header">
+      <span>Checklist</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <az-check-list-grid [inspectionId]="inspectionId" [insIsComplete]="insIsComplete" (conclusionEmitterData)="conclusionEmitterDataChange($event)" (testEmitter)="onTestEmitterChange($event)"></az-check-list-grid>
+    </div>
+  </div>
+  <br/>
+  <div widget class="card uploadPictures">
+    <div class="card-header">
+      <span>Additional Pictures</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <az-pictures [inspectionId]="inspectionId"></az-pictures>
+    </div>
+  </div>
+  <br/>
+  <div widget class="card breakdownGrid">
+      <div class="card-header">
+        <span>Breakdown</span>
+        <div class="widget-controls">
+          <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+          <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+          <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+          <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+        </div>
+      </div>
+      <div class="card-block widget-body">
+        <az-item-breakdown 
+          [inspectionId]="inspectionId" 
+          (qtyPassed)="qtyPassed($event)" 
+          (qtyAccepted)="qtyAccepted($event)" 
+          (qtyRejected)="qtyRejected($event)" 
+          (stockDetails)="stockArray($event)" 
+          (warehouseBinId)="warehouseBin($event)"
+          (itemBreakdownComponent)="setItemBreakdownComponent($event)"
+          [insIsComplete]="insIsComplete">
+      </az-item-breakdown>
+      <br>
+      </div>
+  </div>
+    <br/>
+  <div widget class="card conclusionGrid">
+    <div class="card-header">
+      <span>Conclusion</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <az-conclusion [inspectionId]="inspectionId" 
+      [conclusionDataInput]="conclusionData"    
+      [selectedResultId]="resultId"
+      [quanityPassed]="totalQtyPassed"
+      [acceptedDiscrepant]="totalQtyAccepted"
+      [rejectedDiscrepant]="totalQtyRejected"
+      [warehouseBinId]="warehouseBinId"
+      [stockDetails]="stockDetails"
+      [poQuantity]="poQuantity"
+      [itemBreakdownComponent]="itemBreakdownComponent">
+      </az-conclusion>
+    </div>
+  </div>
+  
+</div>

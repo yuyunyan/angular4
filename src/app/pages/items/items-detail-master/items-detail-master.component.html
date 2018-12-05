@@ -1,0 +1,112 @@
+<div class="widget-body parentMargin">
+	<button id="btnAddItem" type="button" class="btn-details btn-affirm">
+		<i class="fas fa-file-pdf" aria-hidden="true"></i>&ensp;Datasheet
+	</button>
+	<div class="row mbm-20">
+		<div class="col-lg-12 col-12 bottom-30">
+						
+			<div widget class="card">
+				<div class="card-header">
+					<span>Details</span>
+					<div class="widget-controls">              
+						<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+						<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+						<a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+						<a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>                          
+					</div>        
+				</div>
+				<div class="card-block widget-body">
+					<az-items-detail
+						[itemId]="itemId"
+						[itemPermissions]="itemPermissions">
+					</az-items-detail>
+				</div>
+			</div>
+		<div *ngIf="itemId > 0">
+			<div widget class="card">
+				<div class="card-header">
+					<span>Technical Details</span>
+					<div class="widget-controls">
+						<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+						<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="card-block widget-body">
+					<az-items-technical-details
+					[itemId]="itemId">
+					</az-items-technical-details>
+				</div>
+			</div>
+			
+			<div widget class="card">
+				<div class="card-header">
+					<span>Inventory</span>
+					<div class="widget-controls">
+						<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+						<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="card-block widget-body">
+					<az-item-inventory [itemId]="itemId"></az-item-inventory>
+				</div>
+			</div>	
+			
+			<div widget class="card">
+				<div class="card-header">
+					<span>Sources</span>
+					<div class="widget-controls">
+						<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+						<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="card-block widget-body">
+					<az-item-availability [itemId]="itemId"></az-item-availability>
+				</div>
+			</div>
+			
+			<div widget class="card">
+				<div class="card-header">
+					<span>Sales Orders</span>
+					<div class="widget-controls">
+						<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+						<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="card-block widget-body">
+					<az-item-salesorders [itemId]="itemId"></az-item-salesorders>
+				</div>
+			</div>
+			
+			<div widget class="card">
+				<div class="card-header">
+					<span>Purchase Order</span>
+					<div class="widget-controls">
+						<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+						<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+					</div>
+				</div>
+				<div class="card-block widget-body">
+					<az-item-purchaseorders
+					[itemId]="itemId">
+					</az-item-purchaseorders>
+				</div>
+			</div>
+
+			<div widget class="card">
+					<div class="card-header">
+						<span>Quotes</span>
+						<div class="widget-controls">
+							<a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+							<a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+						</div>
+					</div>
+					<div class="card-block widget-body">
+						<az-item-quotes [itemId]="itemId"></az-item-quotes>
+					</div>
+			</div>
+				
+		</div>
+	  </div>
+	</div>
+</div>
+	

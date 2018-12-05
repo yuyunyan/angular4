@@ -1,0 +1,61 @@
+<div class="container-fluid">
+  <button (click)="onAddRow()" class="btn btn-main" *ngxPermissionsOnly="['CanEditExtras']">Add Row</button>
+  <button (click)="deleteSelectedRows()" class="btn btn-main" *ngxPermissionsOnly="['CanEditExtras']">Delete Rows</button>
+
+  <div class="purchaseExtraGridOuter">
+  <ag-grid-angular
+    id="purchaseOrderExtraGrid"
+    style="width: 100%;"
+    class="ag-fresh"
+    [gridOptions]="agGridOptions"
+    (rowClicked)="onCellClicked($event)">
+  </ag-grid-angular>
+
+  <div class="ag-grid-sort pull-right" style="position: absolute; top:86%; right:5%;">
+      <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -120%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+          <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+    </div>
+      <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -120%; right: 7.5%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+          <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+    </div>
+  </div>
+  <div class="btn-group dropup quotePartsButton">
+      <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+      <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+          <ul class="dropdown-menu dropLeft">
+              <li><button style="width:100%" class="export-grid" (click)="exportGrid_Click($event)">Export</button></li>
+              <li><button style="width:100%" class="reset-grid" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+              <li><button style="width:100%" class="save-grid" (click)="saveGridState_Click($event)">Save Column</button></li>
+          </ul>
+  </div>
+</div>
+  
+</div>
+
+<div id="po-extra-comment-preview">
+  <az-comment-hover
+    [objectId]="hoverObjectId"
+    [objectTypeId]="poExtraObjectTypeId"
+    [objectInfo]="hoverObjectInfo">
+  </az-comment-hover>
+</div>
+
+<div id="po-extra-comment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 150%; right: 25%;">
+      <div class="modal-header">
+        <div class="header-text">
+          {{clickedObjectInfo}}
+        </div>
+      </div>
+      <div class="modal-body">
+        <az-comments
+          [objectId]="clickedPOExtraId"
+          [objectTypeId]="poExtraObjectTypeId"
+          [commentTitle]="'PO Extra Comments'"
+          (onCommentSaved)="onPOExtraCommentSaved()">
+        </az-comments>
+      </div>
+    </div>
+  </div>
+</div>

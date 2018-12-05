@@ -1,0 +1,28 @@
+
+.checkListBtn{
+    background-color: #008CBA;
+    color: white;
+    font-family: 'Calibri Bold','Calibri Regular','Calibri';
+    border-radius: 25px;
+}
+.checkListBtn:hover{
+    background-color:  #344154;
+    color:white;
+    font-family: 'Calibri Bold','Calibri Regular','Calibri';
+}
+.clickGridMessage{
+   font-family: 'Calibri Bold','Calibri Regular','Calibri';
+   color:#008CBA;
+   font-size: 20px;
+}
+
+.ag-paging-page-summary-panel {
+    background-color: #9C9DA0;
+    font-size: 12px;
+    color: white;
+    margin-top: -4% !important;
+} 
+
+.ag-paging-row-summary-panel{
+    float:right !important;
+}

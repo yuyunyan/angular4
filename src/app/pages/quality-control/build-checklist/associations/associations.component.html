@@ -1,0 +1,154 @@
+<div class="container-fluid">
+<div class="row pull-right" >
+  <!-- <h5 class="pull-left">Associations</h5> -->
+   <button id="btnAddLink" style="margin-right:15px;" type="button" class="btn-details btn-affirm pull-right" data-toggle="modal" data-target="#mdlAddLink">Add Link</button> 
+</div>
+<div class="associationsGridOuter">
+  <ag-grid-angular 
+  #agGrid style="width: 100%; height: 500px;" 
+  class="ag-fresh" 
+  [gridOptions]="agGridOptions" 
+  [rowData] = "AcData" 
+  (cellClicked)="onCellClicked($event)">
+</ag-grid-angular>
+<div class="btn-group dropup quotePartsButton">
+    <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+    <!-- <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+      <ul class="dropdown-menu dropLeft">
+        <!-- <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li> -->
+        <!-- <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+        <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+      </ul>  -->
+  </div>
+</div>
+</div>
+
+<div class="modal fade" id="mdlAddLink" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-small">
+    <div class="modal-content modal-content-small">
+      <div class="modal-header">
+        <div class="header-text">
+          Add Link
+        </div>
+        <button type="button" class="close"  #assCloseBtn data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="row textArea">
+          <div class="col-sm-4">
+            <div class="form-group row text-left">
+              <label>Link Type</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <!-- <textarea class="form-control" rows="5" name="linkTypes"  [(ngModel)]="linkTypes"></textarea> -->
+            <select class="form-control" name="linkTypesDropdown" [(ngModel)]="linkType" (change)="LinkTypeChanged($event)">
+              <option *ngFor="let link of linkTypes" [value]="link.objectTypeId">{{link.name}}</option>
+            </select>
+          </div>
+          <!-- <div [ngStyle]="{'display': !onReadonly? 'inline-block': 'none'}">
+              <ng2-completer   
+                [inputClass]="'Vendor-Input form-control purchase'"        
+                name="accountSupplierCompleter" 
+                [(ngModel)]="selectedAccountName"
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote2" 
+                [minSearchLength]="2">
+              </ng2-completer>
+          </div>
+          <div [ngStyle]="{'display': !onReadonly? 'inline-block': 'none'}">
+              <ng2-completer   
+                [inputClass]="'Vendor-Input form-control purchase'"        
+                name="accountSupplierCompleter" 
+                (selected)="onAccountSelected($event)" 
+                [datasource]="dataRemote3" 
+                [minSearchLength]="2">
+              </ng2-completer>
+          </div> -->
+        </div>
+        <div class="row textArea">
+          <div class="col-sm-4">
+            <div class="form-group row text-left">
+              <label>Value</label>
+            </div>
+          </div>
+          <div class="col-sm-8">
+            <!-- <textarea class="form-control" rows="5"  name="linkTypes"  [(ngModel)]="linkTypes"></textarea> -->
+            <!-- <select *ngIf="!isSupplier && !isCustomer && linkType != 0" id="selLinkValue" class="form-control" name="linkValuesDropdown" [(ngModel)]="linkTypeValueId">
+              <option *ngFor="let linkValue of linkTypeValues" [value]="linkValue.accountId">{{linkValue.accountName}}</option>
+            </select> -->
+
+            <ng2-completer 
+              *ngIf="isSupplier"
+              [inputClass]="'Vendor-Input form-control purchase'"        
+              name="accountSupplierCompleter" 
+              (selected)="onAccountSelected($event)" 
+              [datasource]="dataRemote" 
+              [minSearchLength]="2">
+            </ng2-completer>
+
+            <ng2-completer 
+              *ngIf="isCustomer"
+              [inputClass]="'Vendor-Input form-control purchase'"        
+              name="accountCustomerCompleter" 
+              (selected)="onAccountSelected($event)" 
+              [datasource]="dataRemote2" 
+              [minSearchLength]="2">
+            </ng2-completer>
+
+            <ng2-completer   
+              *ngIf="isManufacturer"
+              [inputClass]="'Vendor-Input form-control purchase'"        
+              name="accountSupplierCompleter" 
+              (selected)="onAccountSelected($event)" 
+              [datasource]="dataRemote3" 
+              [minSearchLength]="2">
+            </ng2-completer>
+
+            <ng2-completer   
+              *ngIf="isItems"
+              [inputClass]="'Vendor-Input form-control purchase'"         
+              name="partNumberCompleter" 
+              (selected)="onAccountSelected($event)" 
+              [datasource]="dataRemote4" 
+              [minSearchLength]="2">
+            </ng2-completer>
+
+            <select 
+              *ngIf="isCommodity" 
+              data-field-name="Commodity" 
+              name="CommodityID"  
+              (change)="onAccountSelected($event)"
+              [(ngModel)]="commondityId"
+              class="selectpicker form-control">
+              <option [ngValue]="com.CommodityID" *ngFor="let com of commodityList">{{com.CommodityName}}</option>
+            </select>
+
+            <select 
+            *ngIf="isCompanyType" 
+            data-field-name="Companytype" 
+            name="CompanyTypeID"  
+            (change)="onAccountSelected($event)"
+            [(ngModel)]="companyTypeId"
+            class="selectpicker form-control">
+            <option [ngValue]="comType.companyTypeId" *ngFor="let comType of companyTypes">{{comType.companyTypeName}}</option>
+            </select>
+
+            <!-- <ItemTypeaheadGridComponent></ItemTypeaheadGridComponent> -->
+            <!-- <az-grid-typeahead></az-grid-typeahead> -->
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+            <div class="btn-group" role="group">
+              <button type="button" id="btnSaveLink" [disabled]="(!linkType) || (linkType > 0 && !(linkTypeValueId>0))" (click)="createLink()" class="btn btn-default btn-modal" data-action="save"
+                role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+            </div>
+            <div class="btn-group" role="group">
+              <button (click)="closeModal()" type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

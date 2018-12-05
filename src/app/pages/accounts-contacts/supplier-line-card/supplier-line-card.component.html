@@ -1,0 +1,13 @@
+<div class="card-block widget-body container-fluid">
+  <button *ngIf="canEditFocus" type="button" (click)="onAddRow()" class="btn-details btn-affirm pull-right">+ New Focus</button>
+    <ag-grid-angular 
+      #linesGrid 
+      style="width: 100%;"
+      id="supplierGrid"
+      class="ag-theme-balham" 
+      (rowClicked)="onCellClicked($event)" 
+      [gridOptions]="agGridOptions">
+    </ag-grid-angular>
+</div>
+
+

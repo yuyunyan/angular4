@@ -1,0 +1,539 @@
+
+<div class="container-fluid" id="wrapper" [ngBusy]="busyConfig">
+        <form [readonlyField]="onReadonly"
+            [objectPermissions]="accountDetailPermissions"
+            [showSync]="showSync"
+            (onFormStatusChange)="onFormStatusChange($event)"
+            (onOwnershipClick)="onOwnershipClick($event)"
+            (onDeleteClick)="onDeleteClick($event)"
+            (ngSubmit)="onSubmit()"
+            #accountForm="ngForm">
+          <div class="row detailParent">
+            <div class="col-sm-10">
+              <div class="row">
+                <div [ngClass]="[isSupplier() ? 'col-sm-4' : 'col-sm-6', isCustomer() ? 'col-sm-4' : 'col-sm-6']">
+                    <div style="height:100%;" class="row mbm-20">
+                      <div class="col-sm-12 bottom-30">
+                        <div class="card card-outline-default ">
+                            <div class="card-header border-bottom detailCard"><strong>Account Details</strong></div>
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Account Number']">
+                              <label class="col-sm-4 col-form-label">Number</label>
+                              <div class="col-sm-4">
+                                <input type="text" [(ngModel)]="accountDetails.number" name="number" class="form-control" #accountNumber="ngModel">
+                              </div>
+                            </div>
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Name']">
+                              <label class="col-sm-4 col-form-label">Name</label>
+                              <div class="col-sm-8">
+                                <input
+                                data-field-name="Name"
+                                type="text"
+                                maxlength="40"
+                                [(ngModel)]="accountDetails.name"
+                                name="name"
+                                class="form-control"
+                                required
+                                #accountName="ngModel">
+                                <span
+                                class="help-block text-danger"
+                                [hidden]="(accountName.untouched && !formSubmitted) || accountName.valid" >
+                                Account name is required.
+                              </span>
+                              </div>
+                            </div>
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Email']">
+                              <label class="col-sm-4 col-form-label">Email</label>
+                              <div class="col-sm-8">
+                                <input
+                                  data-field-name="Email"
+                                  type="text"
+                                  maxlength="240"
+                                  [(ngModel)]="accountDetails.email"
+                                  name="email"
+                                  #accountEmail="ngModel"
+                                  [pattern]="emailRegExp"
+                                  class="form-control">
+                                <span
+                                  class="help-block text-danger"
+                                  [hidden]="!accountForm.submitted || accountEmail.valid">
+                                  Email input is not valid.
+                                </span>
+                              </div>
+                            </div>
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Website']">
+                              <label class="col-sm-4 col-form-label">Website</label>
+                              <div class="col-sm-8">
+                                <input
+                                  data-field-name="Website"
+                                  type="text"
+                                  maxlength="1280"
+                                  [(ngModel)]="accountDetails.website"
+                                  #accountWebsite="ngModel"
+                                  name="website"
+                                  class="form-control"
+                                  pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$">
+                                <span
+                                  class="help-block text-danger"
+                                  [hidden]="!accountForm.submitted || accountWebsite.valid">
+                                  Website input is not valid.
+                                </span>
+                              </div>
+                            </div>
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Company Type']">
+                                <label class="col-sm-4 col-form-label">Company Type</label>
+                                <div class="col-sm-8">
+                                  <select data-field-name="Company Type" class="form-control" [(ngModel)]="accountDetails.companyTypeId" name="accountDropDown" required #companyStatus="ngModel">
+                                    <option *ngFor="let c of companyTypes"  [value]="c.companyTypeId">{{c.companyTypeName}}</option>
+                                  </select>
+                                  <span
+                                  class="help-block text-danger"
+                                  [hidden]="(companyStatus.untouched && !formSubmitted) || companyStatus.valid">
+                                    Company Type is required.
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Year Established']">
+                                <label class="col-sm-4 col-form-label">Year Established</label>
+                                <div class="col-sm-8">
+                                  <input
+                                    data-field-name="Year Established"
+                                    type="text"
+                                    maxlength="10"
+                                    [(ngModel)]="accountDetails.yearEstablished"
+                                    name="yearEstablished"
+                                    pattern="[0-9]{4}"
+                                    #yearEstablished="ngModel"
+                                    class="form-control">
+                                  <span
+                                    class="help-block text-danger"
+                                    [hidden]="(yearEstablished.untouched && !formSubmitted) || yearEstablished.valid">
+                                    Invalid year format. Please enter the year in 4 digits(eg: 'yyyy')
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['NumOfEmployees']">
+                                  <label class="col-sm-4 col-form-label">Number of Emp.</label>
+                                  <div class="col-sm-8">
+                                    <input
+                                      data-field-name="NumOfEmployees"
+                                      type="number"
+                                      [(ngModel)]="accountDetails.numOfEmployees"
+                                      name="numOfEmployees"
+                                      class="form-control">
+                                  </div>
+                                </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Incoterms']">
+                                <label class="col-sm-4 col-form-label">Incoterms</label>
+                                <div class="col-sm-8">
+                                  <select
+                                    class="form-control"
+                                    name="incoTermId"
+                                    data-field-name="Incoterms"
+                                    [(ngModel)]="accountDetails.incotermID">
+                                    <option [value]="-1">None</option>
+                                    <option *ngFor="let it of incotermList" [value]="it.id">{{it?.incotermName}}</option>
+                                  </select>
+                                </div>
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Currency']">
+                                <label class="col-sm-4 col-form-label">Currency</label>
+                                <div class="col-sm-8">
+                                  <!-- <select data-field-name="Currency" class="form-control" [(ngModel)]="accountDetails.currencyId" name="currencyId">
+                                    <option *ngFor="let c of currencyList" [value]="c.currencyId">{{c.name}}</option>
+                                  </select> -->
+                                  <label>{{accountDetails.currencyId}}</label>
+                                </div>
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Website']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                                <label class="col-sm-4 col-form-label"> D & B #</label>
+                                <div class="col-sm-8">
+                                  <input 
+                                  data-field-name="Website" 
+                                  type="text" 
+                                  #DBNum="ngModel"
+                                  maxlength="9"
+                                  [(ngModel)]="accountDetails.DBNum"  
+                                  name="DBNum"
+                                  class="form-control">
+                                  <span
+                                  class="help-block text-danger"
+                                  *ngIf="DBNumInvalid">
+                                  Value must be exactly 9 digits (numbers only).
+                                </span>
+                                </div>
+
+                              </div>
+                        </div>
+                      </div>
+                </div>
+                </div>
+
+            <div [ngClass]="isSupplier() ? 'col-sm-4' : 'col-sm-6'" *ngIf="isCustomer()">
+            <div style="height:100%;" class="row mbm-20">
+                <div class="col-sm-12 bottom-30" *ngFor="let accountType of customerType" >
+                <div class="card card-outline-default">
+                  <div class="card-header border-bottom detailCard"><strong>Customer Details</strong></div>
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Account Types']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                            <label class="col-sm-4 col-form-label">Status</label>
+                              <label class="col-sm-8 col-form-label readonlyLabel" *ngFor="let accountType of customerType">&nbsp;&nbsp;&nbsp;&nbsp;{{accountType.statusName}}</label>
+                        </div>
+
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Parent Company']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                            <label class="col-sm-4 col-form-label">Parent Company</label>
+                            <div class="col-sm-8 wrapper">
+                              <select
+                                [ngStyle]="{'display': !newParentCompany? 'block' : 'none'}"
+                                data-field-name="Parent Company"
+                                class="form-control col-sm-10"
+                                [(ngModel)]="parentCompanyId"
+                                name="parentCompanyId"
+                                (change)="onParentCompanyChanged($event.target.value)">
+                                <option *ngFor="let ah of accountHierarchies"  [value]="ah.accountHierarchyId">{{ah.hierarchyName}}</option>
+                              </select>
+                              <button
+                                [ngStyle]="{'display': (!newParentCompany && !onReadonly)? 'block' : 'none',
+                                  'background-color': canEditParentCompany()? '#ededed' : 'grey'}"
+                                type="button"
+                                [disabled]="!canEditParentCompany()"
+                                class="btn btn-sm pull-right col-sm-2 accountplusButton"
+                                (click)="toggleParentCompanyField()">
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                              </button>
+                              <input
+                                [ngStyle]="{'display': newParentCompany? 'block' : 'none'}"
+                                data-field-name="Parent Company"
+                                type="text"
+                                maxlength="40"
+                                style="width: 86% !important;"
+                                [(ngModel)]="accountDetails.hierarchyName"
+                                name="hierarchyName"
+                                class="form-control pull-left">
+                              <button
+                                [ngStyle]="{'display': (newParentCompany && !onReadonly)? 'block' : 'none'}"
+                                type="button"
+                                class="btn btn-sm pull-right col-sm-2 accountplusButton"
+                                (click)="toggleParentCompanyField()">
+                                <i class="fas fa-keyboard-o" aria-hidden="true"></i>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Region']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                              <label class="col-sm-4 col-form-label">Region</label>
+                              <div class="col-sm-8">
+                                <select data-field-name="Region" class="form-control" [(ngModel)]="accountDetails.accountHierarchyId" name="accountHierarchyId">
+                                  <option *ngFor="let ah of regionOptions"  [value]="ah.accountHierarchyId">{{ah.hierarchyName}}</option>
+                                </select>
+                              </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['Approved Vendor']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                                <label class="col-sm-4 col-form-label">Approved Vendor</label>
+                                <div class="col-sm-8 checkboxAlign">
+                                  <input
+                                    style="width: 30px; height:15px;"
+                                    data-field-name="Approved Vendor"
+                                    type = "checkbox"
+                                    [checked]="accountDetails.approvedVendor"
+                                    (change)="accountDetails.approvedVendor = !accountDetails.approvedVendor"
+                                    name="approvedVendor"
+                                    class="form-control">
+                                </div>
+                              </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['VendorNum']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                        <label class="col-sm-4 col-form-label">Vendor Number</label>
+                        <div class="col-sm-8">
+                          <input
+                            data-field-name="VendorNum"
+                            type="text"
+                            maxlength="50"
+                            [(ngModel)]="accountDetails.vendorNum"
+                            name="vendorNum"
+                            class="form-control">
+                        </div>
+                      </div>
+
+                      <div class="form-group row text-left" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                          <label class="col-sm-4 col-form-label">Payment Terms</label>
+                          <div class="col-sm-8">
+                              <label class="col-form-label readonlyLabel">&nbsp;&nbsp;&nbsp;&nbsp;{{accountType.paymentTermName}}</label>
+                              </div>
+                        </div>
+
+                      <div class="form-group row text-left" *ngxPermissionsOnly="['ProductFocus']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                          <label class="col-sm-4 col-form-label">Product Focus</label>
+                          <div class="col-sm-8">
+                            <select data-field-name="ProductFocus" class="form-control" [(ngModel)]="accountDetails.productFocus" name="productFocus">
+                              <option value="Consumer">Consumer</option>
+                              <option value="Industrial">Industrial</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <div class="form-group row text-left" *ngxPermissionsOnly="['Credit Limit']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                            <label class="col-sm-4 col-form-label">Credit Limit</label>
+                            <div class="col-sm-8 account-money-wrapper">
+                              <span class="account-money">{{accountDetails?.creditLimit | currency: 'USD': 'symbol': '1.2-2'}}</span>
+                            </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngxPermissionsOnly="['Open Balance']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                              <label class="col-sm-4 col-form-label">Open Balance</label>
+                              <div class="col-sm-8 account-money-wrapper">
+                                <span class="account-money">{{accountDetails?.openBalance | currency: 'USD': 'symbol': '1.2-2'}}</span>
+                              </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['EPDSID']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                              <label class="col-sm-4 col-form-label">EPDS Account#</label>
+                              <div class="col-sm-8 account-money-wrapper">
+                                <span class="account-money">{{accountType.epdsId}}</span>
+                              </div>
+                            </div>
+
+                            <div class="form-group row text-left" *ngxPermissionsOnly="['ProductFocus']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}">
+                                <label class="col-sm-4 col-form-label">Ship Requirement</label>
+                                <div class="col-sm-8">
+                                  <select data-field-name="ProductFocus" class="form-control" name="regionsDropDown" [(ngModel)]="accountDetails.shipFromRegionId">
+                                    <option [value]="null"></option>
+                                    <option *ngFor="let r of regionsList" [value]="r.ShipfromRegionID">{{r.RegionName}}</option>
+                                  </select>
+                                </div>
+                              </div>
+                    </div>
+                    </div>
+                    </div>
+                  </div>
+
+                  <div [ngClass]="isCustomer() ? 'col-sm-4' : 'col-sm-6'" *ngIf="isSupplier()" >
+
+                      <div style="height:100%;" class="row mbm-20" *ngFor="let accountType of vendorType">
+                          <div class="col-sm-12 bottom-30">
+                          <div class="card card-outline-default">
+                              <div class="card-header detailCard"><strong>Supplier Details</strong></div>
+                          <div>
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['Account Types']" [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                                  <label class="col-sm-4 col-form-label ">Status</label>
+                                    <label class="col-sm-8 col-form-label readonlyLabel" >&nbsp;&nbsp;&nbsp;&nbsp;{{accountType.statusName}}</label>
+                              </div>
+
+                              <div class="form-group row text-left" *ngxPermissionsOnly="['SupplierRating']" [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                                  <label class="col-sm-4 col-form-label">Rating</label>
+                                  <div class="col-sm-8">
+                                    <input
+                                      type="number"
+                                      data-field-name="SupplierRating"
+                                      maxlength="30"
+                                      class="form-control"
+                                      [(ngModel)]="accountDetails.supplierRating"
+                                      name="supplierRating"/>
+                                  </div>
+                                </div>
+
+                                <div class="form-group row text-left" [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                                    <label class="col-sm-4 col-form-label">Payment Terms</label>
+                                        <label class="col-sm-8 col-form-label readonlyLabel" >&nbsp;&nbsp;&nbsp;&nbsp;{{accountType.paymentTermName}}</label>
+                                  </div>
+
+                                <div class="form-group row text-left" *ngxPermissionsOnly="['CarryStock']" [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                                    <label class="col-sm-4 col-form-label">Carry Stock</label>
+                                    <div class="col-sm-8">
+                                      <select data-field-name="CarryStock" class="form-control" [(ngModel)]="accountDetails.carryStock" name="carryStock">
+                                        <option value="1">Yes</option>
+                                        <option value="0">No</option>
+                                      </select>
+                                    </div>
+                                  </div>
+
+                                  <div class="form-group row text-left" *ngxPermissionsOnly="['MinimumPO']" [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                                      <label class="col-sm-4 col-form-label">Minimum PO</label>
+                                      <div class="col-sm-8">
+                                        <input
+                                          type="number"
+                                          data-field-name="MinimumPO"
+                                          maxlength="240"
+                                          class="form-control"
+                                          [(ngModel)]="accountDetails.minimumPO"
+                                          name="minimumPO"/>
+                                      </div>
+                                    </div>
+                                    <div class="form-group row text-left" *ngxPermissionsOnly="['EPDSID']" [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                                      <label class="col-sm-4 col-form-label">EPDS Vendor#</label>
+                                      <div class="col-sm-8">
+                                        <span class="account-money">{{accountType.epdsId}}</span>
+                                      </div>
+                                    </div>
+
+                              </div>
+                          </div>
+                          </div>
+                          </div>
+                    </div>
+                </div>
+
+                  <div class="row mbm-20">
+                      <div class="col-sm-12 bottom-30">
+                        <div class="card card-outline-default">
+                            <div class="card-header detailCard"><strong>Notes</strong></div>
+                          <div class="row w-100 p-3 form-group" *ngxPermissionsOnly="['ShippingInstructions']" [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}" >
+                                  <label class="col-sm-2 col-form-label">Shipping Notes:</label>
+                                  <div class="col-sm-10">
+                                      <label class="form-control readonlyLabel" type="text" *ngIf="onReadonly">{{accountDetails.shippingInstructions}}</label>
+                                    <textarea
+                                    *ngIf="!onReadonly"
+                                      data-field-name="ShippingInstructions"
+                                      class="form-control"
+                                      name="shippingInstructions"
+                                      rows="5"
+                                      [(ngModel)]="accountDetails.shippingInstructions"></textarea>
+                                  </div>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+
+                    <div class="row mbm-20">
+                        <div class="col-sm-12 bottom-30">
+                          <div class="card card-outline-default">
+                            <div class="row w-100 p-3 form-group" *ngxPermissionsOnly="['ShippingInstructions']"  [ngStyle]="{'display': isCustomer() ? 'flex' : 'none'}" >
+                              <label class="col-sm-2 col-form-label">QC Notes:</label>
+                              <div class="col-sm-10">
+                                  <label class="form-control readonlyLabel" type="text" *ngIf="onReadonly">{{accountDetails.qcNotes}}</label>
+                                  <textarea
+                                  *ngIf="!onReadonly"
+                                    data-field-name="QCNotes"
+                                    class="form-control"
+                                    name="qcNotes" rows="5"
+                                    [(ngModel)]="accountDetails.qcNotes"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                    <div class="row mbm-20">
+                      <div class="col-sm-12 bottom-30">
+                        <div class="card card-outline-default">
+                          <div class="row w-100 p-3 form-group" *ngxPermissionsOnly="['ShippingInstructions']"  [ngStyle]="{'display': isSupplier() ? 'flex' : 'none'}">
+                            <label class="col-sm-2 col-form-label">Purchase Order Notes:</label>
+                            <div class="col-sm-10">
+                                <label class="form-control readonlyLabel" type="text" *ngIf="onReadonly">{{accountDetails.poNotes}}</label>
+                              <textarea
+                              *ngIf="!onReadonly"
+                                data-field-name="PONotes"
+                                class="form-control"
+                                name="poNotes" rows="5"
+                                [(ngModel)]="accountDetails.poNotes"></textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+          </div>
+
+
+              <!--<div class="form-group row text-left" *ngxPermissionsOnly="['Organization']">
+                <label class="col-sm-3 col-form-label">Organization</label>
+                <div class="col-sm-7">
+                  <select data-field-name="Organization" class="form-control" [(ngModel)]="accountDetails.organizationId" name="organizationId" required #AccountOrganization="ngModel">
+                    <option *ngFor="let o of organizationList"  [value]="o.id">{{o.name}}</option>
+                  </select>
+                  <span
+                  class="help-block text-danger"
+                  [hidden]="(AccountOrganization.untouched && !formSubmitted) || AccountOrganization.valid">
+                    Organization is required.
+                  </span>
+                </div>
+              </div>-->
+
+
+              <!-- <div class="form-group row text-left" *ngxPermissionsOnly="['Account Types']">
+                <label class="col-sm-3 col-form-label">Account Type</label>
+                <div class="col-sm-8">
+                  <span
+                  class="help-block text-danger"
+                  [hidden]="!formSubmitted || accountTypesValid">
+                    At least one account type is required.
+                  </span>
+                </div>
+              </div> -->
+
+
+              <!-- <div class="col-sm-9 columnBorderNotes">
+                  <div class="row form-group" *ngxPermissionsOnly="['PONotes']">
+                      <label class="col-sm-1 col-form-label notesFont">Notes:</label>
+                  <div class="col-sm-11">
+                      <label class="notesContent form-control" type="text" *ngIf="onReadonly">{{poDetails.poNotes}}</label>
+                    <textarea
+                    *ngIf="!onReadonly"
+                      data-field-name="PONotes"
+                      class="form-control shippingNotes"
+                      name="PONotes" rows="5"
+                      [(ngModel)]="poDetails.poNotes"></textarea>
+                  </div>
+                </div>
+                </div> -->
+
+            <div class="col-sm-2">
+                <div class="card card-outline-default accountTypes">
+                    <div class="card-header border-bottom detailCard"><strong>Account Types</strong></div>
+                      <div class="form-group row text-left" *ngFor="let accountType of customerType">
+                          <div class="form-group">&nbsp;
+                              <input name="options"
+                              data-field-name="Account Types"
+                              type = "checkbox"
+                              (change)="accountTypeChanged($event, accountType)"
+                              [checked]="accountType.checked"
+                              />{{accountType.accountTypeName}}
+                          </div>
+                          </div>
+
+                          <div class="form-group row text-left" *ngFor="let accountType of vendorType">
+                              <div class="form-group">&nbsp;
+                                  <input name="options"
+                                  data-field-name="Account Types"
+                                  type = "checkbox"
+                                  (change)="accountTypeChanged($event, accountType)"
+                                  [checked]="accountType.checked"
+                                  />{{accountType.accountTypeName}}
+                              </div>
+                          </div>
+                  </div>
+                  <br>
+                    <div class="card card-outline-default ownership-section">
+                        <div class="card-header detailCard">
+                          <strong>Owners</strong>
+                          <i class="far fa-edit pull-right" (click)="onOwnershipClick()"></i>
+                        </div>
+                          <div class="form-group">
+                        <ownership-view
+                            [objectId]="accountId"
+                            [objectTypeId]="accountObjectTypeId">
+                          </ownership-view>
+                        </div>
+                    </div>
+            </div>
+          </div>
+        </form>
+      <simple-notifications
+      [options]="notifyOptions">
+    </simple-notifications>
+    <!-- </div> -->
+    <!-- </div> -->
+
+
+
+    <div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <ownership-assignment
+        [objectId]="accountId"
+        [objectTypeId]="accountObjectTypeId">
+      </ownership-assignment>
+    </div>
+
+

@@ -1,0 +1,59 @@
+<div class="container-fluid">
+  <div class="searchMaster">
+    <div class="widget-body">
+      <div class="row mbm-20">
+        <div class="col-lg-12 col-12 bottom-30">
+          <div widget class="card errorDetail">
+            <div class="card-header">
+              <span>Error Details - id#{{errorLog?.errorId}} - User: {{errorLog?.user}}</span>
+              <div class="widget-controls">
+                <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+                <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+                <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+                <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+              </div>
+            </div>
+
+            <div class="card-block widget-body">
+              <div class="row col-md-12">
+                <label><strong>Error Message:</strong>&nbsp;&nbsp;{{errorLog?.errorMessage}}</label>
+              </div>
+              <div class="row col-md-12" *ngIf="errorLog?.innerExceptionMessage">
+                <label><strong>Inner Exception:</strong>&nbsp;&nbsp;{{errorLog?.innerExceptionMessage}}</label>
+              </div>
+              <div class="row col-md-12">
+                <label><strong>Exception Type:</strong>&nbsp;&nbsp;{{errorLog?.exceptionType}}</label>
+              </div>
+              <div class="row col-md-12" *ngIf="errorLog?.url">
+                <label><strong>url:</strong>&nbsp;&nbsp;{{errorLog?.url}}</label>
+              </div>
+              <div class="row col-md-12">
+                <label><strong>Application:</strong>&nbsp;&nbsp;{{errorLog?.application}}</label>
+              </div>
+              <div class="row col-md-12">
+                <label><strong>Timestamp:</strong>&nbsp;&nbsp;{{errorLog?.timestamp}}</label>
+              </div>
+              <div class="row col-md-12">
+                <label><strong>StackTrace:</strong>&nbsp;&nbsp;{{errorLog?.stackTrace}}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div widget class="card clWidget">
+    <div class="card-header">
+      <span>Post Data</span>
+      <div class="widget-controls">
+        <a data-widgster="expand" class="transition"><i class="fas fa-chevron-down"></i></a>
+        <a data-widgster="collapse" href="#" class="transition"><i class="fas fa-chevron-up"></i></a>
+        <a data-widgster="fullscreen" href="#" class="transition"><i class="fas fa-expand-arrows-alt"></i></a>
+        <a data-widgster="restore" href="#" class="transition"><i class="fas fa-compress"></i></a>
+      </div>
+    </div>
+    <div class="card-block widget-body">
+      <div id="postData"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,265 @@
+<div class="container-fluid" id="wrapper" [ngBusy]="busyConfig">
+<form 
+  #soItemForm="ngForm"
+  [readonlyField]="onReadonly" 
+  [objectPermissions]="itemPermissions" 
+  [showSync]="showSync"
+  (onDeleteClick)="onDeleteClick($event)"
+  (onFormStatusChange)="onFormStatusChange($event)" 
+  (onOwnershipClick)="onOwnershipClick($event)">
+
+  <div class="row detailParent">
+      <div class="col-sm-10">
+        <div class="row bottom-30">
+          <div class="col-sm-4 mbm-20">
+              <div class="card card-outline-default">
+                  <div class="card-header detailCard"><strong>Item Details</strong></div>
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['MPN']">
+                      <label class="col-sm-4 col-form-label">MPN</label>
+                        <div class="col-sm-8" *ngxPermissionsOnly="['MPN']"  [ngClass]="{'has-danger': mpn.invalid && (formSubmitted || mpn.touched)}">
+                          <input
+                          data-field-name="MPN" 
+                          type="text" 
+                          class="form-control" 
+                          name="MPN" 
+                          required
+                          #mpn="ngModel"
+                          [(ngModel)]="details.MPN"
+                         />
+                          
+                        </div>
+                       
+                    </div>
+
+                    <!-- <div class="form-group row text-left" *ngxPermissionsOnly="['Manufacturer']">
+                      <label class="col-sm-4 col-form-label">Manufacturer</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Manufacturer" name="ManufacturerID" [(ngModel)]="details.ManufacturerID" class="selectpicker form-control"
+                            *ngxPermissionsOnly="['Manufacturer']">
+                            <option *ngFor="let mfr of mfrs" [ngValue]="mfr.MfrID">{{mfr.MfrName}}</option>
+                          </select>
+                        </div>
+                    </div> -->
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Manufacturer']" [ngClass]="{'has-danger':  manufacturer.invalid  &&(formSubmitted || manufacturer.touched)  }">
+                      <label class="col-sm-4 col-form-label">Manufacturer</label>
+                        <div class="col-sm-8 wrapper">
+                            <ng2-completer 
+                              #mfrCompleter 
+                              [inputClass]="'Mfr-Typeheader form-control col-sm-10'"  
+                              name="mfrCompleter" 
+                              [(ngModel)]="selectedName"
+                              (selected)="onMfrtSelected($event)"
+                              (opened)="onDropdownOpened()"
+                              [datasource]="dataRemote" 
+                              [minSearchLength]="2"
+                              [fillHighlighted]=false required #manufacturer="ngModel" >
+                            </ng2-completer>
+                            <button [disabled]="!canCreateManufacturer" style="font-size: 0.870rem;" id="btnAddMfr" [ngStyle]="{'display': !onReadonly? 'inline-block': 'none'}" class="btn btn-sm pull-right col-sm-2 plusButton" (click)="AddManufacturer()" type="button" >
+                                <i class="fas fa-plus" aria-hidden="true"></i>
+                              </button>
+                        </div>                  
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Status']" [ngClass]="{'has-danger': !details.StatusID && formSubmitted}">
+                      <label class="col-sm-4 col-form-label">Status</label>
+                        <div class="col-sm-8">
+                          <select data-field-name="Status" name="StatusID" [(ngModel)]="details.StatusID"  #newStatusID="ngModel" required
+                           class="selectpicker form-control"
+                            *ngxPermissionsOnly="['Status']">
+                            <option 
+                            *ngFor="let status of statusList" [value]="status.ItemStatusID">{{status.StatusName}}</option>
+                          </select>
+
+                        </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Group']">
+                        <label class="col-sm-4 col-form-label">Group</label>
+                      <div class="col-sm-8">
+                        <label class="col-form-label readonlyLabel">&nbsp;&nbsp;&nbsp;&nbsp;{{details.GroupName}}</label>
+                      </div>
+                    </div>
+
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Commodity']"  [ngClass]="{'has-danger': !details.CommodityID && formSubmitted}" >
+                        <label class="col-sm-4 col-form-label">Commodity</label>
+                      <div class="col-sm-8" *ngxPermissionsOnly="['Commodity']">
+                        <select data-field-name="Commodity" name="CommodityID" [(ngModel)]="details.CommodityID"
+                         class="selectpicker form-control" required #newCommodity="ngModel">
+                          <option *ngFor="let com of commodityList" [ngValue]="com.CommodityID">{{com.CommodityName}}</option>
+                        </select>
+                      </div> 
+                    </div>
+              
+                    <div class="form-group row text-left" *ngxPermissionsOnly="['Description']" style="align-items: start;">
+                      <label class="col-sm-4 col-form-label">Description</label>
+                        <div class="col-sm-8" *ngxPermissionsOnly="['Description']">
+                          <textarea data-field-name="Description" name="Description" class="form-control descriptionReadOnly" [(ngModel)]="details.Description"
+                            rows="6">
+                          </textarea>
+                        </div>
+                    </div>
+              </div>
+          </div>
+
+          <div class="col-sm-4 mbm-20">
+              <div class="card card-outline-default">
+                <div class="form-group row text-left" *ngxPermissionsOnly="['EU RoHS']">
+                  <label class="col-sm-4 col-form-label">EU RoHS</label>
+                    <div class="col-sm-8" *ngxPermissionsOnly="['EU RoHS']">
+                      <select data-field-name="EU RoHS" id="ddlEuRohs" class="selectpicker form-control" name="EUROHS" [(ngModel)]="details.EUROHS">
+                        <option value="0">Not Compliant</option>
+                        <option value="1">Compliant</option>
+                      </select>
+                    </div>
+                </div>
+
+                <div class="form-group row text-left" *ngxPermissionsOnly="['CN RoHS']">
+                    <label class="col-sm-4 col-form-label">CN RoHS</label>
+                  <div class="col-sm-8">
+                    <select data-field-name="CN RoHS" id="ddlEuRohs" class="selectpicker form-control" name="CNROHS" [(ngModel)]="details.CNROHS"
+                      *ngxPermissionsOnly="['CN RoHS']">
+                      <option value="0">Not Compliant</option>
+                      <option value="1">Compliant</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="form-group row text-left" *ngxPermissionsOnly="['ECCN']">
+                    <label class="col-sm-4 col-form-label">ECCN</label>
+                  <div class="col-sm-8">
+                    <input *ngxPermissionsOnly="['ECCN']" data-field-name="ECCN" type="text" class="form-control" name="ECCN" [(ngModel)]="details.ECCN"/>
+                  </div>
+                </div>
+
+                <div class="form-group row text-left" *ngxPermissionsOnly="['HTS']">
+                    <label class="col-sm-4 col-form-label">HTS Code</label>
+                  <div class="col-sm-8" *ngxPermissionsOnly="['HTS']">
+                    <input data-field-name="HTS" type="text" class="form-control" name="HTS" [(ngModel)]="details.HTS"/>
+                  </div>
+                </div>
+
+                <div class="form-group row text-left" *ngxPermissionsOnly="['MSL']">
+                    <label class="col-sm-4 col-form-label">MSL</label>
+                  <div class="col-sm-8" *ngxPermissionsOnly="['MSL']">
+                    <input data-field-name="MSL" type="text" class="form-control" name="MSL" [(ngModel)]="details.MSL"/>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div class="col-sm-4 mbm-20">
+            <div class="card card-outline-default">
+              <div class="form-group row text-left" *ngxPermissionsOnly="['Length']">
+                <label class="col-sm-4 col-form-label">Length(CM)</label>
+                <div class="col-sm-8" *ngxPermissionsOnly="['Length']">
+                  <input data-field-name="Length" type="text" name="Length" class="form-control" [(ngModel)]="details.Length" />
+                </div>
+              </div>
+
+              <div class="form-group row text-left" *ngxPermissionsOnly="['Width']">
+                  <label class="col-sm-4 col-form-label">Width(CM)</label>
+                    <div class="col-sm-8">
+                      <input *ngxPermissionsOnly="['Width']" data-field-name="Width" type="text" name="Width" class="form-control" [(ngModel)]="details.Width" />
+                    </div>
+              </div>
+
+              <div class="form-group row text-left" *ngxPermissionsOnly="['Depth']">
+                  <label class="col-sm-4 col-form-label">Depth(CM)</label>
+                    <div class="col-sm-8" *ngxPermissionsOnly="['Depth']">
+                      <input data-field-name="Depth" type="text" name="Depth" class="form-control" [(ngModel)]="details.Depth" />
+                    </div>
+              </div>
+
+              <div class="form-group row text-left" *ngxPermissionsOnly="['Weight']">
+                  <label class="col-sm-4 col-form-label">Weight(G)</label>
+                    <div class="col-sm-8" *ngxPermissionsOnly="['Weight']">
+                      <input data-field-name="Weight" type="text" name="Weight" class="form-control" [(ngModel)]="details.Weight" />
+                    </div>
+              </div>
+            </div>
+          </div>
+          </div>
+          </div>
+
+
+      <div class="col-sm-2">
+          <div class="card card-outline-default accountTypes">
+              <div class="card-header detailCard"><strong>Owners</strong></div>
+              <div>
+                <ownership-view
+                  [objectId]="itemId"
+                  [objectTypeId]="itemObjectTypeId">
+                </ownership-view>
+              </div>
+          </div>
+      </div>
+      </div>
+</form>
+<simple-notifications [options]="notifyOptions"></simple-notifications>
+
+<div id="ownershipModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <ownership-assignment
+    [objectId]="itemId"
+    [objectTypeId]="itemObjectTypeId">
+  </ownership-assignment>
+</div>
+
+</div>
+
+<div id="MfrModal" class="modal mfrModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Create Manufacturer</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          <form novalidate
+          class="ng-pristine ng-invalid ng-touched"
+          #newMfrForm="ngForm">
+          <br/>
+          <div class="col-md-12">
+            <div class="form-group">
+              <label><b>Manufacturer Name</b></label>
+            <input  #fName="ngModel" (keypress)="mfrTypeFunction()" name="name" class="form-control checking-field ng-untouched ng-pristine ng-invalid" [(ngModel)]="newMfr.MfrName" required="" type="text">
+            <span *ngIf="manufacurerExists" class="help-block text-danger">This manufacturer exists in the database.</span>  
+            <span *ngIf="fName.invalid && (fName.dirty || fName.touched) || mfrNameValid" class="error help-block text-danger">Field is required</span>  
+          </div>
+            <div class="form-group">
+              <label><b>Website</b></label>
+              <input id="url" (keypress)="webTypeFunction()" placeholder="https://example.com" formcontrolname="website" #WName="ngModel" class="form-control checking-field ng-invalid ng-touched ng-dirty" [(ngModel)]="newMfr.MfrUrl" name="url" type="url" required>
+              <span *ngIf="WName.invalid && (WName.dirty || WName.touched) || webNameValid" class="help-block text-danger">Field is required</span>  
+            </div>
+          </div>
+          
+            <br/>
+            <div class="modal-footer">
+                <input class="pull-left mr-auto" id="clear" (click)="ClearFields()" type="reset" value="Clear Fields">
+                <button [disabled]="fName.invalid" (click)="CreateManufacturer()" type="button" class="btn btn-primary">Create</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </form>
+        </div>
+      </div>
+      </div>
+
+      <div id="MfrExist" class="modal" tabindex="-1" role="dialog">
+          <div class="modal-dialog">
+              <div class="modal-header">
+                  <h5 class="modal-title">Important Note:</h5>
+                </div>
+            <div class="modal-content">
+                <br/>
+                <div class="bottom-30">
+                  <label><b>This Manufacturer doesn't exist in the database. Kindly choose an existing manufacturer or create a new one by clicking on the green box <button id="btnAddMfrDisable" type="button" disabled ><i class="fas fa-plus" aria-hidden="true"></i></button>
+                    on the right side of the manufacturer field.</b></label> 
+              </div>
+                  <div class="modal-footer">
+                      <button (click)="CloseNoteModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  </div>
+              </div>
+            </div>
+            </div>
+

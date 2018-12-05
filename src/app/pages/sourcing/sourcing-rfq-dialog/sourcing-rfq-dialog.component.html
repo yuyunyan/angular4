@@ -1,0 +1,117 @@
+<div class="modal fade" id="dlgAddRfq" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="header-text">
+                    Add Rfq
+                </div>
+                <button type="button" class="close" data-dismiss="modal" (click)="closeDialog()" #rfqCloseBtn><span aria-hidden="true">×</span><span class="sr-only">Cancel</span></button>
+            </div>
+            <div class="modal-body">
+                <form class="form-addrfq" (ngSubmit)="onSave()">
+                  RFQ Details<br>
+                    <div *ngFor="let detail of rfqDetails; let i = index">
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="supplierDropdown">Supplier</label>
+                          <div class="col-9">
+                              <select class="form-control" name="supplierDropdown" [(ngModel)]="rfqDetails[i].supplierId" (change)="onSupplierChange($event.target.value)">
+                              <option *ngFor="let supplier of accountsByObjectType" [selected]="rfqDetails[i].supplierId === supplier.accountId" [value]="supplier.accountId">{{supplier.accountName}}</option> 
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="contactDropdown">Contact</label>
+                          <div class="col-9">
+                              <select class="form-control" name="contactDropdown" [(ngModel)]="detail.contactId">
+                                <option *ngFor="let contact of contacts" [value]="contact.contactId">{{contact.firstName}}&nbsp;{{contact.lastName}}</option>  
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="currencies{{i}}">Currency</label>
+                          <div class="col-9">
+                              <select class="form-control" name="currencies{{i}}" [(ngModel)]="detail.currencyId">
+                              <option *ngFor="let currency of currencies" [value]="currency.id">{{currency.id}}</option> 
+                            </select>
+                          </div>                 
+                      </div>  
+                    </div>
+                    <!-- <div class="form-group row">                      
+                      <button type="button" (click)="incrementRfqDetailsArray()"><span aria-hidden="true">+</span><span class="sr-only">Add New Supplier / Contact</span></button>
+                    </div> -->
+                    <br>
+                    RFQ Line Details
+                    <br>
+                    <div *ngFor="let line of rfqLines; let i = index;trackBy:trackByIndex;">                        
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="{{line.partNumber}}-{{i}}">Part Number</label>
+                          <div class="col-9">
+                              <input class="form-control" type="text" id="{{line.partNumber}}-{{i}}" name="{{line.partNumber}}-{{i}}" [disabled]="true" [(ngModel)]="rfqLines[i].partNumber">
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="{{line.manufacturer}}{{i}}">Mfr</label>
+                          <div class="col-9">
+                              <input class="form-control" type="text" name="{{line.manufacturer}}{{i}}" [(ngModel)]="rfqLines[i].manufacturer">
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="commodity{{i}}">Commodity</label>
+                          <div class="col-9">
+                              <select class="form-control" name="commodity{{i}}" [(ngModel)]="line.commodityId">
+                              <option *ngFor="let commodity of commodities" [value]="commodity.id">{{commodity.name}}</option> 
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="{{line.qty}}{{i}}">Qty</label>
+                          <div class="col-3">
+                              <input class="form-control" type="number" max=50 id="{{line.qty}}{{i}}" name="{{line.qty}}{{i}}" [(ngModel)]="line.qty">
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="{{line.dateCode}}{{i}}">Date Code</label>
+                          <div class="col-3">
+                              <input class="form-control" type="text" id="{{line.dateCode}}{{i}}" name="{{line.dateCode}}{{i}}" [(ngModel)]="line.dateCode">
+                          </div>
+                      </div>                      
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="cost{{i}}">Cost</label>
+                          <div class="col-3">
+                              <input class="form-control" type="number" id="cost{{i}}" name="cost{{i}}" [(ngModel)]="line.targetCost">
+                          </div>                       
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="packaging{{i}}">Packaging</label>
+                          <div class="col-9">
+                              <select class="form-control" name="packaging{{i}}" [(ngModel)]="line.packagingId">
+                              <option *ngFor="let type of packagingTypes" [value]="type.id">{{type.name}}</option> 
+                            </select>
+                          </div>
+                      </div>
+                      <div class="form-group row">
+                          <label class="col-3 col-form-label" for="notes">Notes</label>
+                          <div class="col-9">
+                              <input class="form-control" type="text" id="{{line.notes}}{{i}}" name="{{line.notes}}{{i}}" [(ngModel)]="line.note">
+                          </div>                                              
+                      </div>
+                      <br>  
+                    </div>
+                    <div class="modal-footer">
+                      <div class="btn-group btn-group-justified" role="group" aria-label="group button">
+                        <div class="btn-group" role="group">
+                            <button type="submit" id="btnSaveRfq" class="btn btn-default btn-modal" role="button"><i class="fas fa-check" aria-hidden="true"></i>&nbsp; Save</button>
+                        </div>
+
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-modal" id="btnCloseModal" data-dismiss="modal" role="button"><i class="fa fas fa-times" aria-hidden="true"></i> &nbsp; Cancel</button>
+                        </div>
+                      </div>
+                    </div>
+                </form>
+            </div>
+
+            
+        </div>
+    </div>
+</div>

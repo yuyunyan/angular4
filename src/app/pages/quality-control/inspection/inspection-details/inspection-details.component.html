@@ -1,0 +1,125 @@
+<report-modal [reportUrl]="identifiedStockReportUrl" [cssSelectorClass]="identifiedStockReportClass"></report-modal>
+<report-modal [reportUrl]="inspectionReportUrl" [cssSelectorClass]="inspectionReportClass"></report-modal> <!-- [display]='landscape' -->
+
+<div class="row detailParent"> 
+  <div class="col-sm-12">
+      <div class="row bottom-30"> 
+        <div class="col-sm-6">  
+            <div class="card card-outline-default">
+              <div  class="card-header detailCard"><strong>Item Details</strong></div>
+              <div class="row"> 
+                <div class="col-sm-6">
+                  <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Item Number</label>
+                      <label class="col-sm-8"><button class="btn btn-link pl-0" (click)="routeItem()">{{inspDetails.PartNumber}}</button></label>
+                  </div>
+                  <div class="form-group row text-left">
+                    <label style="white-space: nowrap" class="col-sm-4 col-form-label">Manufacturer</label>
+                    <label class="col-sm-8 col-form-label readonlyLabel">{{inspDetails.MfrName}}</label>
+                  </div>
+                  <div class="form-group row text-left">
+                    <label class="col-sm-4 col-form-label">HTS</label>
+                    <label class="col-sm-8 col-form-label readonlyLabel">{{itemDetails?.HTS}}</label>
+                  </div>
+              
+                  <div class="form-group row text-left">
+                    <label class="col-sm-4 col-form-label">Description</label>
+                    <label class="col-sm-8 col-form-label readonlyLabel">{{inspDetails.PartDescription}}</label>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group row text-left">
+                    <label class="col-sm-4 col-form-label">ECCN</label>
+                    <label class="col-sm-8 col-form-label readonlyLabel">{{itemDetails?.ECCN}}</label>
+                  </div>
+                  <div class="form-group row text-left">
+                    <label class="col-sm-4 col-form-label">MSL</label>
+                    <label class="col-sm-8 col-form-label readonlyLabel">{{itemDetails?.MSL}}</label>
+                  </div>
+                  <div class="form-group row text-left">
+                    <label class="col-sm-4 col-form-label">RoHS</label>
+                    <label class="col-sm-8 col-form-label readonlyLabel">{{itemDetails?.CNROHS}}</label>
+                  </div>
+                  <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Stock</label>
+                      <p class="col-sm-8 col-form-label readonlyLabel">{{inspDetails.LotNumber}}</p>
+                    </div>
+        
+                    <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Warehouse</label>
+                      <p class="col-sm-8 col-form-label readonlyLabel">{{inspDetails.WarehouseName}}</p>
+                    </div>
+                </div>
+            </div> 
+            </div>
+        </div>
+
+      <div class="col-sm-6">
+          <div class="card card-outline-default">
+            <div class="row">
+              <div class="col-sm-6">
+                  <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Vendor</label>
+                      <label class="col-sm-8"><button class="btn btn-link pl-0" (click)="routeVendor()">{{inspDetails.VendorAccount}}</button></label>
+                    </div>
+
+                    <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Vendor Type</label>
+                      <p class="col-sm-8">{{inspDetails.vendorType}}</p>
+                    </div>
+                
+                    <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Customer</label>
+                      <label class="col-sm-8"><button class="btn btn-link pl-0" (click)="routeCustomer()"> {{inspDetails.CustomerAccount}}</button></label>
+                    </div>
+                
+                    <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">PO Quantity</label>
+                      <p class="col-sm-8">{{inspDetails.ItemQty}}</p>
+                    </div>
+
+                    <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Inspection Type</label>
+                      <p class="col-sm-8">{{inspDetails.inspectionTypeName}}</p>
+                    </div>
+
+                    <div class="form-group row text-left">
+                        <label class="col-sm-4 col-form-label">QC Notes</label>
+                        <p class="col-sm-8 label-wrap">{{inspDetails.QCNotes}}</p>
+                      </div>
+              </div>
+              <div class="col-sm-6">
+                  <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Purchase Order</label>
+                      <label class="col-sm-8"><button class="btn btn-link pl-0" (click)="routePO()">{{ sopoUtilities.DisplayOrderId(inspDetails.poExternalID, inspDetails.PurchaseOrderID) }}</button></label>
+                  </div>
+                  <div class="form-group row text-left">
+                      <label class="col-sm-4 col-form-label">Sales Order</label>
+                      <label class="col-sm-8"><button class="btn btn-link pl-0" (click)="routeSO()">{{ sopoUtilities.DisplayOrderId(inspDetails.soExternalID, inspDetails.SalesOrderID) }}</button></label>
+                  </div>
+              </div>
+            </div>
+      </div>
+  </div>
+</div>
+<div class="row bottom-30">
+    <div class="col-sm-12">
+        <div class="card card-outline-default">
+            <div class="card-header detailCard"><strong>Notes</strong></div>
+              <div class="row w-100 p-4 form-group">
+                <label class="col-sm-1 col-form-label pl-0">QC Notes</label>
+                <div class="col-sm-10 pl-0">
+                  <label class="form-control readonlyLabel pl-0" type="text" *ngIf="onReadonly ">{{inspDetails.QCNotes}}</label>
+                </div>
+              </div>
+          </div>
+    </div>
+  </div>
+</div>
+
+
+  </div>
+
+  <div id="inspectionDocModal">
+    <documents [disableToast]="true" [objectId]="inspectionId" [objectTypeId]="104" (count)="documentCountChanged($event)"></documents>
+  </div>

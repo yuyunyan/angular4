@@ -1,0 +1,711 @@
+  <form class="form" #newCustomerForm="ngForm" [ngBusy]="busyConfig">
+    <div class="row form-section-description-wrapper">
+      <div class="col-md-6">
+        <div class="row text-left">
+          <label class="col-sm-5 offset-sm-1 col-form-label" style="font-weight: 900;">Account Information</label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+  
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Name</label>
+          <div class="col-sm-7">
+            <input 
+              class="form-control checking-field"
+              name="name"
+              #newCustomerName="ngModel"
+              maxlength="40"
+              required
+              [(ngModel)]="newCustomer.name">
+            <span
+              class="help-block text-danger"
+              *ngIf="newCustomerName.invalid && (newCustomerName.dirty || newCustomerName.touched)">
+              Customer is required.
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label">Website</label>
+          <div class="col-sm-7">
+            <input
+              class="form-control"
+              name="website"
+              maxlength="1280"
+              #accountWebsite="ngModel"
+              [(ngModel)]="newCustomer.website"
+              pattern="^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$">
+            <span 
+              class="help-block text-danger"
+              *ngIf="accountWebsite.touched && accountWebsite.invalid">
+              Website input is not valid.
+            </span>
+          </div>
+        </div>
+  
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Company Type</label>
+          <div class="col-sm-7">
+            <select 
+              class="form-control checking-field"
+              name="companyTypeId"
+              #newCustomerCompanyTypeId="ngModel"
+              required
+              [(ngModel)]="newCustomer.companyTypeId">
+              <option *ngFor="let c of companyTypes" [value]="c.companyTypeId"> {{c.companyTypeName}}</option>
+            </select>
+            <span
+              class="help-block text-danger"
+              *ngIf="newCustomerCompanyTypeId.invalid && (newCustomerCompanyTypeId.dirty || newCustomerCompanyTypeId.touched)">
+              Company Type is required.
+            </span>
+          </div>
+        </div>
+
+        <!-- <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Status</label>
+            <div class="col-sm-7">
+              <select 
+                class="form-control checking-field"
+                name="statusId"
+                #newCustomerstatusId="ngModel"
+                required
+                [(ngModel)]="newCustomer.statusId">
+                <option *ngFor="let s of statusList" [value]="s.optionId"> {{s.optionName}}</option>
+              </select>
+              <span
+                class="help-block text-danger"
+                *ngIf="newCustomerstatusId.invalid && (newCustomerstatusId.dirty || newCustomerstatusId.touched)">
+                Status is required.
+              </span>
+            </div>
+          </div>
+   -->
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Organization</label>
+          <div class="col-sm-7">
+            <select 
+              class="form-control checking-field"
+              name="organizationId"
+              #newAccountOrganization="ngModel"
+              required
+              [(ngModel)]="newCustomer.organizationId">
+              <option *ngFor="let o of organizations" [value]="o.id"> {{o.name}}</option>
+            </select>
+            <span
+              class="help-block text-danger"
+              *ngIf="newAccountOrganization.invalid && (newAccountOrganization.dirty || newAccountOrganization.touched)">
+              Organization is required.
+            </span>
+          </div>
+        </div>
+  
+      </div>
+  
+      <div class="col-md-6">
+        <div class="form-group row text-left">
+          <label class="col-sm-3 col-form-label req-account-label">Account Type</label>
+          <div class="col-sm-7">
+            <div class = "input-group w-100" *ngFor="let accountType of accountTypesBoundData">
+              <span class="input-group-addon">
+                <input name="options"
+                  type = "checkbox" 
+                  (change)="accountType.checked = $event.target.checked"
+                  [checked]="accountType.checked"
+                  />
+              </span>
+              <span class="input-group-addon checkbox-label-wrapper">
+                <label for="accountType" >{{accountType.accountTypeName}}</label>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <hr/>  
+  <div class="row form-section-description-wrapper">
+    <div class="col-md-6">
+      <div class="row text-left">
+        <label class="col-sm-5 offset-sm-1 col-form-label" style="font-weight: 900;">Contact Information</label>
+      </div>
+    </div>
+  </div>
+  <br>
+  <div class="row">
+    <div class="col-md-6">
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">First Name</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="firstName"
+            maxlength="40"
+            required
+            #newContactFirstName="ngModel"
+            [(ngModel)]="newCustomer.contact.firstName">
+          <span
+            class="help-block text-danger"
+            *ngIf="newContactFirstName.invalid && (newContactFirstName.dirty || newContactFirstName.touched)">
+            First name is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Last Name</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="lastName"
+            maxlength="40"
+            required
+            #newContactLastName="ngModel"
+            [(ngModel)]="newCustomer.contact.lastName">
+          <span
+            class="help-block text-danger"
+            *ngIf="newContactLastName.invalid && (newContactLastName.dirty || newContactLastName.touched)">
+            Last name is required.
+          </span>
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Title</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            maxlength="40"
+            name="title"
+            [(ngModel)]="newCustomer.contact.title">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 offset-sm-1 col-form-label">Note</label>
+        <div class="col-sm-7">
+          <textarea
+            class="form-control"
+            name="note"
+            rows="3"
+            [(ngModel)]="newCustomer.contact.note">
+          </textarea>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Office Ph</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="officePhone"
+            maxlength="30"
+            [(ngModel)]="newCustomer.contact.officePhone">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Mobile Ph</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            maxlength="30"
+            name="mobilePhone"
+            [(ngModel)]="newCustomer.contact.mobilePhone">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Fax</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="fax"
+            maxlength="30"
+            [(ngModel)]="newCustomer.contact.fax">
+        </div>
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Email</label>
+        <div class="col-sm-7">
+          <input 
+            class="form-control"
+            name="email"
+            maxlength="240"
+            [(ngModel)]="newCustomer.contact.email"
+            [pattern]="emailRegExp"
+            #accountEmail="ngModel">
+            <span class="help-block text-danger" 
+              *ngIf="accountEmail.invalid && (accountEmail.dirty || accountEmail.touched)">
+              Please enter a valid email address.
+            </span>
+        </div>                                  
+      </div>
+
+      <div class="form-group row text-left">
+        <label class="col-sm-3 col-form-label">Contact Method</label>
+        <div class="col-sm-7">
+          <select 
+            class="form-control"
+            name="preferredContactMethodId"
+            #newAccountPreferredContactMethodId="ngModel"
+            [(ngModel)]="newCustomer.contact.preferredContactMethodId">
+            <option *ngFor="let p of preferredContactMethods" [value]="p.id"> {{p.name}}</option>
+          </select>
+          <span
+            class="help-block text-danger"
+            *ngIf="!accountPage && newAccountPreferredContactMethodId.invalid && (newAccountPreferredContactMethodId.dirty || newAccountPreferredContactMethodId.touched)">
+            Prefered contact is required.
+          </span>
+        </div>
+      </div>
+      
+    </div>
+
+  </div>
+  <br/>
+  <hr>
+  <div class="row form-section-description-wrapper">
+      <div class="col-md-6">
+        <div class="row text-left">
+          <label class="col-sm-7 offset-sm-1 col-form-label" style="font-weight: 900;">Location Information - Bill To</label>
+        </div>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-md-6">
+  
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Location name</label>
+          <div class="col-sm-7">
+            <input 
+              class="form-control checking-field"
+              name="locationName"
+              #newCustomerName="ngModel"
+              maxlength="40"
+              required
+              [(ngModel)]="newCustomer.location.LocationName">
+            <span
+              class="help-block text-danger"
+              *ngIf="newCustomerName.invalid && (newCustomerName.dirty || newCustomerName.touched)">
+              Location name required.
+            </span>
+          </div>
+        </div>
+        
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Location Type</label>
+          <div class="col-sm-7">
+            <select 
+              class="form-control"
+              name="LocationTypeID"
+              required
+              disabled="disabled"
+              #newLocationType="ngModel"
+              [(ngModel)]="newCustomer.location.LocationTypeID">
+              <option *ngFor="let l of locationTypes" [value]="l.id"> {{l.name}}</option>
+            </select>
+            <span
+              class="help-block text-danger"
+              *ngIf="newLocationType.invalid && (newLocationType.dirty || newLocationType.touched)">
+              Location Type required.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group row text-left">
+          <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Country</label>
+          <div class="col-sm-7">
+            <select 
+              class="form-control checking-field"
+              name="CountryID"
+              required
+              #locationCountry="ngModel"
+              [(ngModel)]="newCustomer.location.CountryID"
+              (change)="countryChanged($event.target.value)">
+              <option *ngFor="let c of countryList" [value]="c.CountryID"> {{c.CountryName}}</option>
+            </select>
+            <span
+              class="help-block text-danger"
+              *ngIf="locationCountry.invalid && (locationCountry.dirty || locationCountry.touched)">
+              Country is required.
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label">Address Line 1</label>
+            <div class="col-sm-7">
+              <input 
+                class="form-control"
+                name="AddressLine1"
+                maxlength="40"
+                [(ngModel)]="newCustomer.location.AddressLine1">
+            </div>
+          </div>
+
+        <!-- <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label">Address Line 2</label>
+            <div class="col-sm-7">
+              <input 
+                class="form-control"
+                name="addressLine2"
+                #addressLine2="ngModel"
+                [(ngModel)]="newCustomer.location.AddressLine2">
+            </div>
+          </div> -->
+
+          <div class="form-group row text-left">
+              <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">House Number</label>
+              <div class="col-sm-7">
+                <input 
+                  class="form-control"
+                  name="houseNumber"
+                  maxlength="10"
+                  required
+                  #houseNumber="ngModel"
+                  [(ngModel)]="newCustomer.location.HouseNumber">
+                <span
+                  class="help-block text-danger"
+                  *ngIf="houseNumber.invalid && (houseNumber.dirty || houseNumber.touched)">
+                  House Number is required.
+                </span>
+              </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            
+                <div class="form-group row text-left">
+                  <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Street</label>
+                  <div class="col-sm-7">
+                    <input 
+                      class="form-control"
+                      name="street"
+                      maxlength="60"
+                      required
+                      #street="ngModel"
+                      [(ngModel)]="newCustomer.location.Street">
+                    <span
+                      class="help-block text-danger"
+                      *ngIf="street.invalid && (street.dirty || street.touched)">
+                      Street is required.
+                    </span>
+                  </div>
+                </div>
+    
+                <!-- <div class="form-group row text-left">
+                  <label class="col-sm-3 offset-sm-1 col-form-label">Address Line 4</label>
+                  <div class="col-sm-7">
+                    <input 
+                      class="form-control"
+                      name="addressLine4"
+                      #addressLine4="ngModel"
+                      [(ngModel)]="newCustomer.location.AddressLine4">
+                  </div>
+                </div> -->
+    
+                <div class="form-group row text-left">
+                  <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">City</label>
+                  <div class="col-sm-7">
+                    <input 
+                      class="form-control"
+                      name="city"
+                      maxlength="40"
+                      required
+                      #city="ngModel"
+                      [(ngModel)]="newCustomer.location.City">
+                    <span
+                      class="help-block text-danger"
+                      *ngIf="city.invalid && (city.dirty || city.touched)">
+                      City is required.
+                    </span>
+                  </div>
+                </div>
+    
+                <div class="form-group row text-left">
+                  <label class="col-sm-3 offset-sm-1 col-form-label">State/Province<br/>/Region</label>
+                  <div class="col-sm-7">
+                    <select 
+                      class="form-control"
+                      name="stateId"
+                      [(ngModel)]="newCustomer.location.StateID">
+                      <option *ngFor="let s of stateList" [value]="s.StateID"> {{s.StateName}}</option>
+                    </select>
+                  </div>
+                </div>
+    
+                <div class="form-group row text-left">
+                  <label class="col-sm-3 offset-sm-1 col-form-label">Postal Code</label>
+                  <div class="col-sm-7">
+                    <input
+                      class="form-control"
+                      name="PostalCode"
+                      maxlength="10"
+                      [(ngModel)]="newCustomer.location.PostalCode">
+                  </div>
+                </div>
+    
+                <div class="form-group row text-left">
+                    <label class="col-sm-3 offset-sm-1 col-form-label">District</label>
+                    <div class="col-sm-7">
+                      <input
+                        class="form-control"
+                        maxlength="40"
+                        name="District"
+                        [(ngModel)]="newCustomer.location.District">
+                    </div>
+                  </div>
+                  <div class="form-group row text-left">
+                      <label class="col-sm-3 offset-sm-1 col-form-label">Notes</label>
+                      <div class="col-sm-7">
+                        <textarea
+                          class="form-control"
+                          name="notes"
+                          [(ngModel)]="newCustomer.location.Note">
+                        </textarea>
+                      </div>
+                    </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row form-section-description-wrapper">
+        <div class="col-md-6">
+          <div class="row text-left">
+            <label class="col-sm-7 offset-sm-1 col-form-label"><input type="checkbox" name="shipToChecked" [(ngModel)]="shipToChecked" (change)="onCheckboxStateChange($event)" data-toggle="toggle">Ship-To is the same as Bill-To
+            </label>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div *ngIf="!shipToChecked" class="row">
+        <div class="col-md-6">
+    
+          <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Location name</label>
+            <div class="col-sm-7">
+              <input 
+                class="form-control checking-field"
+                name="locationNameShipTo1"
+                maxlength="40"
+                #newCustomerName1="ngModel"
+                required
+                [(ngModel)]="shiptoLocation.LocationName">
+              <span
+                class="help-block text-danger"
+                *ngIf="newCustomerName1.invalid && (newCustomerName1.dirty || newCustomerName1.touched)">
+                Location name required.
+              </span>
+            </div>
+          </div>
+          
+          <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Location Type</label>
+            <div class="col-sm-7">
+              <select 
+                class="form-control"
+                name="LocationTypeID1"
+                required
+                disabled="disabled"
+                #newLocationType1="ngModel"
+                [(ngModel)]="shiptoLocation.LocationTypeID">
+                <option *ngFor="let l of locationTypes" [value]="l.id"> {{l.name}}</option>
+              </select>
+              <span
+                class="help-block text-danger"
+                *ngIf="newLocationType1.invalid && (newLocationType1.dirty || newLocationType1.touched)">
+                Location Type required.
+              </span>
+            </div>
+          </div>
+  
+          <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Country</label>
+            <div class="col-sm-7">
+              <select 
+                class="form-control checking-field"
+                name="CountryID1"
+                required
+                #locationCountry1="ngModel"
+                [(ngModel)]="shiptoLocation.CountryID"
+                (change)="countryChangedOne($event.target.value)">
+                <option *ngFor="let c of countryList" [value]="c.CountryID"> {{c.CountryName}}</option>
+              </select>
+              <span
+                class="help-block text-danger"
+                *ngIf="locationCountry1.invalid && (locationCountry1.dirty || locationCountry1.touched)">
+                Country is required.
+              </span>
+            </div>
+          </div>
+  
+          <div class="form-group row text-left">
+            <label class="col-sm-3 offset-sm-1 col-form-label">Address Line 1</label>
+            <div class="col-sm-7">
+              <input 
+                class="form-control"
+                name="addressLine1"
+                maxlength="40"
+                #addressLine1="ngModel"
+                [(ngModel)]="shiptoLocation.AddressLine1">
+            </div>
+          </div>
+  
+          <!-- <div class="form-group row text-left">
+              <label class="col-sm-3 offset-sm-1 col-form-label">Address Line 2</label>
+              <div class="col-sm-7">
+                <input 
+                  class="form-control"
+                  name="addressLine2"
+                  #addressLine2="ngModel"
+                  [(ngModel)]="newCustomer.location.AddressLine2">
+              </div>
+            </div> -->
+  
+            <div class="form-group row text-left">
+                <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">House Number</label>
+                <div class="col-sm-7">
+                  <input 
+                    class="form-control"
+                    name="houseNumber1"
+                    maxlength="10"
+                    required
+                    #houseNumber1="ngModel"
+                    [(ngModel)]="shiptoLocation.HouseNumber">
+                  <span
+                    class="help-block text-danger"
+                    *ngIf="houseNumber1.invalid && (houseNumber1.dirty || houseNumber1.touched)">
+                    House Number is required.
+                  </span>
+                </div>
+              </div>
+          </div>
+          <div class="col-md-6">
+              
+                  <div class="form-group row text-left">
+                    <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">Street</label>
+                    <div class="col-sm-7">
+                      <input 
+                        class="form-control"
+                        name="street1"
+                        maxlength="60"
+                        required
+                        #street1="ngModel"
+                        [(ngModel)]="shiptoLocation.Street">
+                      <span
+                        class="help-block text-danger"
+                        *ngIf="street1.invalid && (street1.dirty || street1.touched)">
+                        Street is required.
+                      </span>
+                    </div>
+                  </div>
+      
+                  <!-- <div class="form-group row text-left">
+                    <label class="col-sm-3 offset-sm-1 col-form-label">Address Line 4</label>
+                    <div class="col-sm-7">
+                      <input 
+                        class="form-control"
+                        name="addressLine4"
+                        #addressLine4="ngModel"
+                        [(ngModel)]="newCustomer.location.AddressLine4">
+                    </div>
+                  </div> -->
+      
+                  <div class="form-group row text-left">
+                    <label class="col-sm-3 offset-sm-1 col-form-label req-account-label">City</label>
+                    <div class="col-sm-7">
+                      <input 
+                        class="form-control"
+                        name="cityOne"
+                        maxlength="40"
+                        required
+                        #cityOne="ngModel"
+                        [(ngModel)]="shiptoLocation.City">
+                      <span
+                        class="help-block text-danger"
+                        *ngIf="cityOne.invalid && (cityOne.dirty || cityOne.touched)">
+                        City is required.
+                      </span>
+                    </div>
+                  </div>
+      
+                  <div class="form-group row text-left">
+                    <label class="col-sm-3 offset-sm-1 col-form-label">State/Province<br/>/Region</label>
+                    <div class="col-sm-7">
+                      <select 
+                        class="form-control"
+                        name="StateID"
+                        [(ngModel)]="shiptoLocation.StateID">
+                        <option *ngFor="let s of stateListOne" [value]="s.StateID"> {{s.StateName}}</option>
+                      </select>
+                    </div>
+                  </div>
+      
+                  <div class="form-group row text-left">
+                    <label class="col-sm-3 offset-sm-1 col-form-label">Postal Code</label>
+                    <div class="col-sm-7">
+                      <input
+                        class="form-control"
+                        maxlength="10"
+                        name="postalCode"
+                        [(ngModel)]="shiptoLocation.PostalCode">
+                    </div>
+                  </div>
+      
+                  <div class="form-group row text-left">
+                      <label class="col-sm-3 offset-sm-1 col-form-label">District</label>
+                      <div class="col-sm-7">
+                        <input
+                          class="form-control"
+                          maxlength="40"
+                          name="district"
+                          [(ngModel)]="shiptoLocation.District">
+                      </div>
+                    </div>
+                    <div class="form-group row text-left">
+                        <label class="col-sm-3 offset-sm-1 col-form-label">Notes</label>
+                        <div class="col-sm-7">
+                          <textarea
+                            class="form-control"
+                            name="Note"
+                            [(ngModel)]="shiptoLocation.Note">
+                          </textarea>
+                        </div>
+                      </div>
+          </div>
+      </div>
+
+
+    <div *ngIf="errorMessage" class="row">
+      <div class="col-sm-4 offset-sm-4 file-upload-buttons">
+        <span  class="help-block text-danger">{{errorMessage}}</span>
+      </div>
+    </div>
+    <div class="row save-bom-buttons-wrapper">
+       
+        <div class="col-sm-4 offset-sm-4 file-upload-buttons">
+          <button
+            class="btn btn-bom-save"
+            type="button"
+            [disabled]="(!newCustomerForm.valid)"
+            (click)="onSaveNewCustomer($event)">
+            <i class="fas fa-check" aria-hidden="true"></i> &nbsp;SAVE
+          </button>
+          <button
+            class="btn btn-bom-cancel"
+            type="button"
+            (click)="cancelClick.emit()">
+            <i class="fas fa-times" aria-hidden="true"></i> &nbsp;CANCEL
+          </button>
+        </div>
+      </div>
+      
+  </form>
+

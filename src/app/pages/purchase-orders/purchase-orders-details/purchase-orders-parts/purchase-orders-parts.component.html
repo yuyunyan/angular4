@@ -1,0 +1,87 @@
+<div class="container-fluid">
+    <div class="addDelete">
+  <button (click)="onAddRow()" class="btn-gridButtons" *ngxPermissionsOnly="['CanEditLines']">Add Row</button>
+  <button (click)="deleteRows()" class="btn-gridButtons" *ngxPermissionsOnly="['CanEditLines']">Delete Rows</button>
+  </div>
+
+  <div class="purchaseOrderGridOuter">
+  <ag-grid-angular
+    id="partsGrid"
+    #agGrid
+    style="width: 100%;"
+    class="ag-theme-balham"
+    [gridOptions]="partsGrid"
+    (rowClicked)="onCellClicked($event)">
+  </ag-grid-angular>
+  <div class="ag-grid-sort pull-right" style="position: absolute; top: 94.3%; right: 5%;">
+    <div class="alert alert-success alert-autocloseable-success grid-Download" style="display:none; position: absolute; top: -120%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+        <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Downloading...
+    </div>
+    <div class="alert alert-success alert-autocloseable-success grid-Alert" style="display:none; position: absolute; top: -120%; right: 7.5%; height: 25px; padding-top: 2px; padding-left: 10px; padding-right: 100px;">
+          <i class="fas fa-check-circle fa-lg" aria-hidden="true">&nbsp;&nbsp;</i>Saved
+    </div>
+  </div>
+  <div class="btn-group dropup quotePartsButton">
+      <button class="refreshGrid" (click)="refreshGrid()"><i style="color:white;" class="fas fa-sync-alt"></i></button>
+      <button class="menuBtn" data-toggle="dropdown"><i style="color:white;" class="fas fa-cog"></i></button>
+          <ul class="dropdown-menu dropLeft">
+              <li><button style="width:100%" class="export-grid dropdown-item" (click)="exportGrid_Click($event)">Export</button></li>
+              <li><button style="width:100%" class="reset-grid dropdown-item" (click)="resetGridColumns_Click()">Reset Columns</button></li>
+              <li><button style="width:100%" class="save-grid dropdown-item" (click)="saveGridState_Click($event)">Save Column</button></li>
+          </ul>
+  </div>
+</div>
+  <br/>
+
+  <div [hidden]="!specBuyChecked">
+    <az-item-spec-buy [partNumber]="partNumber" [poLineId]="poLineId" [itemId]="itemId" [poId]="poId" [poVersionId]="poVersionId" [specBuyData]="specBuyData" [poPartForUpdate]="poPartForUpdate" (onPOLineChange)="updatePOLineOnGridRow($event)"></az-item-spec-buy>
+  </div>
+ <div> <!--</div> [hidden]="!specBuyChecked">-->
+    <p>
+      <az-unallocated-so-lines 
+      [partNumber]="partNumber" 
+      [poId]="poId"
+      [poVersionId]="poVersionId"
+      [cost]="selectedCost"
+      [poLineNum]="selectedLineNum"
+      [isPOLineClicked]="isPOLineClicked"
+      [poLineId]="poLineId"
+      [poLineAvailableQty] = "poLineAvailableQty"
+      (qtyChanged)="qtyChanged($event)">
+      </az-unallocated-so-lines>
+    </p>
+  </div>
+  
+  
+</div>
+
+<az-allocation-po-window>
+</az-allocation-po-window>
+
+<div id="po-part-comment-preview">
+  <az-comment-hover
+    [objectId]="hoverObjectId"
+    [objectTypeId]="poLineObjectTypeId"
+    [objectInfo]="hoverObjectInfo">
+  </az-comment-hover>
+</div>
+
+<div id="po-part-comment-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="width: 150%; right: 25%;">
+      <div class="modal-header">
+        <div class="header-text">
+          {{clickedObjectInfo}}
+        </div>
+      </div>
+      <div class="modal-body">
+        <az-comments
+          [objectId]="clickedPOLineId"
+          [objectTypeId]="poLineObjectTypeId"
+          [commentTitle]="'PO Line Comments'"
+          (onCommentSaved)="onPOLineCommentSaved()">
+        </az-comments>
+      </div>
+    </div>
+  </div>
+</div>

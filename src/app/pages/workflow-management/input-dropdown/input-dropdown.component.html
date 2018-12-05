@@ -1,0 +1,26 @@
+<div class="az-input-dropdown"
+	[ngStyle]="{'width': InputBoxFullWidth? '100%': '33%'}">
+	<input 
+		type="text"
+		name="inputName"
+		placeholder="Value"
+		autocomplete="off"
+		[(ngModel)]="inputObject.inputName"
+		class="az-input-class"
+		(click)="onClick($event)"
+		(keypress)="onKeydown($event)"
+		(ngModelChange)="onInputChange()"
+		(focus)="onInputFocus()"
+		(blur)="onInputBlur($event)">
+	<ng-container *ngIf="dropdownVisible">
+		<ul>
+			<li *ngFor="let dropdownOption of dropdownOptions;let i = index;"
+				(click)="selectItem(dropdownOption, i)"
+				(mouseenter)="setActive(i)"
+				(mousedown)="dropdownPressed()"
+				[ngStyle]="{'background': activeItemIndex === i? '#608AEB': '#fff'}">
+				{{dropdownOption?.valueName}}
+			</li>
+		</ul>
+	</ng-container>
+</div>

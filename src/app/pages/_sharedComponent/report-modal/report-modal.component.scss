@@ -1,0 +1,23 @@
+.mdlReportViewer .modal-content{
+    width: 1000px;
+    height: 1000px;
+    right: 245px;
+}
+
+.mdlReportViewer iframe {
+    width: 900px;
+    height: 940px;
+    border:none;
+}
+
+.mdlReportViewer .large-content{
+    width: 1150px;
+    height: 1050px;
+    right: 60%;
+}
+
+.mdlReportViewer iframe.large-content {
+    width: 1050px;
+    height: 940px;
+    border:none;
+}

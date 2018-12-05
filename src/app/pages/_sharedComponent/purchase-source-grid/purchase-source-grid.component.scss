@@ -1,0 +1,21 @@
+.ag-icon-cell{
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-content: center;
+	height: 100%;
+	a{
+		padding-right: 4px;
+	}
+}
+
+.lhs-controls {
+	height : 30px;
+	width : fit-content;
+}
+
+.source-plus-cell{
+	margin-left:7px;
+	background: transparent;
+    border: none;
+}

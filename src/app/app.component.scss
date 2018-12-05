@@ -1,0 +1,146 @@
+@import "theme/styles/variables";
+@import "theme/styles/mixins";
+
+@import "./../../node_modules/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox";
+@import "./../../node_modules/pace/themes/pace-theme-flash";
+@import "./../../node_modules/dropzone/dist/min/dropzone.min";
+@import "./../../node_modules/jquery-ui-dist/jquery-ui.css";
+@import "./../../node_modules/ag-grid/dist/styles/ag-theme-balham.css";
+
+@import "theme/styles/bootstrap-override";
+@import "theme/styles/libs-override";
+@import "theme/styles/base";
+@import "theme/styles/readonlyFieldDirective";
+
+@import '~angular-tree-component/dist/angular-tree-component.css';
+
+.idleStateClass
+{
+    z-index: 3;
+    position: fixed;
+    float: right;
+    top: 20px;
+    right: 10px;
+}
+
+.white-text{
+    color:white;
+}
+
+.black-text{
+    color:black;
+}
+
+.card .card-header{
+    background-color: #0171A2;
+    color: white;
+}
+
+.plusButton {
+    position: absolute;
+    top: 0;
+    right: 15px;
+}
+
+.card-outline-default{
+    width:100%;
+    height:100%;
+}
+
+.button, .btn-search, .ag-paging-button{
+    color:#01A282;
+    border: none;
+}
+.parentMargin{
+    margin-left: -1.5%;
+}
+
+
+.ag-fresh {
+    .custom-header-wrapper, .ag-header-container{
+        background-color:#9C9DA0;
+    }
+
+    .ag-header {
+        height: 25px !important;
+
+        &-row {
+            height: 25px !important;
+        }
+
+        &-cell,
+        &-cell-label,
+        &-cell-sorted-none,
+        &-container {
+            background-color:#9C9DA0;
+        }
+    }
+}
+
+// a:not([href]):not([tabindex]) {
+//     background-color: white;
+// }
+.dropdown-menu a:hover{
+    background-color:rgb(238, 238, 241);
+}
+
+.ag-cell-highlighted{
+    background: #FFFDA0;
+}
+
+.btn-new-quote {
+    background-color: #01A282;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 2px;
+    font-weight: 500;
+    margin: 4px;
+    margin-left: 0;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    height: 30px;
+}
+
+.po-allocation-cell{
+    width: 100%;
+    height: 28px;
+    a{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-right: 0;
+        color: white;
+        width: 100%;
+        height: 28px;
+        span{
+            height: 24px;
+        }
+    }
+    .po-allocated-not{
+        background-color: #01A282;
+    }
+    .po-allocated{
+        background-color: #990000;
+    }
+    .po-allocated-disabled{
+        background-color: #CCCCCC;
+    }
+}
+
+.allocated-po-row{
+    background-color: #FFFDA0 !important;
+    div, a, span:not(.cell-btn-text){
+        font-weight: 900 !important;
+    }
+}
+
+.main-wrapper{
+    position: relative;
+}
+
+.dropdown-menu {
+    z-index: 1;
+}

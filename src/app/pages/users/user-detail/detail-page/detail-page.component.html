@@ -1,0 +1,170 @@
+<div class='row accountDetailParent'>
+	<div class='col-sm-2'>
+		<br>
+		<img id="u13963_img" class="img rounded-circle" src="{{Image}}" (error)="imageError($event)">
+		<br>
+		<input [disabled]="userCreated" id="fileInput" (click)="fileUploadClick()" type="file" (change)="fileChange($event)" placeholder="Upload file" accept="image/*">
+		<small class="errorMessage" *ngIf="invalidImageType">Invalid file type. Please select an image file.</small>
+		<small class="errorMessage" *ngIf="invalidImageSize">File size is too large. Please select a file that is less than 3 MB in size.</small>
+
+
+	</div>
+	<form class='col-sm-3 accountColumnBorder' #userForm="ngForm">
+		<div class="form-group row">
+			<label for="example-search-input" class="col-sm-4 col-form-label">First Name</label>
+			<div class="col-sm-8">
+				<input [readonly]="onReadOnly" [(ngModel)]="FirstName" name="FirstName" class="form-control"
+				 type="text" id="example-search-input" required  #firstName="ngModel">
+				<span class="errorMessage" [hidden]="(firstName.untouched && !formWarningMessage) || firstName.valid">First Name is required. Please try again.</span>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="example-email-input" class="col-sm-4 col-form-label">Last Name</label>
+			<div class="col-sm-8">
+				<input [readonly]="onReadOnly" [(ngModel)]="LastName" name="LastName" class="form-control"
+				 type="email" id="example-email-input" required #lastName="ngModel">
+				 <span class="errorMessage" [hidden]="(lastName.untouched && !formWarningMessage) || lastName.valid">Last Name is required. Please try again.</span>
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="example-url-input" class="col-sm-4 col-form-label">Phone</label>
+			<div class="col-sm-8">
+				<input [readonly]="onReadOnly" [(ngModel)]="PhoneNumber"  name="PhoneNumber" class="form-control" type="text" id="example-url-input">
+			</div>
+		</div>
+		<div class="form-group row">
+			<label for="example-url-inputEmail" class="col-sm-4 col-form-label">Email</label>
+			<div class="col-sm-8">
+				<input [readonly]="onReadOnly" [(ngModel)]="EmailAddress"  name="EmailAddress" class="form-control"
+				 type="url" id="example-url-inputEmail"  required #email="ngModel"  pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$">
+				 <span class="errorMessage" [hidden]="(email.untouched && !formWarningMessage) || email.valid">Email is required and should be in the correct format.</span>
+			</div>
+		</div>
+		<div class="form-group row" *ngIf="!userCreationPage">
+			<label for="example-url-input" class="col-sm-4 col-form-label">Password</label>
+			<div class="col-sm-8">
+				<button class="btn-details btn-affirm" (click)="changePassword()">Change Password</button>
+			</div>
+			<div class="col-sm-4"></div>
+			<div class="col-sm-8">
+				<small id="newPasswordSet" *ngIf="passwordSet">
+					<b>New Password Set</b>
+				</small>
+			</div>
+		</div>
+
+		<div *ngIf="userCreationPage">
+			<div class="form-group row">
+				<label for="example-email-input" class="col-sm-4 col-form-label">Password</label>
+				<div class="col-sm-8">
+					<input class="newPassEnable" (keydown)="onPasswordKeydown($event)"
+					 [(ngModel)]="passwordDetails.newPassword"  name="newPassword"
+					 class="form-control" type="password" required minlength="6"  #password="ngModel">
+					 <span class="errorMessage" [hidden]="(password.untouched && !formWarningMessage) || password.valid">Password is required (minimum 6 characters)</span>
+				</div>
+			</div>
+			<div class="form-group row">
+				<label for="example-url-input" class="col-sm-4 col-form-label">Confirm Password</label>
+				<div class="col-sm-8">
+					<input class="confirmPassEnable" (blur)="confirmPasswordOnBlur($event)" (keydown)="onPasswordKeydown($event)"
+					 [(ngModel)]="passwordDetails.confirmPassword" name="confirmPassword" class="form-control"
+					 type="password"  required minlength="6"  #confirmPassword="ngModel">
+					 <span class="errorMessage" [hidden]="(confirmPassword.untouched && !formWarningMessage) || confirmPassword.valid">Password is required (minimum 6 characters)</span>
+					 <small class="errorMessage" *ngIf="warningMessageTwo">Passwords do not match. Please try again.</small>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<!-- <div class='col-md-3 accountColumnBorder'>
+			<div class="form-group row">
+				<label for="example-url-input" class="col-sm-4 col-form-label">Organization</label>
+				<div class="col-sm-8">
+					<input [(ngModel)]="Organization" class="form-control" type="url" id="example-url-input">
+				</div>
+			</div> -->
+
+	<div class='col-sm-3 accountColumnBorder'>
+		<div class="form-group row">
+			<label for="example-url-input" class="col-sm-4 col-form-label">Organization</label>
+			<div class="col-sm-8">
+				<select [disabled]="organizationReadonly" class="form-control" name="organizationDropDown" [(ngModel)]="organizationId" data-field-name="Organization">
+					<option [value]="-1">None</option>
+					<option *ngFor="let o of organizationList" [value]="o.id">{{o?.name}}</option>
+				</select>
+			</div>
+		</div>
+
+		<div class="form-group row">
+			<label for="example-url-input" class="col-sm-4 col-form-label">Time Zone</label>
+			<div class="col-sm-8">
+				<select [disabled]="onReadOnly" (blur)="onInputFocusLost()" [(ngModel)]="TimezoneName" name="timezone_offset" id="timezone-offset"
+				 class="form-control">
+					<option *ngFor="let t of timezoneList" [value]="t.name">
+						<b>({{t.current_utc_offset}})</b> {{t.name}}</option>
+				</select>
+			</div>
+		</div>
+		<div>
+			<timezone></timezone>
+		</div>
+	</div>
+
+	<div class="col-sm-2" *ngIf="!userCreationPage">
+		<button *ngIf="!onReadOnly" class="btn-details btn-affirm pull-right" (click)="btnUserSave()">Save</button>
+		<button *ngIf="!onReadOnly" style="background-color:#990000;" class="btn-details btn-affirm pull-right" (click)="btnUserCancel()">Cancel</button>
+		<button *ngIf="onReadOnly" class="btn-details btn-affirm pull-right" (click)="btnUserEdit()">Edit</button>
+	</div>
+	<div class="col-sm-2" *ngIf="userCreationPage">
+		<button  class="btn-details btn-affirm pull-right" (click)="btnCreateUser()">Save</button>
+	</div>
+
+	<div id="changePasswordModal" class="modal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<p>Change Password</p>
+				</div>
+				<form #passForm="ngForm">
+				<div class="modal-body">
+					<div class="form-group row">
+						<label for="example-email-input" class="col-sm-4 col-form-label">Current Password *</label>
+						<div class="col-sm-8">
+							<input name="currentPassword" (blur)="onInputFocusLostPassword()" (keydown)="onPasswordKeydown($event)" [(ngModel)]="currentPassword" class="form-control"
+							 type="password" required minlength="6">
+							<small class="errorMessage" *ngIf="loginFailed">Invalid Password</small>
+							<small class="valid" *ngIf="validMessage">Password Valid</small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="example-email-input" class="col-sm-4 col-form-label">New Password *</label>
+						<div class="col-sm-8">
+							<input name="newPassword" #newPassword="ngModel" class="newPassEnable" [(ngModel)]="passwordDetails.newPassword"
+							 class="form-control" type="password" minlength="6" required>
+							<small class="errorMessage" *ngIf="newPassword.dirty && newPassword.errors && (newPassword.errors.required || newPassword.errors.minlength)">Password is required (minimum 6 characters)</small>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label for="example-url-input" class="col-sm-4 col-form-label">Confirm Password *</label>
+						<div class="col-sm-8">
+							<input name="confirmPassword" minlength="6" type="password" #confirmPassword="ngModel" class="confirmPassEnable" [(ngModel)]="passwordDetails.confirmPassword" class="form-control" required>
+							<small class="errorMessage" *ngIf="confirmPassword.dirty && !(passwordDetails.newPassword === passwordDetails.confirmPassword)">Passwords do not match. Please try again.</small>
+							<small class="valid" *ngIf="confirmPassword.dirty && (passwordDetails.newPassword === passwordDetails.confirmPassword)">Passwords match.</small>
+						</div>
+					</div>
+					<div class="row info" [hidden]="(passForm.valid && validMessage)">
+						<div class="col-sm-12">
+							<i class="fas fa-info-circle"></i>
+							Please complete all required (*) fields.
+						</div>
+					</div>
+				</div>
+				</form>
+				<div class="modal-footer">
+					<button [hidden]="!(passForm.valid && validMessage && (passwordDetails.newPassword === passwordDetails.confirmPassword))" (click)="changePasswordButton(passForm)" class="btn btn-primary">Change Password</button>
+					<button type="button" (click)="closeModal(passForm); passForm.reset()" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

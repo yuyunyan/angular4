@@ -1,0 +1,29 @@
+<div class="content-fit-left-align">
+  <div *ngIf="answerTypeId==1">
+    <label><input type="radio" [name]="controlName" value="yes"  (change) = "onChange($event)" [checked]="answer=='yes'"/>Yes</label><br>
+    <label><input type="radio" [name]="controlName" value="no"   (change) = "onChange($event)"  [checked]="answer=='no'"/>No</label>
+  </div><br>
+  <div *ngIf="answerTypeId==2">
+    <label><input type="radio" [name]="controlName" value="yes"  (change) = "onChange($event)" [checked]="answer=='yes'"/>Yes</label><br>
+    <label><input type="radio" [name]="controlName" value="no"   (change) = "onChange($event)" [checked]="answer=='no'"/>No</label><br>
+    <label><input type="radio" [name]="controlName" value="na"   (change) = "onChange($event)" [checked]="answer=='na'"/>N/A</label><br>
+  </div>
+  <div *ngIf="answerTypeId==3">
+    <label><input type="radio" [name]="controlName" value="pass"  (change) = "onChange($event)" [checked]="answer=='pass'"/>Pass</label><br>
+    <label><input type="radio" [name]="controlName" value="fail"  (change) = "onChange($event)" [checked]="answer=='fail'"/>Fail</label><br>
+  </div>
+  <div *ngIf="answerTypeId==4">
+    <label><input type="radio" [name]="controlName" value="pass"  (change) = "onChange($event)" [checked]="answer=='pass'"/>Pass</label><br>
+    <label><input type="radio" [name]="controlName" value="fail"  (change) = "onChange($event)" [checked]="answer=='fail'"/>Fail</label><br>
+    <label><input type="radio" [name]="controlName" value="na" (change)="onChange($event)" [checked]="answer=='na'"/>N/A</label><br>
+  </div>
+  <div *ngIf="answerTypeId==5">
+    <input type="number" step="1" (focusout)="onChange($event)" class="small-number-input" [(ngModel)]="params.data.answer" />
+  </div>
+  <div *ngIf="answerTypeId==6">
+    <Label>Comment only</Label>
+  </div>
+  <div *ngIf="answerTypeId==7" (keydown)="onKeyDown($event)">
+    <textarea (focusout)="onChange($event)" class="answerTextArea" rows="3" cols="18" [(ngModel)]="params.data.answer"></textarea>
+  </div>
+</div>

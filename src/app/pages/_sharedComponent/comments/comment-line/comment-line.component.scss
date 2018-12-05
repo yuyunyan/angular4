@@ -1,0 +1,110 @@
+@import "../../../../theme/styles/variables";
+
+li.media{
+    margin-top: -5px;
+    .media-left{
+        padding-right: 10px;
+        margin-left: 3px;
+    }
+    .media-right{
+        padding-left: 10px;
+    }
+    .media-body{
+        padding: 0 6px;
+        position: relative;
+        overflow: visible;
+        .media-heading{
+            padding: 0;
+            overflow: hidden;
+            h5{
+                font-size: 13px;
+                font-weight: 400;
+            }
+            p{
+                font-size: 11px;
+                margin-top: 0; 
+                color: #121111;           
+                i{
+                    font-size: 10px;
+                    margin-right: 3px;  
+                }
+            }
+        } 
+        p{
+            margin-top: 4px;
+            line-height: 1.2;
+            font-size: 13px;
+            letter-spacing: 0.03em;
+            color: $gray;
+        }
+        &.left{
+                background: none;
+        }           
+        &.right{
+            background: #f7f7f7;
+                &:before{
+                content: "";
+                border: 7px solid transparent;
+                border-left-color: #f7f7f7;
+                position: absolute;
+                top: 18px;
+                right: -14px;
+                }
+        }           
+    }
+    div.comment-reply{
+        margin-right: 15px;
+        button{
+            border: none;
+        }
+    }
+}
+i.send{
+    font-size: 20px;
+}
+
+img.media-object{
+    width: 2vw;
+}
+
+.media-list{
+    -webkit-padding-start: 0;
+    padding-top: 10px !important;
+}
+
+.message-icon {
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    float: left;
+    position: relative;
+    margin-left: 20px;
+    > img, .media-icon {
+      border-radius: 30px;
+      width: 100%;
+      height: 100%;
+    }
+}
+
+.reply-media{
+    margin-left: 25px;
+}
+
+.last-reply{
+    margin-bottom: 14px !important;
+}
+
+li.reply-media:before{
+    position: relative;
+    border-bottom: 1px solid #333;
+    border-left: 1px solid #333;
+    content: "";
+    height: 46px;
+    width: 34px;
+    top: -24px;
+    left: -4px;
+}
+
+li.media:not(.reply-media){
+    margin-bottom: 15px
+}

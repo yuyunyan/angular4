@@ -1,0 +1,11 @@
+
+<div class="container-fluid">
+    <button (click)="onAddRow()" class="btn-details btn-affirm pull-right">Add Row</button>
+<ag-grid-angular
+    #agGrid id="freightGrid"
+    class="ag-theme-balham"
+    [gridOptions]="ACGridOptions"
+    (rowClicked)="onCellClicked($event)">
+</ag-grid-angular>
+
+</div>

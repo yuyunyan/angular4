@@ -1,0 +1,12 @@
+#add-account-wrapper{
+  display: flex;
+  flex-flow: row;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 3px;
+  margin-bottom: 3px;
+}
+
+.invalid-group-line-input{
+  background: rgba(232, 84, 12, 0.3) !important;
+}

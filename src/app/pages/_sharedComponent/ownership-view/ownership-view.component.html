@@ -1,0 +1,12 @@
+<ng-container *ngFor="let owner of originalOwnersList;">
+	<li class="media" style="align-items: center;">
+		<div class="media-left">
+			<img class="media-object rounded-circle" [src]="owner.ownerImageUrl" (error)="imageError($event)" alt="author image">
+		</div>
+		<div class="media-body rounded left">
+			<div class="media-heading">
+				<h5 class="d-inline text-capitalize pull-left">{{owner?.name}}&nbsp;({{owner?.percentage}}&nbsp;%)</h5>
+			</div>
+		</div>
+	</li>
+</ng-container>
